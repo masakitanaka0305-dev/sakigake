@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: sakigake
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: APP_ID
+        sync: false
+      - key: APP_SECRET
+        sync: false
+      - key: FORM_APP_TOKEN
+        sync: false
+      - key: FORM_TABLE_ID
+        sync: false
+      - key: MAIN_APP_TOKEN
+        sync: false
+      - key: PORT
+        value: 3000
