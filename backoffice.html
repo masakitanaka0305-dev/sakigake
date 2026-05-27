@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — 自動バックオフィス (Auto-Pilot)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      ink: '#0A0A0A', ink2: '#2A2A2D', inksoft: '#555559', inkmute: '#8A8A8F',
+      paper: '#FFFFFF', cream: '#F4F1E8', cream2: '#ECE8DB',
+      mint: '#4ADE80', mintdeep: '#16A34A', mintsoft: '#D7F7E0', mintglow: '#B6F4A5',
+      warn: '#F59E0B', warnsoft: '#FEF3C7',
+      info: '#3B82F6', infosoft: '#DBEAFE',
+      danger: '#EF4444', dangersoft: '#FEE2E2',
+    },
+    fontFamily: {
+      jp: ['"Zen Kaku Gothic New"', 'system-ui', 'sans-serif'],
+      mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      num: ['Manrope', '"Zen Kaku Gothic New"', 'sans-serif'],
+    },
+  }}
+}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* AI shimmer for active stages */
+  @keyframes ai-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .ai-shimmer {
+    background: linear-gradient(110deg, #4ADE80 30%, #B6F4A5 50%, #4ADE80 70%);
+    background-size: 200% 100%;
+    animation: ai-shimmer 2.4s linear infinite;
+  }
+
+  @keyframes pulse-mint {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); }
+    50%       { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+  }
+  .pulse-mint { animation: pulse-mint 2.2s ease-in-out infinite; }
+
+  @keyframes spin-slow { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  .spin-slow { animation: spin-slow 4s linear infinite; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeIn 0.4s ease both; }
+
+  /* Live dot */
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+
+  /* connector line growth */
+  @keyframes grow { from { width: 0; } to { width: 100%; } }
+
+  /* Toast */
+  .toast {
+    position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%) translateY(20px);
+    background: #0A0A0A; color: #fff; padding: 10px 20px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; opacity: 0;
+    transition: opacity 0.18s ease, transform 0.2s ease;
+    pointer-events: none; z-index: 80;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast .ico { color: #4ADE80; margin-right: 6px; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<!-- =========== HEADER =========== -->
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5 hover:opacity-90 transition">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">ダッシュボード</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">02<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">エンジニア</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">03<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">案件</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink text-white font-bold">
+        <span class="mono text-[9px] text-mint tracking-[0.14em] font-bold">04</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-mint blink"></span>
+        <span>自動処理</span>
+      </a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+        <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+        <div class="hidden sm:block">
+          <div class="font-bold text-[13px] leading-tight">田中 健一</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</header>
+
+
+<main class="max-w-[1280px] mx-auto px-6 py-8">
+
+  <!-- ===================================================== -->
+  <!-- HERO : Auto-Pilot                                       -->
+  <!-- ===================================================== -->
+  <section class="relative overflow-hidden bg-ink text-white rounded-3xl p-7 md:p-10 grid-bg mb-6">
+    <div class="absolute -right-32 -bottom-32 w-96 h-96 rounded-full" style="background: radial-gradient(circle, rgba(74,222,128,0.15), transparent 65%);"></div>
+
+    <div class="relative grid lg:grid-cols-[1.5fr_1fr] gap-8 items-center">
+      <!-- Left: Message -->
+      <div>
+        <div class="flex items-center gap-3 mb-6">
+          <span class="block w-7 h-[1.5px] bg-mint"></span>
+          <span class="text-mint mono text-[11px] tracking-[0.22em] uppercase font-bold">自動処理 · SAKIGAKE</span>
+        </div>
+        <h1 class="font-black leading-[1.1] tracking-tight" style="font-size: clamp(28px, 4.6vw, 52px);">
+          契約後は、<br/>
+          <span class="hl" style="background: linear-gradient(180deg, transparent 55%, rgba(74,222,128,0.35) 55%, rgba(74,222,128,0.35) 92%, transparent 92%);">あなたは何もしなくていい</span>
+        </h1>
+        <p class="mt-5 text-white/70 text-[14px] leading-relaxed max-w-xl">
+          成約後の契約書ドラフト・電子契約・タイムシート・請求・入金消込・送金まで、
+          <span class="text-mint font-bold">9つの工程を SAKIGAKE OS が自動で進行</span>します。
+          あなたは案件マッチングだけに集中してください。
+        </p>
+
+        <!-- Status row -->
+        <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-[12px]">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-mint blink"></span>
+            <span class="mono text-mint font-bold tracking-wider">稼働中</span>
+          </div>
+          <div class="text-white/70">あなたの今月の手動工数 <span class="num font-black text-mint text-[18px] ml-1">0</span><span class="text-white/50 text-[11px] ml-0.5">時間</span></div>
+          <div class="text-white/70">処理ステップ数 <span class="num font-black text-white text-[18px] ml-1">128</span><span class="text-white/50 text-[11px] ml-0.5">/ 今月</span></div>
+        </div>
+      </div>
+
+      <!-- Right: This month payout -->
+      <div class="bg-white/[0.06] border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
+        <div class="text-white/55 mono text-[10px] tracking-[0.14em] uppercase font-bold mb-2">今月、あなたに振り込まれる予定</div>
+        <div class="flex items-baseline gap-2">
+          <span class="num font-black text-mint" style="font-size: clamp(40px, 6vw, 56px); letter-spacing: -0.03em;">¥325,000</span>
+          <span class="text-white/55 font-bold text-base num">/ 月</span>
+        </div>
+        <div class="mt-3 text-white/65 text-[12px] leading-relaxed">
+          稼働中 4 名分のストック報酬。<br/>
+          <span class="text-mint font-bold mono">次回振込: 6月15日</span> <span class="text-white/40 mono text-[11px]">(あと 20 日)</span>
+        </div>
+        <div class="mt-5 pt-4 border-t border-white/10 grid grid-cols-3 gap-2 text-center">
+          <div>
+            <div class="num font-black text-[16px]">3</div>
+            <div class="text-[10px] text-white/50 mono mt-0.5">進行中</div>
+          </div>
+          <div>
+            <div class="num font-black text-[16px] text-mint">2</div>
+            <div class="text-[10px] text-white/50 mono mt-0.5">入金待ち</div>
+          </div>
+          <div>
+            <div class="num font-black text-[16px]">¥0</div>
+            <div class="text-[10px] text-white/50 mono mt-0.5">未収リスク</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- AUTOMATION PIPELINE per deal                            -->
+  <!-- ===================================================== -->
+  <section class="mb-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="block w-4 h-[1.5px] bg-ink"></span>
+      <span class="mono text-[11px] text-inksoft tracking-[0.18em] uppercase font-bold">契約後の自動処理 (進行中)</span>
+      <span class="flex-1"></span>
+      <span class="mono text-[10px] text-inkmute tracking-[0.1em]"><span class="inline-block w-1.5 h-1.5 rounded-full bg-mint blink mr-1.5 align-middle"></span>稼働中</span>
+    </div>
+
+    <div id="deals" class="flex flex-col gap-3"></div>
+  </section>
+
+
+
+  <!-- ===================================================== -->
+  <!-- Monthly Payout Schedule (no calendar — table form)     -->
+  <!-- ===================================================== -->
+  <section class="mb-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="block w-4 h-[1.5px] bg-ink"></span>
+      <span class="mono text-[11px] text-inksoft tracking-[0.18em] uppercase font-bold">今後の振込予定</span>
+    </div>
+    <div class="bg-paper border border-black/5 rounded-2xl overflow-hidden">
+      <div id="payouts" class="divide-y divide-black/5"></div>
+    </div>
+  </section>
+
+</main>
+
+
+
+<div id="toast" class="toast"><span class="ico">✓</span><span id="toast-msg"></span></div>
+
+
+<script>
+// ============================================
+// 9-Step automation pipeline
+// ============================================
+const STEPS = [
+  { id: 1, label: '契約書 自動生成',    short: '契約書生成',  system: 'Claude AI',   icon: '📄' },
+  { id: 2, label: '電子契約 送信',       short: '電子契約',    system: 'CloudSign',   icon: '✉️' },
+  { id: 3, label: 'クライアント押印待ち', short: '押印待ち',    system: 'CloudSign',   icon: '✍️' },
+  { id: 4, label: 'エンジニア合意',      short: 'エンジニア',  system: 'Slack',       icon: '🤝' },
+  { id: 5, label: '着工 / オンボーディング', short: '着工',     system: 'SAKIGAKE OS', icon: '🚀' },
+  { id: 6, label: 'タイムシート自動集計', short: '工数集計',    system: 'Lark Base',   icon: '⏱️' },
+  { id: 7, label: 'クライアント請求書 発行', short: '請求発行', system: 'freee会計',   icon: '🧾' },
+  { id: 8, label: '入金確認 / 自動消し込み', short: '入金確認',  system: 'GMOあおぞら', icon: '🏦' },
+  { id: 9, label: '送金 → あなたに報酬', short: '報酬振込',    system: 'GMOあおぞら', icon: '💰' },
+];
+
+// ============================================
+// Sample deals — different stages
+// ============================================
+const deals = [
+  {
+    id: 'DEAL-301',
+    eng: 'Y.N', engRole: 'インフラ / SRE',
+    client: 'FinX 株式会社', project: '決済プラットフォーム / バックエンド',
+    rate: 105, // 万
+    yourMonthly: 105 * 0.1, // 10.5 万 / 月
+    currentStep: 3,
+    currentDetail: 'CloudSign で FinX 法務部の押印を待機中（推定残 1.5 営業日）',
+    startedHoursAgo: 38,
+    nextActionAuto: '本日中に押印完了見込み。完了後、自動でエンジニア合意フェーズへ進行。',
+  },
+  {
+    id: 'DEAL-295',
+    eng: 'H.W', engRole: 'データエンジニア',
+    client: 'AIvory', project: 'DWH構築 / Snowflake',
+    rate: 80,
+    yourMonthly: 80 * 0.1,
+    currentStep: 6,
+    currentDetail: '5月分タイムシート (140時間) を Lark Base で自動集計 → 確定済み',
+    startedHoursAgo: 320,
+    nextActionAuto: '明日 09:00 に freee で請求書を自動発行し、AIvory経理へ送付します。',
+  },
+  {
+    id: 'DEAL-287',
+    eng: 'S.N', engRole: 'AWS / SRE',
+    client: 'Rakume', project: 'EC基盤 / クラウド移行',
+    rate: 90,
+    yourMonthly: 90 * 0.1,
+    currentStep: 8,
+    currentDetail: 'Rakume社からの入金 (¥900,000) を 5/24 に検知 → 自動消し込み完了',
+    startedHoursAgo: 580,
+    nextActionAuto: '6/15 に エンジニア (¥720,000) と あなた (¥90,000) へ自動送金予定。',
+  },
+];
+
+// ============================================
+// Render Deal Pipelines
+// ============================================
+function dealCard(d) {
+  const stepsHtml = STEPS.map(s => {
+    const done = s.id < d.currentStep;
+    const active = s.id === d.currentStep;
+    const upcoming = s.id > d.currentStep;
+    let cls = '', dotCls = '', labelCls = '';
+    if (done) {
+      cls = 'bg-ink text-white';
+      dotCls = 'bg-mint';
+      labelCls = 'text-ink2';
+    } else if (active) {
+      cls = 'ai-shimmer text-ink';
+      dotCls = 'bg-mint pulse-mint';
+      labelCls = 'text-ink font-bold';
+    } else {
+      cls = 'bg-cream2 text-inkmute';
+      dotCls = 'bg-black/15';
+      labelCls = 'text-inkmute';
+    }
+    return `
+      <div class="flex-1 min-w-0 flex flex-col items-center group">
+        <div class="w-9 h-9 rounded-full ${cls} flex items-center justify-center mono font-black text-[11px] relative">
+          ${done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4 10-10"/></svg>' : active ? '<span class="text-[12px]">'+ s.icon +'</span>' : s.id}
+        </div>
+        <div class="mt-1.5 text-center px-1">
+          <div class="${labelCls} text-[10px] leading-tight font-bold">${s.short}</div>
+          <div class="text-inkmute mono text-[8.5px] tracking-[0.04em] mt-0.5 truncate">${s.system}</div>
+        </div>
+      </div>
+    `;
+  }).join('<div class="flex-shrink-0 w-2 md:w-4 h-px bg-black/10 mt-[18px]"></div>');
+
+  const stepDetail = STEPS[d.currentStep - 1];
+  return `
+    <div class="bg-paper border border-black/5 rounded-2xl p-5 fade-in">
+      <div class="flex items-start gap-4 flex-wrap mb-5">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-11 h-11 rounded-xl bg-mintsoft text-mintdeep flex items-center justify-center mono font-black text-[13px] flex-shrink-0">${d.eng}</div>
+          <div class="min-w-0">
+            <div class="font-black text-[15px] leading-tight">${d.eng} さん × ${d.client}</div>
+            <div class="text-[11.5px] text-inksoft mono mt-0.5 truncate">${d.engRole} · ${d.project} · ${d.id}</div>
+          </div>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-5">
+          <div class="text-right">
+            <div class="mono text-[9.5px] text-inkmute tracking-wider uppercase">単価 / 月</div>
+            <div class="num font-black text-[18px]">¥${(d.rate*10000).toLocaleString()}</div>
+          </div>
+          <div class="text-right">
+            <div class="mono text-[9.5px] text-mintdeep tracking-wider uppercase">あなたの取り分</div>
+            <div class="num font-black text-[18px] text-mintdeep">¥${(d.yourMonthly*10000).toLocaleString()}<span class="text-[11px] font-bold ml-0.5">/月</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stepper -->
+      <div class="flex items-start justify-between gap-0 overflow-x-auto pb-1">
+        ${stepsHtml}
+      </div>
+
+      <!-- Current step detail -->
+      <div class="mt-5 pt-4 border-t border-black/5 grid md:grid-cols-[auto_1fr_auto] gap-4 items-center">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl ai-shimmer flex items-center justify-center text-ink">
+            <span class="text-[14px]">${stepDetail.icon}</span>
+          </div>
+          <div>
+            <div class="mono text-[9.5px] text-inkmute tracking-[0.14em] uppercase">CURRENT</div>
+            <div class="font-black text-[13.5px] leading-tight">${stepDetail.label}</div>
+          </div>
+        </div>
+        <div>
+          <div class="text-[12.5px] text-ink2 leading-relaxed">${d.currentDetail}</div>
+          <div class="mt-1.5 text-[11px] text-inksoft leading-relaxed flex items-start gap-1.5">
+            <span class="text-mintdeep flex-shrink-0">→</span>
+            <span>${d.nextActionAuto}</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 bg-mintsoft text-mintdeep px-3 py-1.5 rounded-lg whitespace-nowrap self-start">
+          <span class="w-1.5 h-1.5 rounded-full bg-mintdeep blink"></span>
+          <span class="mono text-[10px] tracking-[0.14em] uppercase font-black">AUTO-RUNNING</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+document.getElementById('deals').innerHTML = deals.map(dealCard).join('');
+
+
+
+
+// ============================================
+// Payout schedule (no calendar widget — table)
+// ============================================
+const payouts = [
+  { date: '2026-06-15', day: '月', label: '5月度 ストック報酬',  amount: 325000, breakdown: '稼働4名 (T.Y / A.M / S.N / H.W)', status: 'next', sub: '次回振込 · あと 20 日' },
+  { date: '2026-07-15', day: '水', label: '6月度 ストック報酬',  amount: 365000, breakdown: '稼働4名 + 提案中2名着地時 +¥40,000 上振れ可能', status: 'projected', sub: '予測値' },
+  { date: '2026-08-15', day: '土', label: '7月度 ストック報酬',  amount: 425000, breakdown: '6名稼働想定 / 単価UP込み', status: 'projected', sub: '予測値' },
+  { date: '2026-05-15', day: '金', label: '4月度 ストック報酬',  amount: 280000, breakdown: '稼働3名 (T.Y / S.N / H.W)',  status: 'done', sub: '振込完了 ✓' },
+  { date: '2026-04-15', day: '水', label: '3月度 ストック報酬',  amount: 245000, breakdown: '稼働3名',                       status: 'done', sub: '振込完了 ✓' },
+];
+function payoutRow(p) {
+  const isNext  = p.status === 'next';
+  const isDone  = p.status === 'done';
+  const isProj  = p.status === 'projected';
+  const accent =
+    isNext ? 'bg-ink text-white' :
+    isDone ? 'bg-cream2 text-inksoft' :
+    'bg-paper text-ink2 border border-dashed border-black/15';
+  const amountCls =
+    isNext ? 'text-mint' :
+    isDone ? 'text-inksoft line-through opacity-70' :
+    'text-ink/70';
+  return `
+    <div class="grid grid-cols-[140px_1fr_auto] gap-4 p-4 items-center ${isNext ? 'bg-mintsoft/40' : ''}">
+      <div class="flex items-center gap-3">
+        <div class="${accent} rounded-xl w-14 py-2 text-center flex-shrink-0">
+          <div class="mono text-[9px] tracking-[0.14em] uppercase opacity-70">${p.date.slice(0,7)}</div>
+          <div class="num font-black text-[20px] leading-none mt-0.5">${parseInt(p.date.slice(-2),10)}</div>
+          <div class="mono text-[9px] mt-0.5 ${isNext ? 'text-mint' : 'opacity-50'}">${p.day}</div>
+        </div>
+      </div>
+      <div class="min-w-0">
+        <div class="flex items-baseline gap-2 flex-wrap">
+          <span class="font-bold text-[14px]">${p.label}</span>
+          ${isNext ? '<span class="mono text-[9px] font-black tracking-wider bg-mint text-ink px-1.5 py-0.5 rounded">NEXT</span>' : ''}
+          ${isProj ? '<span class="mono text-[9px] font-bold tracking-wider text-inksoft border border-black/15 px-1.5 py-0.5 rounded">PROJECTED</span>' : ''}
+          ${isDone ? '<span class="mono text-[9px] font-bold tracking-wider text-mintdeep">✓ DONE</span>' : ''}
+        </div>
+        <div class="text-[11.5px] text-inksoft mt-1">${p.breakdown}</div>
+        <div class="mono text-[10px] mt-1 ${isNext ? 'text-mintdeep font-bold' : 'text-inkmute'}">${p.sub}</div>
+      </div>
+      <div class="num font-black text-[20px] ${amountCls} whitespace-nowrap">¥${p.amount.toLocaleString()}</div>
+    </div>
+  `;
+}
+// Sort: next on top, then projected, then done (descending date)
+const sortedPayouts = [
+  ...payouts.filter(p => p.status === 'next'),
+  ...payouts.filter(p => p.status === 'projected'),
+  ...payouts.filter(p => p.status === 'done').sort((a,b) => b.date.localeCompare(a.date)),
+];
+document.getElementById('payouts').innerHTML = sortedPayouts.map(payoutRow).join('');
+
+
+// ============================================
+// Toast
+// ============================================
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+</script>
+
+</body>
+</html>

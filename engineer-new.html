@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — 新規エンジニア登録</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { ink:'#0A0A0A', ink2:'#2A2A2D', inksoft:'#555559', inkmute:'#8A8A8F', paper:'#FFFFFF', cream:'#F4F1E8', cream2:'#ECE8DB', mint:'#4ADE80', mintdeep:'#16A34A', mintsoft:'#D7F7E0', mintglow:'#B6F4A5', warn:'#F59E0B', warnsoft:'#FEF3C7', info:'#3B82F6', infosoft:'#DBEAFE' },
+}}}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+  .fld { display: flex; flex-direction: column; gap: 4px; }
+  .fld label { font-family: "JetBrains Mono", monospace; font-size: 10px; color: #555559; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; }
+  .fld input, .fld select, .fld textarea {
+    background: #FFFFFF; border: 1px solid rgba(10,10,10,0.08); border-radius: 10px; padding: 10px 12px;
+    font-size: 13px; color: #0A0A0A; outline: none; transition: border-color 0.12s ease, box-shadow 0.12s ease;
+    font-family: inherit;
+  }
+  .fld textarea { resize: vertical; line-height: 1.6; }
+  .fld input:focus, .fld select:focus, .fld textarea:focus { border-color: #0A0A0A; box-shadow: 0 0 0 3px rgba(74,222,128,0.18); }
+  .req::after { content: " *"; color: #EF4444; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition"><span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span><span class="font-medium hidden xl:inline">ダッシュボード</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink text-white font-bold"><span class="mono text-[9px] text-mint tracking-[0.14em] font-bold">02</span><span class="w-1.5 h-1.5 rounded-full bg-mint blink"></span><span>エンジニア</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition"><span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">03</span><span class="font-medium hidden xl:inline">案件</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition"><span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span><span class="font-medium hidden xl:inline">自動処理</span></a>
+    </nav>
+    <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+      <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+      <div class="hidden sm:block"><div class="font-bold text-[13px] leading-tight">田中 健一</div></div>
+    </a>
+  </div>
+</header>
+
+
+<main class="max-w-[920px] mx-auto px-6 py-7">
+
+  <a href="engineers.html" class="inline-flex items-center gap-1.5 text-[12px] text-inksoft hover:text-ink font-bold transition mb-5">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+    <span>エンジニア一覧に戻る</span>
+  </a>
+
+  <div class="mb-7">
+    <div class="mono text-[11px] text-inksoft tracking-[0.22em] uppercase font-bold mb-3 flex items-center gap-3">
+      <span class="block w-7 h-[1.5px] bg-ink"></span>
+      <span>エンジニア登録 (約30秒で完了)</span>
+    </div>
+    <h1 class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(26px, 4vw, 38px);">
+      新規エンジニアを<span class="hl">登録</span>
+    </h1>
+    <p class="mt-3 text-inksoft text-[13.5px] leading-relaxed max-w-2xl">
+      まずはエンジニア本人にフォーム入力をお願い → 内容を確認して、必要な箇所だけ補完してください。
+    </p>
+  </div>
+
+
+  <!-- ============== Send to Engineer ============== -->
+  <section class="bg-ink text-white rounded-2xl p-5 lg:p-6 mb-5 relative overflow-hidden">
+    <div class="absolute -right-12 -bottom-12 w-56 h-56 rounded-full" style="background: radial-gradient(circle, rgba(74,222,128,0.15), transparent 65%);"></div>
+    <div class="relative">
+      <div class="flex items-center gap-3 mb-3 flex-wrap">
+        <span class="block w-4 h-[1.5px] bg-mint"></span>
+        <span class="mono text-[11px] text-mint tracking-[0.18em] uppercase font-bold">① エンジニアに案内を送る</span>
+        <span class="flex-1"></span>
+        <button type="button" id="copy-intro" class="bg-mint hover:bg-[#5BE890] text-ink px-4 py-2 rounded-lg text-[12px] font-bold flex items-center gap-1.5 whitespace-nowrap transition shadow-[0_2px_8px_rgba(74,222,128,0.25)]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2M8 5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2m0 0h2a2 2 0 0 1 2 2v3m0 4h-6m0 0l2-2m-2 2l2 2"/></svg>
+          案内文を全文コピー
+        </button>
+      </div>
+      <p class="text-[12.5px] text-white/65 leading-relaxed mb-4">
+        下記の案内文を Slack / LINE / メールで送るだけ。<span class="text-mint font-bold">エンジニアが30秒で必要情報を入力</span> → このフォームに自動反映されます。
+      </p>
+      <textarea id="intro-text" spellcheck="false" class="w-full bg-black/40 border border-white/10 text-mint/95 rounded-xl p-4 font-mono text-[12px] leading-[1.75] h-[240px] outline-none focus:ring-2 focus:ring-mint/40 resize-y selection:bg-mint/30">○○さん
+
+お世話になっております。SAKIGAKE 営業の田中です。
+案件マッチング用に、まずは以下のフォームから基本情報のご入力をお願いいたします。
+
+▼ エンジニア情報入力フォーム (所要時間: 約30秒)
+https://until-denatured-moonlit.ngrok-free.dev/
+
+【入力いただく内容】
+・イニシャル / 年齢 / 最寄り駅
+・稼働可能日 / 希望単価 / 並行件数
+・経験年数 / 言語 / FW / 工程 / DB / ツール
+・スキルシートURL (Google スプレッドシート)
+
+ご不明点があればお気軽にご連絡ください。
+よろしくお願いいたします。</textarea>
+      <div class="mt-3 flex items-center gap-2 flex-wrap">
+        <span class="mono text-[10px] text-white/45 tracking-[0.12em] uppercase">URL:</span>
+        <a href="https://until-denatured-moonlit.ngrok-free.dev/" target="_blank" rel="noopener" class="mono text-[11.5px] text-mint hover:underline truncate">until-denatured-moonlit.ngrok-free.dev</a>
+        <button type="button" id="copy-url" class="ml-auto border border-white/15 hover:border-mint text-white text-[10.5px] font-bold px-2.5 py-1 rounded-md mono tracking-wide transition">URLのみコピー</button>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="mb-5 flex items-center gap-3">
+    <span class="block w-4 h-[1.5px] bg-ink"></span>
+    <span class="mono text-[11px] text-inksoft tracking-[0.18em] uppercase font-bold">② 営業が内容を補完 (任意)</span>
+  </div>
+
+
+  <form id="form" class="flex flex-col gap-5">
+
+    <!-- 基本情報 -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>基本情報</span>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="fld"><label class="req">イニシャル</label><input name="initial" required placeholder="A.H" maxlength="6"/></div>
+        <div class="fld"><label class="req">年齢</label><input name="age" type="number" required placeholder="31" min="18" max="80"/></div>
+        <div class="fld"><label>性別</label>
+          <select name="gender">
+            <option value="男性">男性</option><option value="女性">女性</option><option value="その他">その他</option>
+          </select>
+        </div>
+        <div class="fld md:col-span-2"><label>最寄り駅 (地域)</label><input name="station" placeholder="中洲川端駅（福岡）"/></div>
+        <div class="fld"><label class="req">稼働可能日</label><input name="startable" required placeholder="即日 / 2026-06-15〜"/></div>
+        <div class="fld"><label>所属</label><input name="affiliation" value="弊社社員"/></div>
+        <div class="fld"><label>通勤</label><input name="workStyle" placeholder="フルリモート / 週3リモート"/></div>
+        <div class="fld"><label class="req">単価 (万円 / 月)</label><input name="rate" type="number" required placeholder="65" min="30" max="200"/></div>
+        <div class="fld"><label>並行件数</label><input name="parallel" type="number" value="0" min="0" max="10"/></div>
+        <div class="fld"><label>エンジニア歴 (年)</label><input name="yoe" type="number" placeholder="4" min="0" max="40"/></div>
+      </div>
+    </section>
+
+    <!-- 技術スタック -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>技術スタック</span>
+      </div>
+      <div class="grid gap-4">
+        <div class="fld"><label class="req">言語 / FW</label><input name="techStack" required placeholder="TypeScript(React, Next.js) 3年、PHP(Laravel) 2年"/></div>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="fld"><label>工程</label><input name="phases" placeholder="基本設計〜運用保守"/></div>
+          <div class="fld"><label>DB / OS</label><input name="dbos" placeholder="Firebase、Windows、Mac"/></div>
+          <div class="fld"><label>ツール</label><input name="tools" placeholder="Git、GitHub、Backlog"/></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- スキル詳細 + アピール -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>スキル詳細 / アピール</span>
+      </div>
+      <div class="grid gap-4">
+        <div class="fld">
+          <label>スキル (1行に1項目)</label>
+          <textarea name="skills" rows="4" placeholder="Webアプリ開発（React/Next.js・Laravel）
+動画配信サービス開発・運用保守経験
+小規模案件両方の自走経験"></textarea>
+        </div>
+        <div class="fld">
+          <label>アピールポイント</label>
+          <textarea name="appeal" rows="3" placeholder="柔らかい態度で話しやすく、報連相を大切にする協調性のある明るいエンジニアです。"></textarea>
+        </div>
+        <div class="fld">
+          <label>面談可能日時 (1行に1項目)</label>
+          <textarea name="availableSlots" rows="4" placeholder="5月26日(火) 12:00~18:30
+5月27日(水) 12:00~18:30
+5月28日(木) 12:00~18:30
+5月29日(金) 12:00~18:30"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- スキルシート -->
+    <section class="bg-paper border-2 border-mint/40 rounded-2xl p-6 relative overflow-hidden">
+      <div class="absolute -right-6 -top-6 w-20 h-20 rounded-full bg-mint/10"></div>
+      <div class="relative">
+        <div class="mono text-[10px] text-mintdeep tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-mintdeep"></span>
+          <span>スキルシート URL (必須)</span>
+        </div>
+        <div class="fld">
+          <label class="req">Google スプレッドシート URL</label>
+          <input name="skillSheetUrl" type="url" required placeholder="https://docs.google.com/spreadsheets/d/..."/>
+        </div>
+        <div class="mt-3 text-[11.5px] text-inksoft leading-relaxed">
+          ※ エンジニアからスキルシートの共有リンクを送ってもらってください。<br/>
+          ※ クライアント送付テキストにそのまま埋め込まれます。
+        </div>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3 justify-end pt-3 flex-wrap">
+      <a href="engineers.html" class="border border-black/10 hover:border-ink text-[13px] font-bold px-5 py-3 rounded-xl transition">キャンセル</a>
+      <button type="button" id="save-draft" class="border border-black/10 hover:border-ink text-[13px] font-bold px-5 py-3 rounded-xl transition">下書き保存</button>
+      <button type="submit" class="bg-mint hover:bg-[#5BE890] text-ink font-black text-[13px] px-6 py-3 rounded-xl flex items-center gap-2 shadow-[0_6px_20px_rgba(74,222,128,0.25)] transition">
+        登録して送付テキストを生成
+        <span class="text-mintdeep">→</span>
+      </button>
+    </div>
+
+  </form>
+
+</main>
+
+
+<div id="toast" class="fixed left-1/2 bottom-8 -translate-x-1/2 translate-y-5 opacity-0 pointer-events-none bg-ink text-white px-5 py-2.5 rounded-full text-[13px] font-bold z-50 shadow-lg transition-all duration-200"><span class="text-mint mr-1">✓</span><span id="toast-msg"></span></div>
+
+
+<script>
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.remove('opacity-0','translate-y-5');
+  t.classList.add('opacity-100','translate-y-0');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => {
+    t.classList.add('opacity-0','translate-y-5');
+    t.classList.remove('opacity-100','translate-y-0');
+  }, 2400);
+}
+
+function copyText(text) {
+  // Try modern clipboard API first
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text).then(() => true).catch(() => fallbackCopy(text));
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+function fallbackCopy(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly','');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) { return false; }
+}
+
+document.getElementById('copy-intro').addEventListener('click', async () => {
+  const ta = document.getElementById('intro-text');
+  ta.focus();
+  ta.select();
+  const ok = await copyText(ta.value);
+  toast(ok ? '📋 エンジニア向け案内文をコピーしました — 貼り付けて送信' : '⚠ コピー失敗 — テキストが選択されているので ⌘C / Ctrl+C を押してください');
+});
+
+document.getElementById('copy-url').addEventListener('click', async () => {
+  const url = 'https://until-denatured-moonlit.ngrok-free.dev/';
+  const ok = await copyText(url);
+  toast(ok ? '🔗 フォーム URL をコピーしました' : '⚠ URL コピー失敗 — ' + url);
+});
+
+document.getElementById('save-draft').addEventListener('click', () => {
+  toast('💾 下書きを保存しました');
+});
+
+document.getElementById('form').addEventListener('submit', (ev) => {
+  ev.preventDefault();
+  const data = new FormData(ev.target);
+  const initial = data.get('initial') || 'NEW';
+  toast(`🚀 ${initial} さんを登録しました — エンジニア一覧に戻ります`);
+  setTimeout(() => { location.href = 'engineers.html'; }, 1400);
+});
+</script>
+
+</body>
+</html>

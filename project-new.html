@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — 新規案件登録</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { ink:'#0A0A0A', ink2:'#2A2A2D', inksoft:'#555559', inkmute:'#8A8A8F', paper:'#FFFFFF', cream:'#F4F1E8', cream2:'#ECE8DB', mint:'#4ADE80', mintdeep:'#16A34A', mintsoft:'#D7F7E0', mintglow:'#B6F4A5', warn:'#F59E0B', warnsoft:'#FEF3C7', info:'#3B82F6', infosoft:'#DBEAFE' },
+}}}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+  .fld { display: flex; flex-direction: column; gap: 4px; }
+  .fld label { font-family: "JetBrains Mono", monospace; font-size: 10px; color: #555559; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; }
+  .fld input, .fld select, .fld textarea {
+    background: #FFFFFF; border: 1px solid rgba(10,10,10,0.08); border-radius: 10px; padding: 10px 12px;
+    font-size: 13px; color: #0A0A0A; outline: none; transition: border-color 0.12s ease, box-shadow 0.12s ease;
+    font-family: inherit;
+  }
+  .fld textarea { resize: vertical; line-height: 1.6; }
+  .fld input:focus, .fld select:focus, .fld textarea:focus { border-color: #0A0A0A; box-shadow: 0 0 0 3px rgba(74,222,128,0.18); }
+  .req::after { content: " *"; color: #EF4444; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<!-- =========== HEADER =========== -->
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition"><span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span><span class="font-medium hidden xl:inline">ダッシュボード</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition"><span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">02<span class="ml-0.5 opacity-70">✓</span></span><span class="font-medium hidden xl:inline">エンジニア</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink text-white font-bold"><span class="mono text-[9px] text-mint tracking-[0.14em] font-bold">03</span><span class="w-1.5 h-1.5 rounded-full bg-mint blink"></span><span>案件</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition"><span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span><span class="font-medium hidden xl:inline">自動処理</span></a>
+    </nav>
+    <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+      <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+      <div class="hidden sm:block"><div class="font-bold text-[13px] leading-tight">田中 健一</div></div>
+    </a>
+  </div>
+</header>
+
+
+<!-- =========== MAIN =========== -->
+<main class="max-w-[920px] mx-auto px-6 py-7">
+
+  <!-- Back link -->
+  <a href="projects.html" class="inline-flex items-center gap-1.5 text-[12px] text-inksoft hover:text-ink font-bold transition mb-5">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+    <span>案件一覧に戻る</span>
+  </a>
+
+  <!-- Page title -->
+  <div class="mb-7">
+    <div class="mono text-[11px] text-inksoft tracking-[0.22em] uppercase font-bold mb-3 flex items-center gap-3">
+      <span class="block w-7 h-[1.5px] bg-ink"></span>
+      <span>案件登録 (担当エンジニアと自動マッチ)</span>
+    </div>
+    <h1 class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(26px, 4vw, 38px);">
+      新規案件を<span class="hl">登録</span>
+    </h1>
+    <p class="mt-3 text-inksoft text-[13.5px] leading-relaxed max-w-2xl">
+      案件URLを貼り付けるか、下記フォームを直接入力。<br/>
+      登録後、<span class="font-bold text-ink">担当エンジニアと自動照合</span>して推奨を表示します。
+    </p>
+  </div>
+
+
+  <!-- =========== FORM =========== -->
+  <form id="form" class="flex flex-col gap-5">
+
+    <!-- ① Quick paste from email -->
+    <section class="bg-ink text-white rounded-2xl p-5 lg:p-6 relative overflow-hidden">
+      <div class="absolute -right-10 -top-10 w-32 h-32 rounded-full" style="background: radial-gradient(circle, rgba(74,222,128,0.15), transparent 65%);"></div>
+      <div class="relative">
+        <div class="mono text-[10px] text-mint tracking-[0.18em] uppercase font-bold mb-2 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-mint"></span>
+          <span>案件メールを全文貼り付け → AI が項目を自動抽出</span>
+        </div>
+        <p class="text-[12px] text-white/65 leading-relaxed mb-3">
+          クライアントから届いた案件メールの本文をそのまま貼り付けて下さい。「■案件概要」「■スキル要件」「■作業場所」「■人数」「■時期」など、バラバラなフォーマットでも可能な限りパースします。
+        </p>
+        <textarea id="emailText" placeholder="メール本文をそのまま貼り付け…" class="w-full bg-white/[0.06] border border-white/15 rounded-lg px-4 py-3 text-[12px] text-white/95 placeholder:text-white/30 outline-none focus:border-mint font-mono leading-[1.6] resize-y h-[200px]" spellcheck="false"></textarea>
+        <div class="mt-3 flex items-center gap-2 flex-wrap">
+          <button type="button" id="sample-fill" class="text-white/55 hover:text-mint text-[11px] font-bold underline underline-offset-2 transition">サンプルメールを入れる</button>
+          <span class="flex-1"></span>
+          <button type="button" id="ai-fill" class="bg-mint hover:bg-[#5BE890] text-ink font-bold px-4 py-2.5 rounded-lg text-[12.5px] whitespace-nowrap transition">
+            ⚡ AI でフォームを自動入力
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ② クライアント情報 -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>クライアント情報</span>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="fld md:col-span-2"><label class="req">クライアント名</label><input name="client" required placeholder="FinX 株式会社"/></div>
+        <div class="fld"><label>ロゴテキスト (2文字)</label><input name="logo" maxlength="3" placeholder="FX"/></div>
+        <div class="fld md:col-span-2"><label>業種</label>
+          <select name="industry">
+            <option>FinTech</option><option>SaaS</option><option>EC</option><option>HRTech</option><option>AI</option><option>金融</option><option>SI</option><option>B2C</option><option>その他</option>
+          </select>
+        </div>
+        <div class="fld"><label>担当窓口</label><input name="contact" placeholder="高橋 大輔"/></div>
+      </div>
+    </section>
+
+
+    <!-- ③ 案件情報 -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>案件情報</span>
+      </div>
+      <div class="grid gap-4">
+        <div class="fld"><label class="req">案件タイトル</label><input name="title" required placeholder="決済プラットフォーム / バックエンド刷新"/></div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="fld"><label class="req">ロール</label><input name="role" required placeholder="バックエンドエンジニア"/></div>
+          <div class="fld"><label>勤務スタイル</label><input name="workStyle" placeholder="週3リモート + 渋谷"/></div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="fld"><label class="req">単価下限 (万)</label><input name="rateMin" type="number" required placeholder="80" min="30" max="200"/></div>
+          <div class="fld"><label class="req">単価上限 (万)</label><input name="rateMax" type="number" required placeholder="95" min="30" max="200"/></div>
+          <div class="fld"><label>募集人数</label><input name="headcount" type="number" value="1" min="1" max="20"/></div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="fld"><label class="req">期間 (ヶ月)</label><input name="months" type="number" required placeholder="6" min="1" max="36"/></div>
+          <div class="fld"><label class="req">開始日</label><input name="start" type="date" required/></div>
+          <div class="fld"><label class="req">応募締切</label><input name="deadline" type="date" required/></div>
+        </div>
+        <div class="fld">
+          <label>必須スキル (カンマ区切り)</label>
+          <input name="skills" placeholder="Go, PostgreSQL, AWS, Kubernetes"/>
+        </div>
+        <div class="fld">
+          <label>案件概要</label>
+          <textarea name="description" rows="5" placeholder="決済マイクロサービスの再設計プロジェクト。Go経験3年以上必須。"></textarea>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <label class="flex items-center gap-2.5 bg-cream/50 border border-black/5 rounded-xl px-4 py-3 cursor-pointer">
+            <input type="checkbox" name="urgent" class="w-4 h-4 accent-warn"/>
+            <span class="text-[13px] font-bold">🔥 緊急案件としてマーク</span>
+          </label>
+          <label class="flex items-center gap-2.5 bg-cream/50 border border-black/5 rounded-xl px-4 py-3 cursor-pointer">
+            <input type="checkbox" name="aiMatch" class="w-4 h-4 accent-mint" checked/>
+            <span class="text-[13px] font-bold">⚡ 登録後すぐに AI マッチング</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ Actions -->
+    <div class="flex items-center gap-3 justify-end pt-3 flex-wrap">
+      <a href="projects.html" class="border border-black/10 hover:border-ink text-[13px] font-bold px-5 py-3 rounded-xl transition">キャンセル</a>
+      <button type="button" id="save-draft" class="border border-black/10 hover:border-ink text-[13px] font-bold px-5 py-3 rounded-xl transition">下書き保存</button>
+      <button type="submit" class="bg-ink hover:bg-[#1f1f1f] text-white font-black text-[13px] px-6 py-3 rounded-xl flex items-center gap-2 shadow-[0_6px_20px_rgba(10,10,10,0.18)] transition">
+        <span class="text-mint">⚡</span>
+        登録 + AI マッチング実行
+        <span class="text-mint">→</span>
+      </button>
+    </div>
+
+  </form>
+
+</main>
+
+
+<!-- =========== TOAST =========== -->
+<div id="toast" class="fixed left-1/2 bottom-8 -translate-x-1/2 translate-y-5 opacity-0 pointer-events-none bg-ink text-white px-5 py-2.5 rounded-full text-[13px] font-bold z-50 shadow-lg transition-all duration-200"><span class="text-mint mr-1">✓</span><span id="toast-msg"></span></div>
+
+
+<script>
+// ============================================
+// Toast helper
+// ============================================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.remove('opacity-0','translate-y-5');
+  t.classList.add('opacity-100','translate-y-0');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => {
+    t.classList.add('opacity-0','translate-y-5');
+    t.classList.remove('opacity-100','translate-y-0');
+  }, 2400);
+}
+
+// ============================================
+// Sample email data
+// ============================================
+const SAMPLE_EMAIL = `====================================
+■担当営業
+　待水
+　s-machimizu@b-tm.co.jp
+　080-9653-9797
+■特記事項：
+・スキル要件のご経験可否を〇×ください
+・恐れながらご提案から5営業日以降連絡がない場合は、お見送りにてお願い致します。
+====================================
+■案件概要：
+　電子契約システム追加機能開発（Java） ※募集時期変更しました。
+■作業フェーズ：
+　詳細設計～IT、リリース対応
+■時期：
+　2026年7月～長期
+■スキル要件：
+【必須】
+・Java（Spring）のご経験
+・Terasoluna
+・設計～のご経験
+【尚可】
+・AWS環境での開発経験
+■作業場所
+　泉岳寺　※リモート併用
+■人数：
+　2名　※7月以降も増員有
+■就業時間
+　9:30-18:00
+■商談回数：
+　1～2回
+■単価：
+　スキル見合い（150－190h）　※営業日数によって下限140h調整有
+■備考：
+・契約形態：準委任契約
+・商流：貴社迄（個人事業主可）
+・外国籍：NG
+====================================`;
+
+// ============================================
+// Email parser — extracts structured data from free-form project emails
+// ============================================
+function parseProjectEmail(text) {
+  const data = { description: text.trim() };
+
+  const grab = (label) => {
+    const re = new RegExp('■' + label + '[：:]?\\s*\\n([\\s\\S]*?)(?=\\n■|\\n=|$)', 'm');
+    const m = text.match(re);
+    return m ? m[1].split('\n').map(l => l.replace(/^[\s　]+/, '').replace(/[\s　]+$/, '')).filter(Boolean).join('\n') : '';
+  };
+
+  // 案件タイトル
+  const overview = grab('案件概要');
+  if (overview) data.title = overview.split('\n')[0].replace(/\s*※.*$/, '').trim();
+
+  // 作業場所 → 勤務スタイル
+  const place = grab('作業場所');
+  if (place) data.workStyle = place.replace(/\n/g, ' ').trim();
+
+  // 人数
+  const count = grab('人数');
+  const cm = count.match(/(\d+)\s*名/);
+  if (cm) data.headcount = parseInt(cm[1], 10);
+
+  // 時期 → 開始日
+  const time = grab('時期');
+  const tm = time.match(/(\d{4})\s*年\s*(\d{1,2})\s*月/);
+  if (tm) data.start = `${tm[1]}-${String(tm[2]).padStart(2, '0')}-01`;
+
+  // スキル要件 → 必須スキル
+  const skillSec = grab('スキル要件');
+  if (skillSec) {
+    let requiredPart = skillSec;
+    if (skillSec.includes('【必須】')) {
+      requiredPart = skillSec.split('【必須】')[1].split('【尚可】')[0];
+    }
+    const skills = (requiredPart || '').split('\n')
+      .filter(l => /^[・･]/.test(l))
+      .map(l => l.replace(/^[・･]\s*/, '').trim())
+      .filter(Boolean);
+    if (skills.length) data.skills = skills.join(', ');
+  }
+
+  // 担当営業 → 担当窓口
+  const contactSec = grab('担当営業');
+  if (contactSec) data.contact = contactSec.split('\n')[0].trim();
+
+  return data;
+}
+
+// ============================================
+// Event handlers
+// ============================================
+
+// Sample fill
+document.getElementById('sample-fill').addEventListener('click', () => {
+  document.getElementById('emailText').value = SAMPLE_EMAIL;
+  toast('📄 サンプルメールを貼り付けました — AI でフォームを自動入力 を押して下さい');
+});
+
+// AI auto-fill
+document.getElementById('ai-fill').addEventListener('click', () => {
+  const text = document.getElementById('emailText').value.trim();
+  if (!text) { toast('⚠ メール本文を貼り付けて下さい'); return; }
+
+  const btn = document.getElementById('ai-fill');
+  btn.disabled = true;
+  btn.textContent = '⚡ 読み取り中...';
+  toast('⚡ AI がメールを読み取り中...');
+
+  setTimeout(() => {
+    const d = parseProjectEmail(text);
+
+    const setVal = (name, val) => {
+      if (val == null || val === '') return;
+      const el = document.querySelector(`[name="${name}"]`);
+      if (el) el.value = val;
+    };
+
+    setVal('title', d.title);
+    setVal('workStyle', d.workStyle);
+    setVal('headcount', d.headcount);
+    setVal('start', d.start);
+    setVal('skills', d.skills);
+    setVal('description', d.description);
+    setVal('contact', d.contact);
+
+    const filled = Object.keys(d).filter(k => d[k] && k !== 'description').length;
+    btn.disabled = false;
+    btn.textContent = '⚡ AI でフォームを自動入力';
+    toast(`✅ ${filled} 項目を自動入力しました — 単価・業種はチェックして下さい`);
+  }, 1500);
+});
+
+// Draft save
+document.getElementById('save-draft').addEventListener('click', () => {
+  toast('💾 下書きを保存しました');
+});
+
+// Form submit → Lark Base API
+document.getElementById('form').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const fd = new FormData(ev.target);
+  const title = fd.get('title') || '新案件';
+  const emailText = document.getElementById('emailText').value.trim();
+
+  const submitBtn = ev.target.querySelector('[type="submit"]');
+  submitBtn.disabled = true;
+  toast('⚡ Lark Base に登録中...');
+
+  try {
+    const body = {
+      title: title,
+      rawText: emailText || fd.get('description') || '',
+      rate: (fd.get('rateMin') && fd.get('rateMax')) ? fd.get('rateMin') + '万円〜' + fd.get('rateMax') + '万円' : '',
+      station: fd.get('workStyle') || '',
+      requirements: fd.get('skills') || '',
+      sender: fd.get('contact') || '',
+    };
+
+    const res = await fetch('/api/projects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      toast(`✅ 「${title}」を Lark Base に登録しました (${data.recordId})`);
+      setTimeout(() => { location.href = 'projects.html'; }, 1500);
+    } else {
+      throw new Error(data.error || '登録に失敗しました');
+    }
+  } catch (err) {
+    toast('❌ ' + err.message);
+    submitBtn.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>

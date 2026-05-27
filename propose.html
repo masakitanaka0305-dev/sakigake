@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — 提案テキスト作成</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      ink: '#0A0A0A', ink2: '#2A2A2D', inksoft: '#555559', inkmute: '#8A8A8F',
+      paper: '#FFFFFF', cream: '#F4F1E8', cream2: '#ECE8DB',
+      mint: '#4ADE80', mintdeep: '#16A34A', mintsoft: '#D7F7E0', mintglow: '#B6F4A5',
+      warn: '#F59E0B', warnsoft: '#FEF3C7',
+      info: '#3B82F6', infosoft: '#DBEAFE',
+    },
+  }}
+}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+  .av-c0 { background: #E6E1D2; } .av-c1 { background: #DDEDE3; } .av-c2 { background: #E7DFEC; } .av-c3 { background: #EFDFD3; } .av-c4 { background: #D9E5EF; } .av-c5 { background: #EDE2D2; }
+  .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+  .custom-scroll::-webkit-scrollbar-thumb { background: rgba(74,222,128,0.3); border-radius: 3px; }
+  .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">ダッシュボード</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">02<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">エンジニア</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink text-white font-bold">
+        <span class="mono text-[9px] text-mint tracking-[0.14em] font-bold">03</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-mint blink"></span>
+        <span>案件</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span>
+        <span class="font-medium hidden xl:inline">自動処理</span>
+      </a>
+    </nav>
+    <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+      <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+      <div class="hidden sm:block">
+        <div class="font-bold text-[13px] leading-tight">田中 健一</div>
+      </div>
+    </a>
+  </div>
+</header>
+
+
+<main class="max-w-[1280px] mx-auto px-6 py-6">
+
+  <a id="back-link" href="projects.html" class="inline-flex items-center gap-1.5 text-[12px] text-inksoft hover:text-ink font-bold transition mb-5">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+    <span>案件詳細に戻る</span>
+  </a>
+
+  <!-- ============== Page header ============== -->
+  <div class="mb-6">
+    <div class="mono text-[11px] text-inksoft tracking-[0.22em] uppercase font-bold mb-3 flex items-center gap-3">
+      <span class="block w-7 h-[1.5px] bg-ink"></span>
+      <span>提案テキスト作成</span>
+    </div>
+    <h1 class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(26px, 4vw, 38px);">
+      クライアントに送る<span class="hl">提案テキスト</span>を作成
+    </h1>
+    <p class="mt-3 text-inksoft text-[13.5px] leading-relaxed max-w-2xl">
+      担当エンジニアと案件のペアから提案文を自動生成。手入力で編集してそのままコピー → クライアントに送信できます。
+    </p>
+  </div>
+
+
+  <div class="grid lg:grid-cols-[1fr_1.6fr] gap-5">
+
+    <!-- ============== LEFT: project + engineer picker ============== -->
+    <div class="flex flex-col gap-4">
+
+      <!-- Selected Project -->
+      <section class="bg-paper border border-black/5 rounded-2xl p-5">
+        <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-ink"></span>
+          <span>提案先の案件</span>
+        </div>
+        <div id="project-card"></div>
+      </section>
+
+      <!-- Engineer Picker -->
+      <section class="bg-paper border border-black/5 rounded-2xl p-5">
+        <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-ink"></span>
+          <span>提案するエンジニア</span>
+        </div>
+        <div id="engineer-picker" class="flex flex-col gap-2"></div>
+      </section>
+
+    </div>
+
+
+    <!-- ============== RIGHT: proposal textarea ============== -->
+    <div>
+      <section class="bg-paper border border-black/5 rounded-2xl p-5 lg:p-6 sticky top-[88px]">
+        <div class="flex items-center gap-3 mb-3 flex-wrap">
+          <span class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold">送信用提案テキスト</span>
+          <span class="text-[10px] text-inkmute">· 直接編集可能</span>
+          <span class="flex-1"></span>
+          <button id="copy-btn" class="bg-mint hover:bg-[#5BE890] text-ink px-4 py-2 rounded-lg text-[12px] font-bold flex items-center gap-1.5 whitespace-nowrap transition shadow-[0_2px_8px_rgba(74,222,128,0.25)]">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2M8 5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2m0 0h2a2 2 0 0 1 2 2v3m0 4h-6m0 0l2-2m-2 2l2 2"/></svg>
+            全文コピー
+          </button>
+        </div>
+        <textarea id="proposal" class="w-full bg-ink text-mint/95 rounded-xl p-4 mono text-[11.5px] leading-[1.7] h-[540px] custom-scroll selection:bg-mint/30 outline-none focus:ring-2 focus:ring-mint/40 resize-y" spellcheck="false"></textarea>
+
+        <div class="mt-4 pt-4 border-t border-black/5 flex items-center gap-2 flex-wrap">
+          <div class="flex-1 text-[11.5px] text-inksoft">
+            コピー後、商談ページから「提案済み」としてマークしてください。
+          </div>
+          <button id="mark-sent" class="border border-black/10 hover:border-ink text-[12px] font-bold px-4 py-2 rounded-lg transition whitespace-nowrap">
+            送信済みとして 商談へ →
+          </button>
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+</main>
+
+
+<div id="toast" class="fixed left-1/2 bottom-8 -translate-x-1/2 translate-y-5 opacity-0 pointer-events-none bg-ink text-white px-5 py-2.5 rounded-full text-[13px] font-bold z-50 shadow-lg transition-all duration-200"><span class="text-mint mr-1">✓</span><span id="toast-msg"></span></div>
+
+
+<script>
+// ============================================
+// Data: projects + my engineers
+// ============================================
+const projects = {
+  'PJ-2087': { id:'PJ-2087', logo:'FX', title:'決済プラットフォーム / バックエンド刷新', client:'FinX 株式会社', industry:'FinTech', role:'バックエンドエンジニア', workStyle:'週3リモート + 渋谷', rate:[80,95], months:6, start:'2026-07-01', skills:['Go','PostgreSQL','AWS','K8s'] },
+  'PJ-2084': { id:'PJ-2084', logo:'DD', title:'SaaS向けデータ基盤 / DWH構築', client:'DataDive Inc.', industry:'SaaS', role:'データエンジニア', workStyle:'フルリモート', rate:[85,100], months:12, start:'2026-06-15', skills:['Snowflake','dbt','Airflow','Python'] },
+  'PJ-2076': { id:'PJ-2076', logo:'RK', title:'EC基盤 SRE / クラウド移行', client:'Rakume', industry:'EC', role:'SRE', workStyle:'週3リモート', rate:[95,115], months:9, start:'2026-06-01', skills:['AWS','Terraform','K8s','Datadog'] },
+  'PJ-2074': { id:'PJ-2074', logo:'BH', title:'管理画面リニューアル / React', client:'Bloom HR', industry:'HRTech', role:'フロントエンドエンジニア', workStyle:'フルリモート', rate:[70,85], months:6, start:'2026-06-15', skills:['React','TS','Next.js'] },
+  'PJ-2071': { id:'PJ-2071', logo:'AI', title:'社内LLMチャットボット / MLOps', client:'AIvory', industry:'AI', role:'MLエンジニア', workStyle:'週2出社 / 五反田', rate:[95,120], months:8, start:'2026-06-15', skills:['Python','PyTorch','LLM','SageMaker'] },
+  'PJ-2081': { id:'PJ-2081', logo:'MB', title:'金融系基幹システム PM', client:'MegaBank Tokyo', industry:'金融', role:'PM / PMO', workStyle:'週5常駐 / 大手町', rate:[100,130], months:12, start:'2026-07-01', skills:['PMP','金融','要件定義'] },
+  'PJ-2069': { id:'PJ-2069', logo:'NX', title:'内製スキル人材 / Java求人', client:'NextStep Lab', industry:'SI', role:'Java エンジニア', workStyle:'週5常駐 / 新橋', rate:[60,75], months:6, start:'2026-08-01', skills:['Java','Spring','Oracle'] },
+  'PJ-2065': { id:'PJ-2065', logo:'CV', title:'モバイル新機能開発', client:'Cavotto', industry:'B2C', role:'iOS エンジニア', workStyle:'フルリモート', rate:[55,70], months:4, start:'2026-07-15', skills:['Swift','UIKit','Firebase'] },
+};
+
+const engineers = [
+  {
+    id:'ENG-0138', initial:'K.S', age:28, gender:'男性', station:'新宿駅（東京）', startable:'6月15日〜',
+    affiliation:'弊社社員', workStyle:'週3リモート + 渋谷 (週二)', rate:65, parallel:1, yoe:5,
+    techStack:'Go 3年、Python 2年、Node.js 1年', phases:'詳細設計〜運用保守',
+    dbos:'PostgreSQL、Redis、Docker、Linux', tools:'Git、GitHub Actions、Jira、Datadog',
+    skills:['決済マイクロサービス開発（Go/gRPC）','クラウドネイティブな分散システム設計','CI/CD パイプライン構築'],
+    appeal:'論理的な思考でチームの課題を解決。スピード感と品質のバランスを大切にします。',
+    availableSlots:['5月28日(木) 13:00~18:00','5月29日(金) 10:00~16:00','5月30日(土) 10:00~14:00'],
+    skillSheetUrl:'https://docs.google.com/spreadsheets/d/1k5xJZpQDR3Wsx9KAB7m_kLs/edit?usp=sharing',
+    fit:96, color:'c2',
+  },
+  {
+    id:'ENG-0142', initial:'A.H', age:31, gender:'男性', station:'中洲川端駅（福岡）', startable:'即日',
+    affiliation:'弊社社員', workStyle:'フルリモート（リモート併用相談可）', rate:65, parallel:0, yoe:4,
+    techStack:'TypeScript(React, Next.js) 3年、PHP(Laravel/CodeIgniter) 2年', phases:'基本設計〜運用保守',
+    dbos:'Firebase、Windows、Mac', tools:'Git、GitHub、Backlog',
+    skills:['Webアプリ開発（React/Next.js・Laravel）','動画配信サービス開発・運用保守経験','小規模案件両方の自走経験'],
+    appeal:'柔らかい態度で話しやすく、報連相を大切にする協調性のある明るいエンジニアです。',
+    availableSlots:['5月26日(火) 12:00~18:30','5月27日(水) 12:00~18:30','5月28日(木) 12:00~18:30','5月29日(金) 12:00~18:30'],
+    skillSheetUrl:'https://docs.google.com/spreadsheets/d/1TGZwxJPLimo7PcWEUBoVYpZrH3OhYdYNz34S2gte40U/edit?usp=sharing',
+    fit:71, color:'c1',
+  },
+  {
+    id:'ENG-0119', initial:'S.N', age:35, gender:'男性', station:'川崎駅（神奈川）', startable:'稼働中 / 来年3月末まで',
+    affiliation:'弊社社員', workStyle:'週3リモート', rate:90, parallel:1, yoe:11,
+    techStack:'AWS 8年、Terraform 5年、Python 6年、Go 2年', phases:'要件定義〜運用保守',
+    dbos:'AWS 各種、Linux、Kubernetes、Datadog', tools:'Git、Terraform、ArgoCD、Datadog',
+    skills:['AWS マルチアカウント設計・運用','Kubernetes クラスタ運用','SRE / オンコール対応経験'],
+    appeal:'クラウドインフラ全領域に精通。冷静で障害対応に強い。',
+    availableSlots:['稼働中のため面談調整は4月以降'],
+    skillSheetUrl:'https://docs.google.com/spreadsheets/d/1SN3aQpkoBxKWcdHmnP/edit?usp=sharing',
+    fit:78, color:'c4',
+  },
+  {
+    id:'ENG-0108', initial:'H.W', age:31, gender:'男性', station:'目黒駅（東京）', startable:'即日',
+    affiliation:'弊社社員', workStyle:'フルリモート可', rate:80, parallel:0, yoe:7,
+    techStack:'Python 7年、Snowflake 3年、dbt 2年、Airflow 2年', phases:'要件定義〜運用保守',
+    dbos:'Snowflake、BigQuery、PostgreSQL、Linux', tools:'Git、dbt Cloud、Airflow、Looker',
+    skills:['Snowflake DWH 設計・運用','dbt モデリング (中規模)','データパイプライン自動化'],
+    appeal:'データ基盤構築のフルスタック対応が可能。ドメイン理解が早い。',
+    availableSlots:['5月28日(木) 14:00~18:00','5月29日(金) 13:00~17:00','5月30日(土) 終日可'],
+    skillSheetUrl:'https://docs.google.com/spreadsheets/d/1HW8mQpkrEnlxsBdpV/edit?usp=sharing',
+    fit:94, color:'c5',
+  },
+  {
+    id:'ENG-0135', initial:'T.Y', age:36, gender:'男性', station:'横浜駅（神奈川）', startable:'8月1日〜',
+    affiliation:'弊社社員', workStyle:'週5常駐対応可', rate:70, parallel:1, yoe:12,
+    techStack:'Java 12年、Spring 8年、Oracle PL/SQL 6年', phases:'要件定義〜運用保守',
+    dbos:'Oracle、PostgreSQL、Linux、AIX', tools:'Git、Jenkins、Jira、Confluence',
+    skills:['金融系基幹システム開発・運用','Spring Boot / Batch を用いた大規模処理','チームリーダー経験'],
+    appeal:'大規模金融案件での豊富な経験。安定運用への高い意識。',
+    availableSlots:['8月以降の調整となります'],
+    skillSheetUrl:'https://docs.google.com/spreadsheets/d/1TYZ9pUkj_8saHQR2bnL/edit?usp=sharing',
+    fit:84, color:'c3',
+  },
+  {
+    id:'ENG-0124', initial:'A.M', age:30, gender:'男性', station:'大手町駅（東京）', startable:'稼働中 / 12月末まで',
+    affiliation:'弊社社員', workStyle:'週3リモート + 出社', rate:85, parallel:1, yoe:7,
+    techStack:'React 5年、TypeScript 4年、GraphQL 2年', phases:'基本設計〜運用保守',
+    dbos:'PostgreSQL、Linux、Vercel', tools:'Git、GitHub Actions、Figma',
+    skills:['React + TS での大規模 UI 開発','GraphQL クライアント設計','デザインシステム導入'],
+    appeal:'デザイナーとの協業に長け、品質の高い UI を素早く実装。',
+    availableSlots:['12月以降の調整となります'],
+    skillSheetUrl:'https://docs.google.com/spreadsheets/d/1AMxKL7pQ/edit?usp=sharing',
+    fit:84, color:'c3',
+  },
+  {
+    id:'ENG-0098', initial:'M.K', age:27, gender:'男性', station:'品川駅（東京）', startable:'即日',
+    affiliation:'弊社社員', workStyle:'フルリモート', rate:60, parallel:0, yoe:4,
+    techStack:'Swift 4年、UIKit 4年、Firebase 3年', phases:'詳細設計〜運用保守',
+    dbos:'Firebase、Realm、Mac、iOS', tools:'Git、Xcode、Fastlane',
+    skills:['Swift / UIKit でのアプリ開発','Firebase 連携の本番運用','App Store リリース実績'],
+    appeal:'若いがリリース経験豊富。素早いキャッチアップ。',
+    availableSlots:['5月26日(火) 終日','5月27日(水) 終日','5月28日(木) 終日'],
+    skillSheetUrl:'https://docs.google.com/spreadsheets/d/1MK9KaB7d/edit?usp=sharing',
+    fit:81, color:'c0',
+  },
+];
+
+// ============================================
+// Build paste text (matches engineers.html format)
+// ============================================
+function buildEngineerBlock(e) {
+  const DIV = 'ｰｰｰｰｰｰｰｰｰｰｰ';
+  const slots = e.availableSlots.join('\n');
+  const skillsBullets = e.skills.map(s => '・' + s).join('\n');
+  return `${DIV}
+◼︎並行：${e.parallel}件
+${slots}
+
+◼︎アピールポイント
+${e.appeal}
+
+
+${DIV}
+要員概要
+${DIV}
+氏名：${e.initial}（${e.age}歳・${e.gender}）
+最寄り駅：${e.station}
+稼働：${e.startable}
+所属：${e.affiliation}
+通勤：${e.workStyle}
+単価：${e.rate}万
+並行：${e.parallel}件
+
+エンジニア歴：${e.yoe}年
+言語/FW : ${e.techStack}
+工程: ${e.phases}
+DB/OS: ${e.dbos}
+ツール: ${e.tools}
+
+スキル：
+${skillsBullets}
+
+スキルシート：
+${e.skillSheetUrl}
+${DIV}`;
+}
+
+function buildProposalText(project, e) {
+  const intro =
+`${project.client} ご担当者様
+
+平素より大変お世話になっております。
+SAKIGAKE 営業の田中でございます。
+
+ご案内いただきました「${project.title}」につきまして、
+弊社所属のエンジニアより最適と思われる人材をご提案させていただきます。
+ご一読いただけますと幸いです。
+
+【案件】${project.title}（${project.id}）
+【単価帯】${project.rate[0]}〜${project.rate[1]}万円 / 月
+【期間】${project.months}ヶ月（${project.start} 開始）
+【勤務形態】${project.workStyle}
+
+何卒ご検討のほどよろしくお願いいたします。
+`;
+  return intro + '\n\n' + buildEngineerBlock(e);
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+
+// ============================================
+// State + URL params
+// ============================================
+const params = new URLSearchParams(location.search);
+const projectId = params.get('project') || 'PJ-2087';
+const initialEngId = params.get('engineer') || engineers[0].id;
+
+const project = projects[projectId] || projects['PJ-2087'];
+let selectedEng = engineers.find(e => e.id === initialEngId) || engineers[0];
+
+// Back link
+document.getElementById('back-link').href = `project-detail.html?id=${project.id}`;
+
+
+// ============================================
+// Render Project card
+// ============================================
+function renderProject() {
+  const skillTags = project.skills.map(s => `<span class="mono text-[10px] bg-cream2 text-ink2 px-1.5 py-0.5 rounded font-bold">${esc(s)}</span>`).join('');
+  document.getElementById('project-card').innerHTML = `
+    <div class="flex items-start gap-3 mb-4">
+      <div class="w-12 h-12 rounded-xl bg-cream2 flex items-center justify-center mono text-[12px] font-black flex-shrink-0">${project.logo}</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-black text-[15px] leading-tight">${esc(project.title)}</div>
+        <div class="mono text-[10.5px] text-inksoft mt-1.5 tracking-[0.04em]">${esc(project.client)} · ${esc(project.industry)} · ${project.id}</div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-2 text-[12px] mb-3">
+      <div><span class="mono text-[9px] text-inkmute tracking-[0.14em] uppercase font-bold mr-1">単価</span><b class="num">${project.rate[0]}–${project.rate[1]}万</b></div>
+      <div><span class="mono text-[9px] text-inkmute tracking-[0.14em] uppercase font-bold mr-1">期間</span><b class="num">${project.months}ヶ月</b></div>
+      <div><span class="mono text-[9px] text-inkmute tracking-[0.14em] uppercase font-bold mr-1">開始</span><b>${project.start.slice(5)}</b></div>
+      <div><span class="mono text-[9px] text-inkmute tracking-[0.14em] uppercase font-bold mr-1">ロール</span><b>${esc(project.role)}</b></div>
+    </div>
+    <div class="flex flex-wrap gap-1.5">${skillTags}</div>
+    <a href="project-detail.html?id=${project.id}" class="mt-4 inline-flex items-center gap-1 text-[11px] text-inksoft hover:text-ink font-bold mono tracking-wide">案件詳細を見る →</a>
+  `;
+}
+
+// ============================================
+// Render Engineer Picker
+// ============================================
+function renderPicker() {
+  const sorted = [...engineers].sort((a,b) => b.fit - a.fit);
+  document.getElementById('engineer-picker').innerHTML = sorted.map(e => {
+    const isSelected = e.id === selectedEng.id;
+    return `
+    <button type="button" data-eng-id="${e.id}" class="eng-opt text-left rounded-xl border-2 ${isSelected ? 'border-mint bg-mintsoft/30' : 'border-black/5 bg-cream/30 hover:border-black/20'} px-3 py-2.5 transition flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg av-${e.color} flex items-center justify-center mono text-[11px] font-black flex-shrink-0">${e.initial}</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <span class="font-black text-[13px] leading-tight">${e.initial} さん</span>
+          <span class="mono text-[10px] text-inkmute">${esc(e.id)}</span>
+        </div>
+        <div class="text-[11px] text-inksoft mt-0.5 leading-tight">${esc(e.techStack.split('、')[0])}</div>
+        <div class="num font-bold text-[12px] mt-1">${e.rate}<span class="text-[10px] text-inksoft font-bold ml-0.5">万 / 月</span> <span class="text-[10px] text-inksoft ml-1">稼働: ${esc(e.startable)}</span></div>
+      </div>
+      <div class="flex-shrink-0 text-center">
+        <div class="num font-black text-[16px] ${e.fit >= 90 ? 'text-mintdeep' : e.fit >= 80 ? 'text-info' : 'text-inksoft'} leading-none">${e.fit}</div>
+        <div class="mono text-[8px] text-inkmute tracking-[0.14em] mt-0.5 font-bold uppercase">AI</div>
+      </div>
+      ${isSelected ? '<div class="absolute -mr-1"><svg class="w-4 h-4 text-mintdeep" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>' : ''}
+    </button>`;
+  }).join('');
+
+  document.querySelectorAll('.eng-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.engId;
+      selectedEng = engineers.find(e => e.id === id) || engineers[0];
+      renderPicker();
+      renderProposal();
+    });
+  });
+}
+
+// ============================================
+// Render Proposal textarea
+// ============================================
+function renderProposal() {
+  document.getElementById('proposal').value = buildProposalText(project, selectedEng);
+}
+
+document.getElementById('copy-btn').addEventListener('click', () => {
+  const text = document.getElementById('proposal').value;
+  navigator.clipboard?.writeText(text).catch(()=>{});
+  toast(`📋 ${selectedEng.initial} さん × ${project.client} の提案文をコピーしました`);
+});
+
+document.getElementById('mark-sent').addEventListener('click', () => {
+  toast(`✉ 商談ページに「提案済み」として記録 → 遷移します`);
+  setTimeout(() => { location.href = 'deals.html'; }, 1200);
+});
+
+// Toast
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.remove('opacity-0','translate-y-5');
+  t.classList.add('opacity-100','translate-y-0');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => {
+    t.classList.add('opacity-0','translate-y-5');
+    t.classList.remove('opacity-100','translate-y-0');
+  }, 2400);
+}
+
+// Init
+renderProject();
+renderPicker();
+renderProposal();
+</script>
+
+</body>
+</html>

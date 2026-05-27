@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAKIGAKE（さきがけ）エージェント 業務委託 登録フォーム</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=Schibsted+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#FAFAF7;
+    --surface:#FFFFFF;
+    --ink:#0A0A0A;
+    --ink-2:#1A1A1A;
+    --ink-soft:#5B564E;
+    --ink-mute:#A8A39A;
+    --line:rgba(10,10,10,.10);
+    --line-2:rgba(10,10,10,.06);
+    --accent:#00B881;
+    --accent-bg:#E6FAF1;
+    --warn:#C03A1F;
+    --jp:"Zen Kaku Gothic New","Noto Sans JP",system-ui,sans-serif;
+    --en:"Schibsted Grotesk","Zen Kaku Gothic New",system-ui,sans-serif;
+    --pad:clamp(20px,4vw,40px);
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--jp);font-feature-settings:"palt" 1}
+  body{font-size:15px;line-height:1.85;letter-spacing:.01em}
+  h1,h2,h3,h4{word-break:keep-all;overflow-wrap:normal;line-break:strict;margin:0}
+  a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  ::selection{background:var(--accent);color:#fff}
+
+  /* ─── Document shell ─── */
+  .doc{max-width:780px;margin:0 auto;padding:0 var(--pad)}
+  .doc-head{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .label-en{font-family:var(--en);font-size:11px;letter-spacing:.22em;color:var(--ink-mute);font-weight:700;text-transform:uppercase}
+  .org{display:flex;align-items:center;gap:10px;font-family:var(--en);font-weight:900;letter-spacing:.18em;font-size:12px;color:var(--ink)}
+  .org .mark{width:18px;height:18px;border-radius:5px;background:var(--ink);position:relative;overflow:hidden}
+  .org .mark::after{content:"";position:absolute;inset:4px;background:var(--accent);border-radius:2px;transform:skewX(-18deg)}
+  .doc-title{font-family:var(--jp);font-weight:900;font-size:clamp(28px,3.6vw,40px);line-height:1.3;letter-spacing:-.015em;margin:20px 0 14px;color:var(--ink)}
+  .doc-sub{color:var(--ink-soft);font-size:14.5px;line-height:1.9;max-width:60ch}
+  .doc-meta{margin-top:24px;display:flex;flex-wrap:wrap;gap:12px 20px;font-size:12px;color:var(--ink-soft)}
+  .doc-meta div{display:flex;align-items:center;gap:6px}
+  .doc-meta .k{font-family:var(--en);font-weight:700;letter-spacing:.16em;color:var(--ink-mute);text-transform:uppercase;font-size:10.5px}
+
+  /* ─── Section ─── */
+  section{padding:48px 0;border-bottom:1px solid var(--line-2)}
+  section:last-of-type{border-bottom:0}
+  .sec-head{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:baseline;margin-bottom:28px}
+  .sec-num{font-family:var(--en);font-weight:900;font-size:11px;letter-spacing:.22em;color:var(--ink-mute);padding-top:6px}
+  .sec-title{font-family:var(--jp);font-weight:900;font-size:22px;line-height:1.4;letter-spacing:-.005em;color:var(--ink);border-bottom:2px solid var(--ink);padding-bottom:10px}
+  .sec-lede{color:var(--ink-soft);font-size:14px;line-height:1.95;margin-top:0;margin-bottom:24px;max-width:60ch}
+
+  /* ─── Rules display (compact, info, not marketing) ─── */
+  .rules{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+  .rule{display:grid;grid-template-columns:48px 1fr;gap:18px;padding:22px 24px;border-bottom:1px solid var(--line-2);align-items:start}
+  .rule:last-child{border-bottom:0}
+  .rule-icn{width:36px;height:36px;border-radius:9px;background:var(--accent-bg);color:var(--accent);display:grid;place-items:center;flex-shrink:0}
+  .rule-icn svg{width:18px;height:18px}
+  .rule h3{font-family:var(--jp);font-weight:900;font-size:15.5px;line-height:1.5;margin:4px 0 8px;letter-spacing:-.005em}
+  .rule p{margin:0;color:var(--ink-soft);font-size:13.5px;line-height:1.85}
+  .rule p strong{color:var(--ink);font-weight:900;background:linear-gradient(transparent 62%,rgba(0,184,129,.3) 62%);padding:0 2px}
+  .rule .pct{display:inline-flex;align-items:baseline;gap:2px;font-family:var(--en);font-weight:900;color:var(--accent);margin-right:6px}
+  .rule .pct .b{font-size:18px;letter-spacing:-.02em}
+
+  /* ─── Flow strip ─── */
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  @media (max-width:640px){.flow{grid-template-columns:1fr}}
+  .flow-step{padding:18px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;position:relative}
+  .flow-step .n{font-family:var(--en);font-weight:900;font-size:10.5px;letter-spacing:.2em;color:var(--accent);background:var(--accent-bg);padding:4px 8px;border-radius:99px;display:inline-block}
+  .flow-step h4{font-family:var(--jp);font-weight:900;font-size:14px;line-height:1.5;margin:12px 0 6px;letter-spacing:-.005em}
+  .flow-step p{margin:0;color:var(--ink-soft);font-size:12.5px;line-height:1.7}
+
+  /* ─── Form ─── */
+  .field-group{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-bottom:8px}
+  @media (max-width:560px){.field-group{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .field label .req{font-family:var(--en);font-size:9.5px;letter-spacing:.14em;font-weight:700;color:#fff;background:var(--warn);padding:2px 6px;border-radius:3px;line-height:1}
+  .field label .opt{font-family:var(--en);font-size:9.5px;letter-spacing:.14em;font-weight:700;color:var(--ink-mute);background:transparent;border:1px solid var(--line);padding:2px 6px;border-radius:3px;line-height:1}
+  .field .hint{font-size:11.5px;color:var(--ink-mute);margin-top:-2px;line-height:1.6}
+  .field input[type=text],.field input[type=email],.field input[type=tel],.field input[type=date],.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--surface);padding:12px 14px;border-radius:10px;font:inherit;color:var(--ink);font-size:14px;outline:none;transition:border .15s,box-shadow .15s}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+  .field input::placeholder,.field textarea::placeholder{color:var(--ink-mute)}
+  .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-soft) 50%),linear-gradient(135deg,var(--ink-soft) 50%,transparent 50%);background-position:calc(100% - 18px) center,calc(100% - 13px) center;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
+  .field textarea{resize:vertical;min-height:90px;font-family:inherit;line-height:1.7}
+  .field-sub{font-size:12px;color:var(--ink-soft);background:var(--bg);border:1px dashed var(--line);padding:10px 14px;border-radius:8px;margin-top:2px;line-height:1.7}
+
+  /* file */
+  .file-drop{position:relative;border:1.5px dashed var(--line);border-radius:10px;padding:18px 16px;background:var(--surface);text-align:center;cursor:pointer;transition:all .15s}
+  .file-drop:hover{border-color:var(--accent);background:var(--accent-bg)}
+  .file-drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .file-drop .ico{display:inline-block;width:32px;height:32px;border-radius:8px;background:var(--accent-bg);color:var(--accent);line-height:32px;font-size:16px;font-weight:900}
+  .file-drop p{margin:8px 0 2px;font-size:13px;font-weight:700;color:var(--ink)}
+  .file-drop small{display:block;color:var(--ink-mute);font-size:11.5px}
+
+  /* radio group */
+  .radio-group{display:flex;gap:8px;flex-wrap:wrap}
+  .radio{position:relative;flex:1;min-width:100px}
+  .radio input{position:absolute;opacity:0;pointer-events:none}
+  .radio span{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border:1px solid var(--line);background:var(--surface);border-radius:10px;font-size:13.5px;font-weight:500;cursor:pointer;transition:all .15s}
+  .radio span::before{content:"";width:14px;height:14px;border-radius:99px;border:1.5px solid var(--ink-mute);background:#fff;flex-shrink:0;transition:all .15s}
+  .radio input:checked + span{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
+  .radio input:checked + span::before{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px var(--ink)}
+
+  /* ─── Terms scroll box ─── */
+  .terms-box{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+  .terms-box-head{padding:14px 20px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .terms-box-head .l{font-family:var(--en);font-size:10.5px;font-weight:700;letter-spacing:.2em;color:var(--ink-mute);text-transform:uppercase}
+  .terms-box-head .r{font-size:11.5px;color:var(--ink-soft)}
+  .terms-box-head .r .scroll-pct{font-family:var(--en);font-weight:900;color:var(--ink)}
+  .terms-body{padding:32px 36px;max-height:520px;overflow:auto;font-size:13.5px;line-height:1.95;color:var(--ink-2)}
+  .terms-body::-webkit-scrollbar{width:8px}
+  .terms-body::-webkit-scrollbar-track{background:transparent}
+  .terms-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+  .terms-body h3{font-family:var(--jp);font-weight:900;font-size:14.5px;line-height:1.5;margin:20px 0 8px;color:var(--ink);letter-spacing:-.005em}
+  .terms-body h3:first-child{margin-top:0}
+  .terms-body p{margin:0 0 12px}
+  .terms-body em{font-style:normal;font-weight:900;color:var(--ink);background:linear-gradient(transparent 62%,rgba(0,184,129,.25) 62%);padding:0 2px}
+  .terms-body .ban{font-style:normal;font-weight:900;color:var(--warn);background:linear-gradient(transparent 62%,rgba(192,58,31,.18) 62%);padding:0 2px}
+  .terms-body .ol{padding-left:0;list-style:none;margin:0 0 12px;counter-reset:item}
+  .terms-body .ol li{padding-left:30px;position:relative;margin:6px 0;counter-increment:item}
+  .terms-body .ol li::before{content:"（"counter(item)"）";position:absolute;left:0;top:0;color:var(--ink-mute);font-family:var(--en);font-weight:700;font-size:12px}
+
+  /* ─── Consent ─── */
+  .consent{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--ink);color:#fff;padding:22px 24px;border-radius:14px;margin-top:24px;cursor:pointer;transition:background .2s}
+  .consent.locked{opacity:.5;cursor:not-allowed}
+  .consent input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:2px solid rgba(255,255,255,.4);border-radius:6px;background:transparent;cursor:pointer;display:grid;place-items:center;flex-shrink:0;margin-top:1px;transition:all .15s}
+  .consent input:checked{background:var(--accent);border-color:var(--accent)}
+  .consent input:checked::after{content:"✓";color:var(--ink);font-weight:900;font-size:14px;line-height:1}
+  .consent p{margin:0;font-size:13.5px;line-height:1.7;color:#fff}
+  .consent p strong{font-weight:900;color:var(--accent)}
+  .consent .lock-msg{font-size:12px;color:var(--ink-mute);margin-top:6px;display:block}
+  .consent.locked .lock-msg{color:rgba(255,255,255,.5)}
+
+  /* ─── Submit ─── */
+  .submit-row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:24px;flex-wrap:wrap}
+  .submit{height:56px;padding:0 28px;background:var(--accent);color:var(--ink);border-radius:99px;font-weight:900;font-size:14.5px;display:inline-flex;align-items:center;gap:12px;transition:transform .15s,background .2s,opacity .2s;letter-spacing:.04em}
+  .submit:hover:not(:disabled){background:#fff;transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(0,184,129,.6)}
+  .submit:disabled{opacity:.35;cursor:not-allowed}
+  .submit .arr{width:24px;height:24px;border-radius:99px;background:var(--ink);color:var(--accent);display:grid;place-items:center;font-size:12px}
+  .submit-note{font-size:11.5px;color:var(--ink-mute);max-width:32ch;text-align:right;line-height:1.7}
+
+  /* ─── Footer ─── */
+  footer{margin-top:48px;padding:32px 0 48px;border-top:1px solid var(--line)}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:11.5px;color:var(--ink-mute)}
+  .foot a{color:var(--ink-soft);text-decoration:none}
+  .foot a:hover{color:var(--ink)}
+
+  /* success state */
+  .success{display:none;margin:32px 0 0}
+  .success.show{display:block}
+
+  .ob-hero{background:var(--ink);color:#fff;border-radius:18px;padding:48px 40px;position:relative;overflow:hidden}
+  .ob-hero::before{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;background:radial-gradient(closest-side,rgba(0,184,129,.25),transparent 70%);pointer-events:none}
+  .ob-hero .check{width:56px;height:56px;border-radius:99px;background:var(--accent);color:var(--ink);display:grid;place-items:center;font-size:24px;font-weight:900;margin-bottom:20px;position:relative}
+  .ob-hero .ob-eyebrow{font-family:var(--en);font-size:11px;letter-spacing:.22em;color:var(--accent);font-weight:700;text-transform:uppercase;position:relative}
+  .ob-hero h2{font-family:var(--jp);font-weight:900;font-size:clamp(24px,3vw,32px);color:#fff;line-height:1.4;border:0;padding:0;margin:12px 0 14px;position:relative;letter-spacing:-.01em}
+  .ob-hero p{color:rgba(255,255,255,.7);font-size:14px;max-width:48ch;margin:0;line-height:1.9;position:relative}
+  .ob-hero p strong{color:#fff;font-weight:900}
+
+  .ob-ctas{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+  @media (max-width:620px){.ob-ctas{grid-template-columns:1fr}}
+  .ob-cta{display:flex;flex-direction:column;gap:8px;padding:24px;border-radius:14px;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .2s,border-color .2s;border:1px solid var(--line);background:var(--surface)}
+  .ob-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px -16px rgba(0,0,0,.25);border-color:var(--accent)}
+  .ob-cta.primary{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+  .ob-cta.primary:hover{background:#00d094;border-color:#00d094}
+  .ob-cta .ic{width:40px;height:40px;border-radius:10px;background:var(--accent-bg);color:var(--accent);display:grid;place-items:center}
+  .ob-cta.primary .ic{background:var(--ink);color:var(--accent)}
+  .ob-cta .ic svg{width:20px;height:20px}
+  .ob-cta .ctag{font-family:var(--en);font-size:10.5px;letter-spacing:.2em;font-weight:700;color:var(--ink-mute);text-transform:uppercase}
+  .ob-cta.primary .ctag{color:var(--ink-2);opacity:.6}
+  .ob-cta .ctitle{font-family:var(--jp);font-weight:900;font-size:16px;line-height:1.45;letter-spacing:-.005em}
+  .ob-cta .cdesc{font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin:0}
+  .ob-cta.primary .cdesc{color:var(--ink-2);opacity:.7}
+  .ob-cta .carr{margin-top:8px;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;font-family:var(--jp)}
+  .ob-cta .carr::after{content:"→";font-family:var(--en);font-weight:900}
+
+  .manual{margin-top:32px;border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow:hidden}
+  .manual-head{padding:20px 28px;border-bottom:1px solid var(--line);background:var(--bg);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .manual-head .l{display:flex;flex-direction:column;gap:2px}
+  .manual-head .l .t{font-family:var(--jp);font-weight:900;font-size:15.5px;letter-spacing:-.005em}
+  .manual-head .l .s{font-family:var(--en);font-size:10.5px;letter-spacing:.2em;color:var(--ink-mute);font-weight:700;text-transform:uppercase}
+  .manual-head .r{display:flex;gap:8px;align-items:center}
+  .manual-tag{font-family:var(--en);font-size:10.5px;letter-spacing:.16em;font-weight:700;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);padding:5px 10px;border-radius:99px;text-transform:uppercase}
+
+  .manual-body{padding:8px 0}
+  .m-section{border-bottom:1px solid var(--line-2);padding:24px 32px}
+  .m-section:last-child{border-bottom:0}
+  .m-section h3{font-family:var(--jp);font-weight:900;font-size:16px;line-height:1.45;margin:0 0 6px;display:flex;align-items:baseline;gap:10px;letter-spacing:-.005em}
+  .m-section h3 .mn{font-family:var(--en);font-size:11.5px;font-weight:900;color:var(--accent);letter-spacing:.06em;flex-shrink:0;font-variant-numeric:tabular-nums}
+  .m-section .m-lede{margin:0 0 14px 36px;font-size:13px;color:var(--ink-soft);line-height:1.85}
+  .m-section .m-list{margin:0 0 0 36px;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+  .m-section .m-list li{position:relative;padding-left:22px;font-size:13.5px;line-height:1.85;color:var(--ink-2)}
+  .m-section .m-list li::before{content:"";position:absolute;left:0;top:.85em;width:8px;height:2px;background:var(--ink)}
+  .m-section .m-list li strong{font-weight:900;color:var(--ink);background:linear-gradient(transparent 60%,rgba(0,184,129,.25) 60%);padding:0 2px}
+  .m-section .m-list li code{font-family:var(--en);background:var(--bg);border:1px solid var(--line);padding:1px 6px;border-radius:4px;font-size:12px;font-weight:500}
+  .m-section .callout{margin:14px 0 0 36px;padding:14px 18px;border-left:3px solid var(--accent);background:var(--accent-bg);border-radius:0 8px 8px 0;font-size:12.5px;color:var(--ink-2);line-height:1.8}
+  .m-section .callout strong{font-weight:900;color:var(--ink)}
+  .m-section .callout.warn{border-left-color:var(--warn);background:#FDECE6}
+  @media (max-width:560px){.m-section{padding:20px 22px}.m-section h3{font-size:15px}.m-section .m-lede,.m-section .m-list,.m-section .callout{margin-left:0}}
+
+  .ob-foot{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:24px;padding:18px 24px;background:var(--bg);border:1px solid var(--line);border-radius:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-soft)}
+  .ob-foot strong{color:var(--ink);font-weight:900;font-family:var(--en);letter-spacing:.04em}
+
+  /* Let's go! */
+  .letsgo{margin-top:24px;padding:64px 40px;border-radius:18px;background:linear-gradient(135deg,var(--accent) 0%,#00d094 100%);color:var(--ink);text-align:center;position:relative;overflow:hidden}
+  .letsgo::before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.35),transparent 50%),radial-gradient(circle at 70% 70%,rgba(10,10,10,.12),transparent 55%);pointer-events:none}
+  .letsgo .lg-eyebrow{position:relative;font-family:var(--en);font-size:11px;letter-spacing:.32em;font-weight:900;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+  .letsgo .lg-eyebrow::before,.letsgo .lg-eyebrow::after{content:"";width:24px;height:2px;background:var(--ink)}
+  .letsgo h3{position:relative;font-family:var(--jp);font-weight:900;font-size:clamp(28px,4.2vw,44px);line-height:1.25;letter-spacing:-.02em;margin:18px 0 10px}
+  .letsgo h3 .lg-en{display:block;font-family:var(--en);font-style:italic;font-weight:900;font-size:.68em;letter-spacing:-.01em;margin-top:6px;opacity:.85}
+  .letsgo p{position:relative;margin:0;font-size:14.5px;line-height:1.85;color:var(--ink-2);font-weight:500;max-width:38ch;margin-inline:auto}
+</style>
+</head>
+<body>
+
+<main class="doc">
+
+  <!-- ============ DOC HEAD ============ -->
+  <header class="doc-head" id="doc-head" data-screen-label="01 doc head">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <span class="org"><span class="mark"></span>株式会社Rezon</span>
+      <span class="label-en">FORM&nbsp;ID&nbsp;·&nbsp;AGN-2026-001</span>
+    </div>
+    <h1 class="doc-title">SAKIGAKE（さきがけ）エージェント<br>業務委託 登録フォーム</h1>
+    <p class="doc-sub">本フォームは、弊社の<strong style="color:var(--ink);font-weight:900">SAKIGAKE（さきがけ）エージェント（業務委託）</strong>として活動いただく方の、ルール確認・本人情報および入金口座のご登録・業務委託契約の電子的な締結を、ひとつの画面で完結させるためのものです。入力は約3分で完了します。</p>
+    <div class="doc-meta">
+      <div><span class="k">作成日</span>2026.05.25</div>
+      <div><span class="k">版</span>v1.0</div>
+      <div><span class="k">所要時間</span>約3分</div>
+      <div><span class="k">締結方式</span>電子合意（民法522条1項）</div>
+    </div>
+  </header>
+
+  <!-- ============ § 01 RULES ============ -->
+  <section data-screen-label="02 rules">
+    <div class="sec-head">
+      <span class="sec-num">§ 01</span>
+      <h2 class="sec-title">活動ルール・条件のご案内</h2>
+    </div>
+    <p class="sec-lede">ご登録の前に、業務委託エージェントとしての活動条件を必ずお読みください。本セクションの内容は、後述の業務委託契約規約と整合しています。</p>
+
+    <div class="rules">
+      <div class="rule">
+        <span class="rule-icn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+        </span>
+        <div>
+          <h3>報酬：成約粗利の <span class="pct"><span class="b">60〜75%</span></span> を還元</h3>
+          <p>成約したSES案件の<strong>粗利（クライアント請求額から エンジニア報酬・実費を控除した額）の60％を標準とし、エンジニア持ち込み・既存案件移行・年間取扱高に応じて最大75％まで加算</strong>します。支払いはクライアントからの入金確認月の翌月末日（バック・トゥ・バック）です。</p>
+        </div>
+      </div>
+
+      <div class="rule">
+        <span class="rule-icn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+        </span>
+        <div>
+          <h3>バックオフィス業務は弊社が全負担</h3>
+          <p>クライアント・エンジニアとの<strong>契約書発行、月次請求、入金消し込み、与信、トラブル時の法務対応</strong>は弊社が全て代行します。あなたが触る事務作業はほぼゼロです。営業活動だけに集中していただけます。</p>
+        </div>
+      </div>
+
+      <div class="rule">
+        <span class="rule-icn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </span>
+        <div>
+          <h3>案件は社内データベースで随時公開</h3>
+          <p>弊社が保有するSES案件を、<strong>社内データベース上で随時公開</strong>しています。商流や条件は案件ごとに異なりますが、エージェント様は自由に検索・提案・エントリーいただけます。新規案件の追加状況はチャットでも随時お知らせします。</p>
+        </div>
+      </div>
+
+      <div class="rule">
+        <span class="rule-icn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M21 12h-2M5 12H3M18.4 5.6l-1.4 1.4M7 17l-1.4 1.4M18.4 18.4L17 17M7 7L5.6 5.6"/></svg>
+        </span>
+        <div>
+          <h3>エンジニアに最新AIツールを弊社負担で提供</h3>
+          <p>提案先エンジニアの生産性を最初から底上げするため、<strong>Cursor Pro / GitHub Copilot Business 等のAIツール</strong>を弊社が無償で配布します。単価交渉時の根拠資料も弊社が共同で作成します。</p>
+        </div>
+      </div>
+
+      <div class="rule">
+        <span class="rule-icn" style="background:#FFE7DF;color:var(--warn)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22h20L12 2z"/><path d="M12 9v6M12 18h.01"/></svg>
+        </span>
+        <div>
+          <h3 style="color:var(--warn)">禁止事項に違反した場合は即時BAN</h3>
+          <p>スキルシートの偽造・経歴サバ読みの強要・エンジニアへの強引な案件押し付け等、第4条で定める禁止行為が発覚した場合、<strong style="background:linear-gradient(transparent 62%,rgba(192,58,31,.2) 62%)">何らの催告なくシステムアカウントを削除（BAN）し、契約を即時解除</strong>します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ § 02 FLOW ============ -->
+  <section data-screen-label="03 flow">
+    <div class="sec-head">
+      <span class="sec-num">§ 02</span>
+      <h2 class="sec-title">活動の流れ</h2>
+    </div>
+    <p class="sec-lede">登録完了後は、下記の3ステップで業務を進めていただきます。</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <span class="n">STEP 1</span>
+        <h4>案件 or エンジニアを登録</h4>
+        <p>自分の持ち込み案件・エンジニアを、社内データベースに登録します。</p>
+      </div>
+      <div class="flow-step">
+        <span class="n">STEP 2</span>
+        <h4>マッチング・提案</h4>
+        <p>公開案件から提案、または自分の案件にエンジニアをアサインします。</p>
+      </div>
+      <div class="flow-step">
+        <span class="n">STEP 3</span>
+        <h4>成約・報酬入金</h4>
+        <p>クライアント入金月の翌月末に、粗利の60〜75%が指定口座へ振込まれます。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ § 03 PROFILE ============ -->
+  <section data-screen-label="04 profile">
+    <div class="sec-head">
+      <span class="sec-num">§ 03</span>
+      <h2 class="sec-title">本人情報のご登録</h2>
+    </div>
+    <p class="sec-lede">業務委託契約の当事者情報として登録します。本人確認書類の内容と一致するようご記入ください。</p>
+
+    <div class="field-group">
+      <div class="field">
+        <label>氏名<span class="req">必須</span></label>
+        <input type="text" name="name" id="f-name" placeholder="山田 太郎" required>
+      </div>
+      <div class="field">
+        <label>フリガナ<span class="req">必須</span></label>
+        <input type="text" name="furigana" id="f-furigana" placeholder="ヤマダ タロウ" required>
+      </div>
+      <div class="field">
+        <label>生年月日<span class="req">必須</span></label>
+        <input type="date" name="dob" id="f-dob" required>
+      </div>
+      <div class="field">
+        <label>連絡用メールアドレス<span class="req">必須</span></label>
+        <input type="email" name="email" id="f-email" placeholder="agent@example.com" required>
+      </div>
+      <div class="field">
+        <label>電話番号<span class="req">必須</span></label>
+        <input type="tel" name="phone" id="f-phone" placeholder="090-XXXX-XXXX" required>
+      </div>
+      <div class="field">
+        <label>契約形態<span class="req">必須</span></label>
+        <select name="contractType" id="f-contractType" required>
+          <option value="">選択してください</option>
+          <option>個人事業主</option>
+          <option>法人</option>
+          <option>副業（本業あり）</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>現住所<span class="req">必須</span></label>
+        <input type="text" name="address" id="f-address" placeholder="東京都渋谷区...（番地・建物名まで）" required>
+      </div>
+      <div class="field full">
+        <label>現職・所属<span class="opt">任意</span></label>
+        <input type="text" name="currentPosition" id="f-currentPosition" placeholder="例：フリーランス／株式会社○○ 営業部">
+      </div>
+      <div class="field">
+        <label>営業経験年数<span class="opt">任意</span></label>
+        <input type="text" name="salesExperience" id="f-salesExperience" placeholder="例：5">
+      </div>
+      <div class="field">
+        <label>既存エンジニア持ち込み<span class="opt">任意</span></label>
+        <select name="existingEngineers" id="f-existingEngineers">
+          <option value="">選択してください</option>
+          <option>無し</option>
+          <option>1〜3名</option>
+          <option>4〜10名</option>
+          <option>11名以上</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>本人確認書類のアップロード<span class="req">必須</span></label>
+        <span class="hint">運転免許証・マイナンバーカード・パスポートのいずれか（表裏）。PDF / JPG / PNG · 10MBまで</span>
+        <label class="file-drop">
+          <input type="file" name="idDocument" id="f-idDocument" accept=".pdf,.jpg,.jpeg,.png">
+          <span class="ico">↑</span>
+          <p>ファイルを選択 / ドラッグ＆ドロップ</p>
+          <small id="file-name">未選択</small>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ § 04 BANK ============ -->
+  <section data-screen-label="05 bank">
+    <div class="sec-head">
+      <span class="sec-num">§ 04</span>
+      <h2 class="sec-title">報酬の振込先口座</h2>
+    </div>
+    <p class="sec-lede">業務委託報酬のお支払いに使用します。法人契約の場合は法人口座を、個人事業主の場合は屋号付き口座またはご本人名義の口座をご登録ください。</p>
+
+    <div class="field-group">
+      <div class="field">
+        <label>金融機関名<span class="req">必須</span></label>
+        <input type="text" name="bankName" id="f-bankName" placeholder="例：三菱UFJ銀行" required>
+      </div>
+      <div class="field">
+        <label>支店名<span class="req">必須</span></label>
+        <input type="text" name="branchName" id="f-branchName" placeholder="例：渋谷支店" required>
+      </div>
+      <div class="field">
+        <label>預金種別<span class="req">必須</span></label>
+        <div class="radio-group">
+          <label class="radio"><input type="radio" name="accountType" value="普通"><span>普通</span></label>
+          <label class="radio"><input type="radio" name="accountType" value="当座"><span>当座</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>口座番号<span class="req">必須</span></label>
+        <input type="text" name="accountNumber" id="f-accountNumber" placeholder="7桁の数字" required>
+      </div>
+      <div class="field full">
+        <label>口座名義（カタカナ）<span class="req">必須</span></label>
+        <input type="text" name="accountHolder" id="f-accountHolder" placeholder="例：ヤマダ タロウ ／ カ）ヤマダショウジ" required>
+      </div>
+      <div class="field full">
+        <div class="field-sub">
+          ※ 口座情報に誤りがあった場合、再振込手数料はエージェント様のご負担となります。<br>
+          ※ インボイス制度登録番号をお持ちの方は、後日Larkチャットにてご共有ください（適格請求書発行事業者として処理いたします）。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ § 05 TERMS ============ -->
+  <section data-screen-label="06 terms">
+    <div class="sec-head">
+      <span class="sec-num">§ 05</span>
+      <h2 class="sec-title">業務委託契約 規約</h2>
+    </div>
+    <p class="sec-lede">下記の規約全文をお読みください。最下部の同意チェックを入れて送信した時点で、民法第522条第1項に基づき本契約は電子的に成立します。</p>
+
+    <div class="terms-box">
+      <div class="terms-box-head">
+        <span class="l">SES SALES AGENT · MASTER SERVICE AGREEMENT</span>
+        <span class="r">読了率 <span class="scroll-pct" id="scroll-pct">0%</span></span>
+      </div>
+      <div class="terms-body" id="terms-body">
+
+        <h3>第1条（目的）</h3>
+        <p>本規約は、株式会社Rezon（以下「甲」という）と、本フォームに同意の上で送信を行う個人または法人（以下「乙」という）との間で締結される、SES（システムエンジニアリングサービス）案件の営業活動に関する業務委託契約の内容を定めるものとする。乙が本フォーム末尾の同意欄にチェックを入れて送信した時点で、民法第522条第1項に基づき本契約は電子的に成立する。</p>
+
+        <h3>第2条（委託業務）</h3>
+        <p>甲は乙に対し、次の業務を委託する。</p>
+        <ul class="ol">
+          <li>甲が指定する顧客（以下「クライアント」という）に対するSES案件の提案および営業活動</li>
+          <li>甲が登録するエンジニアのアサイン提案</li>
+          <li>成約に向けた条件交渉および契約締結補助</li>
+        </ul>
+
+        <h3>第3条（報酬：<em>バック・トゥ・バック条項</em>）</h3>
+        <p>1. 乙の報酬は、乙の営業活動により甲・クライアント間で成約したSES案件の<em>成約粗利（クライアント請求額からエンジニア報酬および実費を控除した金額）の60％から75％</em>とする。</p>
+        <p>2. 還元率は、エンジニア持ち込み・既存案件の移行・年間取扱高に応じて段階的に加算され、最大75％とする。</p>
+        <p>3. 甲は、クライアントから甲への当該案件の月額分の入金を確認した日の<em>翌月末日</em>までに、乙の指定口座へ報酬を振り込む。</p>
+        <p>4. クライアントからの入金が遅延または不能となった場合、乙の報酬支払いも同様に遅延・減額されることを、乙はあらかじめ承諾する（バック・トゥ・バック）。</p>
+
+        <h3>第4条（情報・人材の帰属：<em>独占的帰属</em>）</h3>
+        <p>1. 乙が本業務を通じて知り得た、または甲から提供を受けた以下の情報・人的リソース（以下「対象資産」と総称する）は、<em>その入手経路を問わず、すべて甲に独占的に帰属</em>する。乙は、対象資産につき何らの権利・利益を主張しない。</p>
+        <ul class="ol">
+          <li>クライアント、エンドユーザー、商流上の各社およびその担当者の氏名・連絡先・組織図・意思決定者情報</li>
+          <li>クライアントから受領した案件情報（案件名、要件、単価、契約条件、面談日程、選考状況、商流構造を含む）</li>
+          <li>甲に登録された、または甲を経由して乙が接触したエンジニア・フリーランス・協力会社の氏名、連絡先、スキルシート、稼働状況、単価、契約条件</li>
+          <li>甲の社内データベースに格納された一切のデータ、検索結果、エクスポート結果、スクリーンショットおよびメモ書き</li>
+          <li>本契約の存在および条件、報酬体系</li>
+        </ul>
+        <p>2. 乙が本契約期間中に新規に獲得・接触したクライアントおよびエンジニアであっても、甲の保有する情報・データベース・案件・関係者を端緒として接触に至ったものは、<em>すべて甲に独占的に帰属</em>するものとし、乙は私的利用・転用を行わない。</p>
+        <p>3. 乙は、対象資産につき、業務上必要な範囲を超えて<em>複製・ダウンロード・スクリーンショット・転記・印刷・PDF化・外部ストレージへの保存・私的端末への送信</em>を行ってはならない。</p>
+
+        <h3>第5条（<em>引き抜き・直接取引の禁止</em> ／ Non-Solicitation・Non-Circumvention）</h3>
+        <p>1. 乙は、本契約期間中および<em>契約終了後2年間</em>、甲の書面による事前承諾なく、以下の行為を直接または間接に（自己・第三者・乙が役員もしくは株主となる法人・乙の親族を通じる場合を含む）行ってはならない。</p>
+        <ul class="ol">
+          <li>甲のクライアント、エンドユーザーおよび商流上の各社に対し、甲を介さずにSES案件・準委任・請負・人材紹介・転職勧誘その他取引を持ち掛け、または受託すること</li>
+          <li>甲に登録された、または甲を経由して接触したエンジニア・フリーランス・協力会社に対し、甲を介さない稼働、他社への移籍、退会、契約解除、単価の再交渉等を勧誘・斡旋・教唆・幇助すること</li>
+          <li>甲のクライアントまたはエンジニアを、乙自身もしくは乙の関係する第三者へ引き抜き、横流し、または流用すること（いわゆる「持ち逃げ」）</li>
+          <li>甲の案件情報のみを抜き取り、他社・他エージェント・SNS・案件マッチングサイト等へ転載・転売・共有すること</li>
+          <li>甲の名称・取引関係・実績を、本業務外の文脈で利用すること</li>
+        </ul>
+        <p>2. 本条の制限は、対象となるクライアント・エンジニアごとに、それぞれ最後に甲が当該当事者と取引・接触した日から起算して2年間とする。</p>
+        <p>3. 本契約終了後、乙が甲のクライアントまたはエンジニアと取引を行った場合、当該取引は、契約終了日から2年間に発生したものである限り、<em>甲の情報・関係性を端緒としたものと推定</em>される。乙が反証する責めを負う。</p>
+
+        <h3>第6条（競業避止）</h3>
+        <p>1. 乙は、本契約期間中、甲の書面による事前承諾なく、甲と競合するSES事業・人材紹介事業を、自ら営み、または競合他社の役員・従業員・業務委託先となってはならない。</p>
+        <p>2. 乙が他のSES事業者と並行して活動する場合、甲から得た案件情報・エンジニア情報を、当該他社の業務に一切利用してはならず、業務間の情報遮断（チャイニーズ・ウォール）を講じる。違反の有無を判定するため、甲は第11条に基づく調査を行うことができる。</p>
+
+        <h3>第7条（禁止事項および<span class="ban">即時解除（BAN）</span>）</h3>
+        <p>乙は、以下の行為を行ってはならない。違反が発覚した場合、甲は何らの催告を要さず、乙のシステムアカウントおよび案件データベースへのアクセス権を<span class="ban">即時削除（BAN）</span>し、本契約を解除できる。違反により甲に生じた損害は、乙が全額賠償する。</p>
+        <ul class="ol">
+          <li>第4条（情報・人材の帰属）、第5条（引き抜き・直接取引の禁止）、第6条（競業避止）、第9条（秘密保持）のいずれかに違反する行為</li>
+          <li>エンジニアのスキルシートの偽造、虚偽記載</li>
+          <li>エンジニアに対する経歴・スキルのサバ読みの強要、または黙認</li>
+          <li>エンジニアの意思に反する強引な案件押し付け、ハラスメント行為</li>
+          <li>クライアントに対する虚偽の説明、二重契約、相見積もりの不正操作</li>
+          <li>甲の社内データベースに対する権限外アクセス、データの一括取得・エクスポート、API・スクレイピング等の不正手段による情報取得</li>
+          <li>反社会的勢力との関与またはその疑いのある行為</li>
+        </ul>
+
+        <h3>第8条（<em>違約金 ／ Liquidated Damages</em>）</h3>
+        <p>1. 乙が第4条・第5条・第6条のいずれかに違反した場合、乙は甲に対し、損害賠償とは別に、違反対象となったクライアントまたはエンジニアごとに、以下のいずれか高い額を違約金として直ちに支払う。</p>
+        <ul class="ol">
+          <li>当該クライアントまたはエンジニアに係る、違反発覚日から遡って12か月間に甲が得た（または得る予定であった）粗利相当額の<em>24か月分</em></li>
+          <li>1名あたり金<em>500万円</em></li>
+        </ul>
+        <p>2. 前項の違約金は、甲の損害立証を要さず請求できる予定損害賠償額とする。実損害が違約金を超える場合、甲は超過分の損害賠償を別途請求できる。</p>
+        <p>3. 乙が第9条（秘密保持）に違反した場合、乙は甲に対し、漏洩した情報1件あたり金<em>300万円</em>を違約金として支払う。</p>
+
+        <h3>第9条（秘密保持）</h3>
+        <p>1. 乙は、本業務を通じて知り得た以下の情報を、甲の書面による事前承諾なく、第三者に開示・漏洩・利用してはならない。本義務は契約終了後も<em>5年間</em>存続する。</p>
+        <ul class="ol">
+          <li>クライアント、エンドユーザー、エンジニアの個人情報（氏名・連絡先・経歴・スキル等）</li>
+          <li>案件の単価・契約条件・商流に関する情報</li>
+          <li>甲の営業上・技術上の機密情報、社内データベースの構造・運用ルール</li>
+          <li>本契約の存在および条件</li>
+        </ul>
+        <p>2. 乙は、業務上知り得た情報を、本業務以外の目的（自己・第三者の利益のための利用を含む）に一切使用しない。</p>
+        <p>3. 本契約終了時、乙は甲から提供を受けた一切の情報・媒体・データを、自己の管理する全ての端末・クラウドストレージ・印刷物から<em>速やかに消去・返却</em>し、その旨を書面で甲に報告する。</p>
+
+        <h3>第10条（損害賠償）</h3>
+        <p>乙の本契約違反、不正行為、過失により甲、クライアント、エンジニアまたは第三者に損害が生じた場合、乙はその一切の損害（直接損害・間接損害・逸失利益・弁護士費用・調査費用・対外的な信用回復費用を含む）を賠償する責めを負う。</p>
+
+        <h3>第11条（監査・調査協力）</h3>
+        <p>1. 甲は、乙の本契約違反の疑いがある場合、合理的な範囲で、乙の業務記録・通信記録・取引記録・端末アクセスログ等の開示を求めることができる。乙は誠実にこれに協力する。</p>
+        <p>2. 甲は、乙のシステムアカウントの操作ログ・アクセス履歴・データ取得履歴を取得・保管しており、乙はこれをあらかじめ承諾する。これらのログは、第8条の違約金請求および第10条の損害賠償請求の証拠として用いることができる。</p>
+
+        <h3>第12条（契約期間および解除）</h3>
+        <p>1. 本契約の有効期間は、成立日から1年間とし、いずれからも申し出がない限り自動更新される。</p>
+        <p>2. 甲・乙は、30日前までに書面（チャットメッセージを含む）で通知することにより、本契約を解除できる。</p>
+        <p>3. 第4条・第5条・第6条・第7条・第9条のいずれかに違反した場合、甲は通知期間を要せず、本契約を即時解除できる。</p>
+        <p>4. 本契約の解除事由が乙の責に帰すべき事由による場合、未払いの報酬請求権は当然に消滅する。既払いの報酬についても、違反対象案件に係るものは、甲の請求により全額返還する。</p>
+
+        <h3>第13条（残存条項）</h3>
+        <p>本契約終了後も、第4条、第5条、第6条、第8条、第9条、第10条、第11条および第14条の規定は、当該条項に定める期間（定めのない場合は無期限）有効に存続する。</p>
+
+        <h3>第14条（管轄）</h3>
+        <p>本契約に関する紛争は、東京地方裁判所を第一審の専属的合意管轄裁判所とする。</p>
+
+        <p style="margin-top:24px;color:var(--ink-mute);font-size:12px">— 以上 —</p>
+      </div>
+    </div>
+
+    <label class="consent locked" id="consent-wrap">
+      <input type="checkbox" id="consent" disabled>
+      <div>
+        <p>上記の<strong>業務委託契約規約 全14条</strong>（とくに第4条 情報・人材の帰属、第5条 引き抜き・直接取引の禁止、第8条 違約金の各条項を含む）を最後まで読了し、内容に同意のうえ、本フォームをもって電子的に契約を締結することに合意します。</p>
+        <span class="lock-msg" id="lock-msg">※ 規約全文を最後までスクロールすると、チェックできるようになります</span>
+      </div>
+    </label>
+  </section>
+
+  <!-- ============ SUBMIT ============ -->
+  <section data-screen-label="07 submit" style="border-bottom:0">
+    <div class="submit-row">
+      <button class="submit" id="submit" disabled>
+        業務委託契約に同意して登録する
+        <span class="arr">→</span>
+      </button>
+      <p class="submit-note">同意送信後、ログイン不要で<strong style="color:var(--ink)">次画面に実務マニュアルとLark招待リンク</strong>を表示します。</p>
+    </div>
+
+    <!-- ============ ONBOARDING (契約後画面) ============ -->
+    <div class="success" id="success" data-screen-label="08 onboarding">
+
+      <div class="ob-hero">
+        <div class="check">✓</div>
+        <span class="ob-eyebrow">Next Step · Rules &amp; Onboarding</span>
+        <h2>契約ありがとうございます。<br>続いて、<strong style="color:var(--accent)">SAKIGAKE（さきがけ）エージェント</strong>の<br>業務ルールをご説明します。</h2>
+        <p>下記の<strong>「Larkワークスペースに参加」</strong>からSAKIGAKEのチームに加わっていただき、続けて<strong>実務マニュアル</strong>を上から下まで一読してから初動に入ってください。</p>
+      </div>
+
+      <div class="ob-ctas">
+        <a class="ob-cta primary" href="https://www.larksuite.com/invitation/page/add_contact/?token=66bv9ccc-fa07-4fab-9a9a-217a8bskgc4l&amp;unique_id=7kOQOw07GQnJwu_F5wnIVQ==" target="_blank" rel="noopener">
+          <span class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-9 9"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+          </span>
+          <span class="ctag">Step 1 · 今すぐ</span>
+          <span class="ctitle">Larkワークスペースに参加</span>
+          <p class="cdesc">クリックでSAKIGAKEのLarkテナントへ。専用チャット・案件DB・ドキュメントへアクセスできるようになります。</p>
+          <span class="carr">招待リンクを開く</span>
+        </a>
+        <a class="ob-cta" href="#manual">
+          <span class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z"/><path d="M4 17a3 3 0 0 1 3-3h13"/><path d="M9 8h7M9 12h5"/></svg>
+          </span>
+          <span class="ctag">Step 2 · 読了必須</span>
+          <span class="ctitle">実務マニュアルを読む</span>
+          <p class="cdesc">案件提案・スキルシート・単価交渉・月次フロー・連絡規則まで、初日から動けるよう全工程を記載しています。</p>
+          <span class="carr">マニュアルへスクロール</span>
+        </a>
+      </div>
+
+      <article class="manual" id="manual">
+        <header class="manual-head">
+          <div class="l">
+            <span class="s">Operations Manual · Rulebook</span>
+            <span class="t">SAKIGAKE（さきがけ）エージェント 実務マニュアル</span>
+          </div>
+          <div class="r">
+            <span class="manual-tag">v1.0</span>
+            <span class="manual-tag">2026.05</span>
+          </div>
+        </header>
+        <div class="manual-body">
+
+          <section class="m-section">
+            <h3><span class="mn">01</span>初日にやること（3ステップ）</h3>
+            <p class="m-lede">上の「Larkワークスペースに参加」を押したあと、以下を順に進めてください。所要時間は合計約20分です。</p>
+            <ul class="m-list">
+              <li>Larkインストール後、<strong>「#01_新規エージェント_オンボ」</strong>チャットで「参加しました」と投稿</li>
+              <li>担当オペレーターから送られる<strong>動画マニュアル（約12分）</strong>を視聴（倍速可）</li>
+              <li>案件データベースの試し検索を行い、気になる案件を3件だけ<code>お気に入り</code>に追加</li>
+            </ul>
+          </section>
+
+          <section class="m-section">
+            <h3><span class="mn">02</span>案件提案の標準フロー</h3>
+            <p class="m-lede">公開案件への提案は、以下の手順を厳守してください。手順違反は提案キャンセル・招待取り消しの対象です。</p>
+            <ul class="m-list">
+              <li>案件DBで提案したい案件を選び、<code>提案予定ボタン</code>を押してエンジニアをひもづけ</li>
+              <li>提案テンプレ起動 → 氏名・経歴・単価を、<strong>スキルシートと一字一句一致</strong>させて記載</li>
+              <li>オペレーターが<strong>2営業日以内</strong>にレビューし、OKならクライアントへ一括提案</li>
+              <li>面談調整は<strong>Lark Calendar</strong>で実施。外部ツール（Google等）での個人調整は禁止</li>
+            </ul>
+            <div class="callout">
+              <strong>応答品質のSLAを厳守してください。</strong>クライアントからの連絡には営業時間内は<strong>2時間以内</strong>、面談調整は<strong>4コマ以上提示</strong>が基準です。
+            </div>
+          </section>
+
+          <section class="m-section">
+            <h3><span class="mn">03</span>エンジニア登録・スキルシートのルール</h3>
+            <p class="m-lede">スキルシートは、業界信頼とエンジニア保護の生命線です。サバ読み・偽装は規約上の即時BAN事由です。</p>
+            <ul class="m-list">
+              <li>エンジニアに<strong>「実際に見た」「本人にヒアリングした」事実</strong>のみを記載</li>
+              <li>業務期間・担当工程・使用技術を<strong>エンジニア本人の同意付き</strong>で提出（Larkで同意スタンプを取る）</li>
+              <li>単価レンジは「希望・最低・会いたい会社・会いたくない会社」を事前ヒアリングして記録</li>
+            </ul>
+            <div class="callout warn">
+              <strong>即時BANの例：</strong>「未経験だが『2年経験あり』と記してもらう」「Flutter試しただけだが認識だけ『設計も可能』にしてもらう」 → 規約第7条違反。
+            </div>
+          </section>
+
+          <section class="m-section">
+            <h3><span class="mn">04</span>単価交渉の規則</h3>
+            <ul class="m-list">
+              <li>初回提示単価は、オペレーターと<strong>事前スレッドでレンジを合意</strong>してから提示</li>
+              <li>クライアントとの単価交渉は<strong>エージェント主導でOK</strong>。ただし最終着地金額はオペレーター承認必須</li>
+              <li>稼働中の単価アップ交渉は<strong>四半期に1回</strong>、初回は稼働6ヶ月経過後</li>
+              <li>単価ダウン要請への応諾は、エンジニアと話した上で<strong>オペレーターと共同で返答</strong>（独断禁止）</li>
+            </ul>
+          </section>
+
+          <section class="m-section">
+            <h3><span class="mn">05</span>月次フローと報酬計算</h3>
+            <p class="m-lede">報酬は<strong>クライアントからの入金確認月の翌月末</strong>に、ご登録口座へ一括振込となります（バック・トゥ・バック）。</p>
+            <ul class="m-list">
+              <li><strong>月初・1日〜3日</strong>：担当エンジニアの稼働報告書を回収（Larkテンプレあり）</li>
+              <li><strong>月中・随時</strong>：新規提案とクロススロップの取りまとめ</li>
+              <li><strong>月末</strong>：弊社からクライアントへ請求 → 翌月入金 → <strong>その翌月末にあなたへ振込</strong></li>
+            </ul>
+            <div class="callout">
+              <strong>計算例：</strong>月請求80万円 − エンジニア報酬60万円 − 実費0円 ＝ 粗利<strong>20万円</strong>。還元率60%なら経由案件のあなたの取り分は<strong>12万円/月</strong>、75%なら15万円/月となります。
+            </div>
+          </section>
+
+          <section class="m-section">
+            <h3><span class="mn">06</span>連絡・コミュニケーション規則</h3>
+            <ul class="m-list">
+              <li>クライアント・エンジニアとのやりとりは<strong>原則Larkで一本化</strong>。個人メール・SNS・電話番号交換は禁止</li>
+              <li>クライアントへの連絡は<strong>必ずSAKIGAKEオペレーターをCC</strong>に入れる（Lark共有チャットを使用）</li>
+              <li>エンジニアとの1on1はOK。ただし<strong>単価・契約・他社話題は選抜事由</strong>になるためオペレーター同席のスレッドで</li>
+              <li>チャットのスクリーンショット・転載・外部保存は<strong>規約第4条3項により禁止</strong></li>
+            </ul>
+          </section>
+
+          <section class="m-section">
+            <h3><span class="mn">07</span>規約上の禁止事項リマインダー</h3>
+            <p class="m-lede">以下は、規約第7条により<strong>発覚時点でアカウントをBAN</strong>し、規約第8条の違約金（1件500万円／漏洩は300万円）を請求する事項です。</p>
+            <ul class="m-list">
+              <li>エンジニア・クライアントの<strong>持ち逃げ・他社への引き抜き</strong>（契約期間中＋終了後2年）</li>
+              <li>案件情報の他エージェント・SNS・案件サイトへの転載・転売</li>
+              <li>スキルシートの偽造・サバ読みの強要</li>
+              <li>クライアントに対する二重契約・相見積もりの不正操作</li>
+              <li>反社会的勢力との関与・その疑いのある行為</li>
+            </ul>
+          </section>
+
+          <section class="m-section">
+            <h3><span class="mn">08</span>困ったとき・エスカレーション</h3>
+            <ul class="m-list">
+              <li>業務の質問とトラブル：<strong>担当オペレーターへLark DM</strong>（営業時間内に初動）</li>
+              <li>クライアント・エンジニアトラブルの可能性：<strong>「#03_トラブル報告」</strong>チャンネルへ担当オペレーターをメンション</li>
+              <li>緊急連絡（エンジニアの進退・反社・信用関連）は<strong>代表番号 03-XXXX-XXXX</strong>へ</li>
+            </ul>
+          </section>
+
+        </div>
+      </article>
+
+      <div class="ob-foot">
+        <span>付与されたエージェントID：<strong>SKG-2026-0042</strong></span>
+        <span>本マニュアルと同一内容をLarkの <strong>#01_新規エージェント_オンボ</strong> チャットにピン留めしています。</span>
+      </div>
+
+      <div class="letsgo">
+        <span class="lg-eyebrow">SAKIGAKE · Day 01</span>
+        <h3>さあ、始めよう。
+          <span class="lg-en">Let&rsquo;s go.</span>
+        </h3>
+        <p>マージンを、あなたの報酬に。<br>今日から、SAKIGAKEエージェントとしての初動をお願いします。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot">
+      <span>© 2026 株式会社Rezon</span>
+      <span><a href="#">特定商取引法に基づく表記</a> · <a href="#">プライバシーポリシー</a> · <a href="#">お問い合わせ</a></span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // file name
+  document.querySelector('.file-drop input').addEventListener('change', e => {
+    const f = e.target.files[0];
+    document.getElementById('file-name').textContent = f ? `選択中：${f.name}` : '未選択';
+  });
+
+  // terms scroll → unlock consent
+  const termsBody = document.getElementById('terms-body');
+  const consentWrap = document.getElementById('consent-wrap');
+  const consent = document.getElementById('consent');
+  const lockMsg = document.getElementById('lock-msg');
+  const scrollPct = document.getElementById('scroll-pct');
+  const submitBtn = document.getElementById('submit');
+
+  function updateScroll() {
+    const max = termsBody.scrollHeight - termsBody.clientHeight;
+    const pct = max <= 0 ? 100 : Math.min(100, Math.round((termsBody.scrollTop / max) * 100));
+    scrollPct.textContent = pct + '%';
+    if (pct >= 95) {
+      consentWrap.classList.remove('locked');
+      consent.disabled = false;
+      lockMsg.textContent = '※ 規約全文を読了しました。チェックして同意を完了してください';
+    }
+  }
+  termsBody.addEventListener('scroll', updateScroll);
+  // also unlock if content fits without scroll
+  setTimeout(updateScroll, 100);
+
+  consent.addEventListener('change', () => {
+    submitBtn.disabled = !consent.checked;
+  });
+
+  function showOnboarding() {
+    document.getElementById('doc-head').style.display = 'none';
+    document.querySelectorAll('main.doc > section').forEach(sec => {
+      if (sec.querySelector('#success')) return;
+      sec.style.display = 'none';
+    });
+    submitBtn.style.display = 'none';
+    document.querySelector('.submit-note').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  submitBtn.addEventListener('click', async () => {
+    const fd = new FormData();
+    fd.append('name', document.getElementById('f-name').value);
+    fd.append('furigana', document.getElementById('f-furigana').value);
+    fd.append('dob', document.getElementById('f-dob').value);
+    fd.append('email', document.getElementById('f-email').value);
+    fd.append('phone', document.getElementById('f-phone').value);
+    fd.append('contractType', document.getElementById('f-contractType').value);
+    fd.append('address', document.getElementById('f-address').value);
+    fd.append('currentPosition', document.getElementById('f-currentPosition').value);
+    fd.append('salesExperience', document.getElementById('f-salesExperience').value);
+    fd.append('existingEngineers', document.getElementById('f-existingEngineers').value);
+    fd.append('bankName', document.getElementById('f-bankName').value);
+    fd.append('branchName', document.getElementById('f-branchName').value);
+    const accountTypeEl = document.querySelector('input[name="accountType"]:checked');
+    fd.append('accountType', accountTypeEl ? accountTypeEl.value : '普通');
+    fd.append('accountNumber', document.getElementById('f-accountNumber').value);
+    fd.append('accountHolder', document.getElementById('f-accountHolder').value);
+    const fileInput = document.getElementById('f-idDocument');
+    if (fileInput.files[0]) fd.append('idDocument', fileInput.files[0]);
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '送信中…';
+
+    try {
+      const res = await fetch('/api/agent-register', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '送信に失敗しました');
+      showOnboarding();
+    } catch (err) {
+      alert('エラー: ' + err.message);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '業務委託契約に同意して登録する <span class="arr">→</span>';
+    }
+  });
+</script>
+</body>
+</html>

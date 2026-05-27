@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAKIGAKE | エンジニア・経歴書 提出フォーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+/* ============================================================
+   SAKIGAKE — intake form (brand-aligned)
+   ============================================================ */
+
+:root {
+  --bg:        #f6f4ef;
+  --bg-card:   #ffffff;
+  --bg-dark:   #0a0a0a;
+  --ink:       #0a0a0a;
+  --ink-2:     #1a1a1a;
+  --ink-mute:  #6b6b6b;
+  --ink-dim:   #9b9b9b;
+  --line:      #e6e2d8;
+  --line-2:    #d6d2c6;
+  --accent:    #3ddb8e;
+  --accent-2:  #2dc77a;
+  --accent-ink:#003920;
+  --warn:      #d97757;
+  --error:     #c54a3f;
+
+  --radius-sm: 6px;
+  --radius:    12px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  --sans: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.005em;
+}
+
+body::before, body::after { content: none !important; display: none !important; }
+.backdrop { display: none !important; }
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   Top navigation
+   ============================================================ */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 40px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.nav-logo { margin-right: auto; }
+
+/* Logo */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.logo-mark {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: var(--accent);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+}
+.logo-mark::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 60%; height: 60%;
+  background: #0a3a22;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+.logo-word {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* ============================================================
+   Page shell
+   ============================================================ */
+
+.page {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(340px, 520px) 1fr;
+  max-width: 1320px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Left intro column */
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+.kicker::before {
+  content: "";
+  width: 28px; height: 1px;
+  background: var(--ink);
+}
+.intro h1 {
+  font-size: 30px;
+  line-height: 1.35;
+  font-weight: 900;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--ink);
+  display: flex; flex-direction: column;
+  gap: 4px;
+}
+.title-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.title-led {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(61, 219, 142, 0.22);
+  display: inline-block;
+  flex: 0 0 auto;
+  animation: led 2.4s ease-in-out infinite;
+}
+.title-brand {
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.intro-lede {
+  display: flex; flex-direction: column; gap: 14px;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: #2a2a2a;
+}
+.intro-lede p { margin: 0; }
+.intro-lede b { color: var(--ink); font-weight: 800; }
+.intro-lede .hl {
+  background: linear-gradient(180deg, transparent 62%, var(--accent) 62%);
+  padding: 0 2px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Benefits */
+.benefits {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px 22px 8px;
+  box-shadow: 0 18px 40px -28px rgba(10,10,10,0.18);
+}
+.benefits-head {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--line-2);
+  margin-bottom: 14px;
+}
+.benefits-icon { font-size: 18px; }
+.benefits-title b { font-weight: 900; }
+
+.benefit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex; flex-direction: column;
+}
+.benefit {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--line-2);
+}
+.benefit:last-child { border-bottom: 0; }
+.benefit-num {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent-ink);
+  background: var(--accent);
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  letter-spacing: 0.02em;
+}
+.benefit-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.benefit-title {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.55;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.benefit-new {
+  display: inline-flex; align-items: center;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  background: var(--bg-dark);
+  color: var(--accent);
+  padding: 3px 7px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: 2px;
+}
+.benefit-text {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--ink-mute);
+}
+.benefit-text b { color: var(--ink); font-weight: 700; }
+
+/* CTA below benefits */
+.intro-cta {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: #fbfaf6;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+.intro-cta-arrow {
+  color: var(--accent-2);
+  font-weight: 800;
+  margin-top: 2px;
+}
+.intro-cta b { font-weight: 800; }
+.intro-cta-time {
+  display: inline-block;
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Form card
+   ============================================================ */
+
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 24px 60px -28px rgba(10, 10, 10, 0.18),
+    0 2px 0 rgba(10,10,10,0.02);
+  overflow: hidden;
+  position: relative;
+}
+
+.form-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #fff 0%, #fbfaf6 100%);
+}
+.form-head-led {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(61, 219, 142, 0.22);
+  animation: led 2.4s ease-in-out infinite;
+}
+@keyframes led {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(61, 219, 142, 0.22); }
+  50%      { box-shadow: 0 0 0 6px rgba(61, 219, 142, 0.32); }
+}
+.form-head-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  flex: 1; min-width: 0;
+}
+.form-head-sub {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.form-body {
+  padding: 28px;
+  display: flex; flex-direction: column;
+  gap: 22px;
+}
+
+.row { display: flex; flex-direction: column; gap: 8px; }
+.row.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.row.two-col > div { display: flex; flex-direction: column; gap: 8px; }
+.field-stack { display: flex; flex-direction: column; gap: 10px; }
+
+.field-label {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0;
+}
+.field-label .label-req {
+  color: var(--accent-2);
+  font-weight: 800;
+  font-size: 11px;
+  margin-left: 2px;
+}
+.field-hint {
+  font-size: 12px;
+  color: var(--ink-mute);
+  font-family: var(--sans);
+  padding-left: 2px;
+}
+.field-error {
+  font-size: 12px;
+  color: var(--error);
+  padding-left: 2px;
+  font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+}
+.field-error::before {
+  content: "!";
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--error); color: #fff;
+  font-size: 10px; font-weight: 800;
+  font-family: var(--mono);
+}
+
+/* ----- Inputs ----- */
+.term-input {
+  position: relative;
+  display: flex; align-items: stretch;
+  background: var(--bg-card);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.term-input:hover { border-color: var(--line-2); }
+.term-input:focus-within {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(10,10,10,0.08);
+}
+.term-input input {
+  flex: 1;
+  background: transparent;
+  border: 0; outline: 0;
+  color: var(--ink);
+  padding: 13px 16px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.term-input input::placeholder {
+  color: var(--ink-dim);
+  font-weight: 400;
+}
+
+/* Select */
+.term-select { position: relative; }
+.term-select-trigger {
+  width: 100%;
+  display: flex; align-items: center;
+  background: var(--bg-card);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.term-select-trigger:hover { border-color: var(--line-2); }
+.term-select.open .term-select-trigger,
+.term-select-trigger:focus-visible {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(10,10,10,0.08);
+  outline: none;
+}
+.term-select-value { flex: 1; padding: 13px 16px; }
+.term-select-value.placeholder { color: var(--ink-dim); font-weight: 400; }
+.term-select-caret {
+  padding: 0 16px;
+  color: var(--ink-mute);
+  display: flex; align-items: center;
+  font-size: 11px;
+  border-left: 1px solid var(--line);
+  align-self: stretch;
+}
+.term-select-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 24px 48px -16px rgba(10,10,10,0.18);
+  padding: 6px;
+  z-index: 20;
+  display: flex; flex-direction: column;
+  max-height: 280px; overflow: auto;
+}
+.term-select-option {
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  padding: 11px 12px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  border-radius: var(--radius-sm);
+}
+.term-select-option:hover { background: #f4f1ea; }
+.term-select-option.selected { background: rgba(61, 219, 142, 0.14); }
+.term-select-option .opt-marker {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0;
+  flex: 0 0 auto;
+}
+.term-select-option.selected .opt-marker {
+  border-color: var(--accent-2);
+  background: var(--accent);
+}
+.term-select-option.selected .opt-marker::after {
+  content: "";
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #0a3a22;
+}
+
+/* ============================================================
+   File drop zone
+   ============================================================ */
+
+.file-drop {
+  display: flex; align-items: center; gap: 18px;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 10px, rgba(10,10,10,0.018) 10px 11px),
+    #fbfaf6;
+  border: 1.5px dashed var(--line-2);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.05s;
+  color: var(--ink);
+  position: relative;
+}
+.file-drop:hover { border-color: var(--accent-2); background: #fff; }
+.file-drop.drag {
+  border-color: var(--accent-2);
+  background: rgba(61, 219, 142, 0.08);
+  box-shadow: 0 0 0 4px rgba(61, 219, 142, 0.16);
+}
+.file-drop:active { transform: translateY(1px); }
+
+.file-drop-icon {
+  width: 56px; height: 56px;
+  background: var(--bg-dark);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+.file-drop-main { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.file-drop-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.file-drop-sub {
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.7;
+}
+.file-drop-sub .hl { color: var(--ink); font-weight: 700; }
+.file-drop-formats {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-dim);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+/* File card */
+.file-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 12px;
+  box-shadow: 0 0 0 3px rgba(61, 219, 142, 0.16);
+}
+.file-card.uploading {
+  border-color: var(--line-2);
+  box-shadow: none;
+}
+.file-card-row { display: flex; align-items: center; gap: 14px; }
+.file-badge {
+  font-family: var(--mono);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 10px 10px;
+  background: var(--bg-dark);
+  color: var(--accent);
+  border-radius: 8px;
+  min-width: 48px;
+  text-align: center;
+}
+.file-badge.pulse { animation: pulse 0.9s ease-in-out infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+.file-meta { display: flex; flex-direction: column; flex: 1; min-width: 0; gap: 2px; }
+.file-name {
+  font-size: 14px; font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.file-sub {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+.file-sub .ok { color: var(--accent-2); font-weight: 700; }
+.file-sub .sep { opacity: 0.5; }
+.mono-dim { color: var(--ink-mute); font-family: var(--mono); font-size: 11px; }
+.file-remove {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-pill);
+  color: var(--ink-mute);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: all 0.12s;
+}
+.file-remove:hover { color: var(--error); border-color: var(--error); }
+.file-bar {
+  height: 4px;
+  background: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.file-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.1s linear;
+}
+
+/* ============================================================
+   Footer / submit
+   ============================================================ */
+
+.form-foot {
+  padding: 20px 28px 26px;
+  border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: 16px;
+  background: linear-gradient(180deg, #fbfaf6 0%, #fff 100%);
+}
+.foot-meta {
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  flex: 1;
+  line-height: 1.75;
+  min-width: 0;
+}
+.foot-meta b { color: var(--ink); font-weight: 700; }
+
+/* Pill buttons (brand style) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border-radius: var(--radius-pill);
+  padding: 14px 22px;
+  cursor: pointer;
+  transition: transform 0.06s, box-shadow 0.12s, background 0.12s, color 0.12s;
+  border: 1.5px solid transparent;
+  text-decoration: none;
+}
+.btn:active:not(:disabled) { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--bg-dark);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #1c1c1c;
+  box-shadow: 0 8px 24px -8px rgba(10,10,10,0.4);
+}
+.btn-primary:disabled {
+  background: #d6d2c6;
+  color: #fbfaf6;
+  cursor: not-allowed;
+}
+.btn-primary .btn-arrow {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 900;
+  margin-left: 2px;
+  transition: transform 0.15s;
+}
+.btn-primary:hover:not(:disabled) .btn-arrow { transform: translateX(3px); }
+.btn-primary:disabled .btn-arrow { background: #ecebe6; color: var(--ink-dim); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+.btn-secondary:hover { background: var(--bg-card); border-color: var(--ink); }
+
+/* ============================================================
+   Success state
+   ============================================================ */
+
+.form-card.success {
+  text-align: center;
+  padding: 56px 32px 44px;
+}
+.success-mark {
+  width: 64px; height: 64px;
+  margin: 0 auto 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent-ink);
+}
+.success-title {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+.success-sub {
+  font-size: 14px;
+  color: var(--ink-mute);
+  margin: 0 0 28px;
+}
+.success-log {
+  display: inline-block;
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--ink-2);
+  background: #fbfaf6;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 0 auto 28px;
+  white-space: pre;
+}
+.success-log .k { color: var(--ink-mute); }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 980px) {
+  .page {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding: 32px 24px 64px;
+  }
+  .intro { position: static; }
+  .intro h1 { font-size: 36px; }
+  .nav { padding: 18px 24px; }
+}
+@media (max-width: 560px) {
+  .row.two-col { grid-template-columns: 1fr; }
+  .form-body { padding: 22px 18px; }
+  .form-head { padding: 18px 20px; }
+  .form-foot { padding: 18px 20px 22px; flex-direction: column; align-items: stretch; }
+  .btn-primary { justify-content: center; }
+  .file-drop { flex-direction: column; text-align: center; padding: 24px 18px; }
+  .intro h1 { font-size: 32px; }
+}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* ---------- Fixed tweaks (production) ---------- */
+const TWEAKS = {
+  accent: "#3ddb8e",
+  showOperatorPanel: false,
+  salesAsSelect: true,
+  showIntro: true,
+};
+
+/* ============================================================
+   Logo
+   ============================================================ */
+
+function Logo() {
+  return (
+    <a href="#" className="logo" aria-label="SAKIGAKE">
+      <span className="logo-mark" aria-hidden="true" />
+      <span className="logo-word">SAKIGAKE</span>
+    </a>
+  );
+}
+
+/* ============================================================
+   Form primitives
+   ============================================================ */
+
+function FieldLabel({ children, htmlFor, required }) {
+  return (
+    <label htmlFor={htmlFor} className="field-label">
+      <span className="label-text">{children}</span>
+      {required && <span className="label-req">必須</span>}
+    </label>
+  );
+}
+
+function TerminalInput({ id, value, onChange, placeholder, autoComplete }) {
+  return (
+    <div className="term-input">
+      <input
+        id={id}
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        autoComplete={autoComplete || "off"}
+        spellCheck="false"
+      />
+    </div>
+  );
+}
+
+function TerminalSelect({ id, value, onChange, options, placeholder }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    function onDoc(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+  return (
+    <div className={"term-select" + (open ? " open" : "")} ref={ref}>
+      <button
+        type="button"
+        id={id}
+        className="term-select-trigger"
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span className={"term-select-value" + (!value ? " placeholder" : "")}>
+          {value || placeholder}
+        </span>
+        <span className="term-select-caret">{open ? "▴" : "▾"}</span>
+      </button>
+      {open && (
+        <div className="term-select-menu" role="listbox">
+          {options.map((opt) => (
+            <button
+              type="button"
+              key={opt}
+              role="option"
+              aria-selected={value === opt}
+              className={"term-select-option" + (value === opt ? " selected" : "")}
+              onClick={() => { onChange(opt); setOpen(false); }}
+            >
+              <span className="opt-marker" />
+              <span>{opt}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ============================================================
+   File drop
+   ============================================================ */
+
+function formatBytes(b) {
+  if (b < 1024) return `${b} B`;
+  if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
+  return `${(b / 1024 / 1024).toFixed(2)} MB`;
+}
+
+function fileExt(name) {
+  const ext = (name.split(".").pop() || "").toLowerCase();
+  if (ext === "pdf") return "PDF";
+  if (ext === "xlsx" || ext === "xls") return "XLS";
+  if (ext === "docx" || ext === "doc") return "DOC";
+  if (ext === "csv") return "CSV";
+  return ext.toUpperCase().slice(0, 3) || "FILE";
+}
+
+function FileDrop({ file, onFile }) {
+  const [drag, setDrag] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const inputRef = useRef(null);
+
+  const accept = ".pdf,.xlsx,.xls,.docx,.doc,.csv,.txt,application/pdf";
+
+  const handleFiles = useCallback((files) => {
+    if (!files || files.length === 0) return;
+    const f = files[0];
+    setUploading(true);
+    setProgress(0);
+    const start = performance.now();
+    const dur = 900 + Math.random() * 500;
+    let raf;
+    const tick = () => {
+      const t = Math.min(1, (performance.now() - start) / dur);
+      setProgress(Math.round(t * 100));
+      if (t < 1) raf = requestAnimationFrame(tick);
+      else { setUploading(false); onFile(f); }
+    };
+    raf = requestAnimationFrame(tick);
+  }, [onFile]);
+
+  const onDrop = (e) => {
+    e.preventDefault();
+    setDrag(false);
+    handleFiles(e.dataTransfer.files);
+  };
+
+  if (file && !uploading) {
+    return (
+      <div className="file-card">
+        <div className="file-card-row">
+          <div className="file-badge">{fileExt(file.name)}</div>
+          <div className="file-meta">
+            <div className="file-name">{file.name}</div>
+            <div className="file-sub">
+              <span>{formatBytes(file.size)}</span>
+              <span className="sep">·</span>
+              <span className="ok">✓ アップロード完了</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="file-remove"
+            onClick={() => { onFile(null); setProgress(0); }}
+          >削除</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (uploading) {
+    return (
+      <div className="file-card uploading">
+        <div className="file-card-row">
+          <div className="file-badge pulse">···</div>
+          <div className="file-meta">
+            <div className="file-name">アップロード中…</div>
+            <div className="file-sub">
+              <span className="mono-dim">{progress}%</span>
+              <span className="sep">·</span>
+              <span className="mono-dim">scanning…</span>
+            </div>
+          </div>
+        </div>
+        <div className="file-bar"><div className="file-bar-fill" style={{ width: progress + "%" }} /></div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={"file-drop" + (drag ? " drag" : "")}
+      onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+      onDragLeave={() => setDrag(false)}
+      onDrop={onDrop}
+      onClick={() => inputRef.current && inputRef.current.click()}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") inputRef.current && inputRef.current.click(); }}
+    >
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        style={{ display: "none" }}
+        onChange={(e) => handleFiles(e.target.files)}
+      />
+      <div className="file-drop-icon">
+        <svg viewBox="0 0 48 48" width="28" height="28" aria-hidden="true">
+          <path d="M24 32 V14 M16 22 L24 14 L32 22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M10 30 V36 A2 2 0 0 0 12 38 H36 A2 2 0 0 0 38 36 V30" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+        </svg>
+      </div>
+      <div className="file-drop-main">
+        <div className="file-drop-title">ファイルを選択 / ドラッグ&ドロップ</div>
+        <div className="file-drop-sub">
+          お手持ちの <b className="hl">Excel / PDF / Word</b> をそのままアップロードしてください。
+        </div>
+        <div className="file-drop-formats">.pdf  .xlsx  .docx  .csv  ·  max 20MB</div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   The form
+   ============================================================ */
+
+const SALES_OPTIONS = [
+  "山田 太郎",
+  "鈴木 一郎",
+  "佐藤 花子",
+  "高橋 健太",
+  "中村 美咲",
+  "（その他 / 直接入力）",
+];
+
+const RATE_OPTIONS = [
+  "～60万円",
+  "60万円",
+  "65万円",
+  "70万円",
+  "75万円",
+  "80万円",
+  "85万円",
+  "90万円",
+  "95万円",
+  "100万円",
+  "100万円以上",
+  "相談（会社規定に一任）",
+];
+
+const AVAILABILITY_OPTIONS = [
+  "即日",
+  "2026年 6月",
+  "2026年 7月",
+  "2026年 8月",
+  "2026年 9月",
+  "2026年 10月",
+  "2026年 11月",
+  "2026年 12月",
+  "2027年 1月以降",
+  "未定（要相談）",
+];
+
+function FormCard() {
+  const [sales, setSales] = useState("");
+  const [salesCustom, setSalesCustom] = useState("");
+  const [engineer, setEngineer] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [rate, setRate] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [file, setFile] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [touched, setTouched] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const useCustomSales = sales === SALES_OPTIONS[SALES_OPTIONS.length - 1];
+  const resolvedSales = useCustomSales ? salesCustom.trim() : sales;
+  const canSubmit =
+    !!resolvedSales &&
+    engineer.trim().length > 0 &&
+    email.trim().length > 0 &&
+    phone.trim().length > 0 &&
+    rate.trim().length > 0 &&
+    !!file &&
+    !submitting;
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setTouched(true);
+    setSubmitError("");
+    if (!canSubmit) return;
+    setSubmitting(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("salesPerson", resolvedSales);
+      formData.append("engineerName", engineer.trim());
+      formData.append("email", email.trim());
+      formData.append("phone", phone.trim());
+      formData.append("desiredRate", rate);
+      formData.append("availability", availability || "未定（要相談）");
+      formData.append("resumeFile", file);
+
+      const res = await fetch("/api/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "送信に失敗しました" }));
+        throw new Error(err.error || "送信に失敗しました");
+      }
+
+      setSubmitting(false);
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitting(false);
+      setSubmitError(err.message || "送信に失敗しました。もう一度お試しください。");
+    }
+  };
+
+  if (submitted) return <Success sales={resolvedSales} engineer={engineer} />;
+
+  return (
+    <form className="form-card" onSubmit={submit} noValidate>
+      <header className="form-head">
+        <span className="form-head-led" aria-hidden="true" />
+        <span className="form-head-title">要員・経歴書 提出フォーム</span>
+        <span className="form-head-sub">SAKIGAKE / intake</span>
+      </header>
+
+      <div className="form-body">
+        <section className="row">
+          <FieldLabel htmlFor="f-sales" required>紹介営業マンの名前</FieldLabel>
+          <div className="field-stack">
+            <TerminalSelect
+              id="f-sales"
+              value={sales}
+              onChange={setSales}
+              options={SALES_OPTIONS}
+              placeholder="選択してください"
+            />
+            {useCustomSales && (
+              <TerminalInput
+                id="f-sales-custom"
+                value={salesCustom}
+                onChange={setSalesCustom}
+                placeholder="営業マンの氏名を入力"
+              />
+            )}
+          </div>
+          <div className="field-hint">誰が連れてきたか分かるようにするため</div>
+          {touched && !resolvedSales && <div className="field-error">営業マン名を入力してください</div>}
+        </section>
+
+        <section className="row">
+          <FieldLabel htmlFor="f-engineer" required>エンジニアのお名前</FieldLabel>
+          <TerminalInput
+            id="f-engineer"
+            value={engineer}
+            onChange={setEngineer}
+            placeholder="例：イニシャルで (T.Y)"
+          />
+          <div className="field-hint">本名を明かしたくない場合はイニシャルでOKです</div>
+          {touched && !engineer.trim() && <div className="field-error">エンジニア名を入力してください</div>}
+        </section>
+
+        <section className="row two-col">
+          <div>
+            <FieldLabel htmlFor="f-email" required>メールアドレス</FieldLabel>
+            <TerminalInput
+              id="f-email"
+              value={email}
+              onChange={setEmail}
+              placeholder="例：taro@example.com"
+              autoComplete="email"
+            />
+            <div className="field-hint">連絡先として使用します</div>
+            {touched && !email.trim() && <div className="field-error">メールアドレスを入力してください</div>}
+          </div>
+          <div>
+            <FieldLabel htmlFor="f-phone" required>電話番号</FieldLabel>
+            <TerminalInput
+              id="f-phone"
+              value={phone}
+              onChange={setPhone}
+              placeholder="例：090-1234-5678"
+              autoComplete="tel"
+            />
+            <div className="field-hint">緊急時の連絡用</div>
+            {touched && !phone.trim() && <div className="field-error">電話番号を入力してください</div>}
+          </div>
+        </section>
+
+        <section className="row two-col">
+          <div>
+            <FieldLabel htmlFor="f-rate" required>希望単価</FieldLabel>
+            <TerminalSelect
+              id="f-rate"
+              value={rate}
+              onChange={setRate}
+              options={RATE_OPTIONS}
+              placeholder="例：75万円"
+            />
+            <div className="field-hint">月単位の希望単価を選択してください</div>
+            {touched && !rate.trim() && <div className="field-error">希望単価を選択してください</div>}
+          </div>
+          <div>
+            <FieldLabel htmlFor="f-avail">稼働可能時期</FieldLabel>
+            <TerminalSelect
+              id="f-avail"
+              value={availability}
+              onChange={setAvailability}
+              options={AVAILABILITY_OPTIONS}
+              placeholder="例：来月から"
+            />
+            <div className="field-hint">現場参画可能なタイミング</div>
+          </div>
+        </section>
+
+        <section className="row">
+          <FieldLabel htmlFor="f-file" required>経歴書（スキルシート）の添付</FieldLabel>
+          <FileDrop file={file} onFile={setFile} />
+          {touched && !file && <div className="field-error">経歴書を添付してください</div>}
+        </section>
+      </div>
+
+      <footer className="form-foot">
+        <div className="foot-meta">
+          送信内容は<b>厳重に管理</b>され、担当の営業エージェントおよび <b>SAKIGAKE 運営</b> のみが閲覧します。<br />
+          マッチする案件が見つかり次第、担当営業より<b>速やかに</b>ご連絡いたします。
+        </div>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={!canSubmit}
+        >
+          {submitting ? <span>送信中…</span> : <span>送信する</span>}
+          <span className="btn-arrow" aria-hidden="true">→</span>
+        </button>
+      </footer>
+      {submitError && (
+        <div style={{ padding: "0 28px 20px", color: "var(--error)", fontSize: "13px", fontWeight: 600 }}>
+          {submitError}
+        </div>
+      )}
+    </form>
+  );
+}
+
+/* ============================================================
+   Success
+   ============================================================ */
+
+function Success({ sales, engineer }) {
+  const [ticket] = useState(() =>
+    "SK-" + Math.random().toString(36).slice(2, 7).toUpperCase() + "-" + Date.now().toString(36).slice(-4).toUpperCase()
+  );
+  return (
+    <div className="form-card success">
+      <div className="success-mark">
+        <svg viewBox="0 0 28 28" width="28" height="28">
+          <path d="M6 14 L12 20 L22 8" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+      <h2 className="success-title">送信完了しました</h2>
+      <p className="success-sub">担当者がスキルシートを確認後、1営業日以内にご連絡します。</p>
+      <pre className="success-log">
+        <div><span className="k">ticket  </span>: {ticket}</div>
+        <div><span className="k">sales   </span>: {sales}</div>
+        <div><span className="k">engineer</span>: {engineer}</div>
+        <div><span className="k">status  </span>: queued for review</div>
+        <div><span className="k">eta     </span>: 1営業日以内</div>
+      </pre>
+    </div>
+  );
+}
+
+/* ============================================================
+   Page chrome (nav + intro)
+   ============================================================ */
+
+function Nav() {
+  return (
+    <nav className="nav">
+      <div className="nav-logo"><Logo /></div>
+    </nav>
+  );
+}
+
+function Intro() {
+  return (
+    <aside className="intro">
+      <div className="kicker">Engineer · Skill-sheet Submission</div>
+      <h1>
+        <span className="title-line">
+          <span className="title-led" aria-hidden="true" />
+          <span className="title-brand">【SAKIGAKE】</span>
+        </span>
+        <span className="title-line">エンジニア・経歴書ご提出フォーム</span>
+      </h1>
+
+      <div className="intro-lede">
+        <p>
+          <b>SAKIGAKE</b>をご利用いただき、ありがとうございます。<br />
+          あなたのスキルと希望に <span className="hl">100%マッチする</span> 「最高単価・最良環境」の案件を、AIと専任の営業ハンターが <b>24時間体制</b> でスピード探索いたします。
+        </p>
+        <p>
+          手入力による細かいスキルのチェックや、面倒な職務経歴書の書き換えは <b>【一切不要】</b> です。<br />
+          今お手元にある最新の経歴書（Excel / PDF / Word など）を、そのまま下部からアップロードしてください。
+        </p>
+      </div>
+
+      <div className="benefits">
+        <div className="benefits-head">
+          <span className="benefits-icon" aria-hidden="true">💡</span>
+          <span className="benefits-title">提出時の <b>4つの安心・限定メリット</b></span>
+        </div>
+        <ol className="benefit-list">
+          <li className="benefit">
+            <span className="benefit-num">01</span>
+            <div className="benefit-body">
+              <div className="benefit-title">
+                最新AIツール（Claude Code / Cursor 等）を弊社負担で全額支給
+                <span className="benefit-new">NEW</span>
+              </div>
+              <p className="benefit-text">
+                SAKIGAKEから案件に参画いただいたエンジニアの皆様には、日々の開発効率を劇的に向上させる最新のAIツール環境（<b>Cursor Pro</b> や <b>Claude 有償ライセンス</b> 等）を、弊社の費用負担で <b>完全無料</b> でご提供します。
+              </p>
+            </div>
+          </li>
+          <li className="benefit">
+            <span className="benefit-num">02</span>
+            <div className="benefit-body">
+              <div className="benefit-title">最新AIによる経歴書の自動最適化</div>
+              <p className="benefit-text">
+                お送りいただいたバラバラなフォーマットの経歴書は、最新AIが元請け企業に最も刺さる <b>「美しいMarkdown形式」</b> へ自動で匿名化・整形します。
+              </p>
+            </div>
+          </li>
+          <li className="benefit">
+            <span className="benefit-num">03</span>
+            <div className="benefit-body">
+              <div className="benefit-title">個人情報の厳重な保護</div>
+              <p className="benefit-text">
+                本名、特定の会社名、最寄り駅などの個人情報は、AIによって自動的にマスキング（非公開化）されます。あなたの許可なく外部へ個人情報が流出することは <b>絶対にありません</b>。
+              </p>
+            </div>
+          </li>
+          <li className="benefit">
+            <span className="benefit-num">04</span>
+            <div className="benefit-body">
+              <div className="benefit-title">24時間以内のスピードマッチング</div>
+              <p className="benefit-text">
+                ご提出後、早ければ <b>数時間〜24時間以内</b> に、あなたのスキルに合致した厳選案件の打診が担当営業より届きます。
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div className="intro-cta">
+        <span className="intro-cta-arrow" aria-hidden="true">▼</span>
+        <span>
+          下記の項目をご入力の上、経歴書ファイルを添付して<b>「送信」</b>してください。<br />
+          <span className="intro-cta-time">所要時間：約30秒</span>
+        </span>
+      </div>
+    </aside>
+  );
+}
+
+/* ============================================================
+   Root
+   ============================================================ */
+
+function App() {
+  return (
+    <>
+      <Nav />
+      <main className="page">
+        <Intro />
+        <div><FormCard /></div>
+      </main>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — 案件管理</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      ink: '#0A0A0A', ink2: '#2A2A2D', inksoft: '#555559', inkmute: '#8A8A8F',
+      paper: '#FFFFFF', cream: '#F4F1E8', cream2: '#ECE8DB',
+      mint: '#4ADE80', mintdeep: '#16A34A', mintsoft: '#D7F7E0', mintglow: '#B6F4A5',
+      warn: '#F59E0B', warnsoft: '#FEF3C7',
+      info: '#3B82F6', infosoft: '#DBEAFE',
+      danger: '#EF4444', dangersoft: '#FEE2E2',
+    },
+  }}
+}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+  @keyframes pulse-mint { 0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); } 50% { box-shadow: 0 0 0 8px rgba(74,222,128,0); } }
+  .pulse-mint { animation: pulse-mint 2.4s ease-in-out infinite; }
+  .toast { position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%) translateY(20px); background: #0A0A0A; color: #fff; padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; transition: opacity 0.18s ease, transform 0.2s ease; pointer-events: none; z-index: 80; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast .ico { color: #4ADE80; margin-right: 6px; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<!-- =========== HEADER =========== -->
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5 hover:opacity-90 transition">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">ダッシュボード</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">02<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">エンジニア</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink text-white font-bold">
+        <span class="mono text-[9px] text-mint tracking-[0.14em] font-bold">03</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-mint blink"></span>
+        <span>案件</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span>
+        <span class="font-medium hidden xl:inline">自動処理</span>
+      </a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+        <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+        <div class="hidden sm:block">
+          <div class="font-bold text-[13px] leading-tight">田中 健一</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</header>
+
+
+<main class="max-w-[1280px] mx-auto px-6 py-8">
+
+  <!-- ============== PAGE HEADER ============== -->
+  <div class="flex items-end justify-between gap-6 mb-7 flex-wrap">
+    <div>
+      <div class="mono text-[11px] text-inksoft tracking-[0.22em] uppercase font-bold mb-3 flex items-center gap-3">
+        <span class="block w-7 h-[1.5px] bg-ink"></span>
+        <span>案件一覧</span>
+      </div>
+      <h1 class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(28px, 4.4vw, 44px);">
+        案件 <span class="hl">8 件</span>
+      </h1>
+      <p class="mt-3 text-inksoft text-[14px] leading-relaxed max-w-xl">
+        クライアントから届いた案件と、自分で登録した案件を一覧で管理。
+      </p>
+    </div>
+    <a href="project-new.html" class="bg-ink hover:bg-[#1f1f1f] text-white font-bold px-5 py-3 rounded-xl text-[13px] flex items-center gap-2 whitespace-nowrap shadow-[0_6px_20px_rgba(10,10,10,0.18)] transition">
+      <span class="text-lg">+</span>
+      新規案件を登録
+      <span class="text-mint">→</span>
+    </a>
+  </div>
+
+
+  <!-- ============== FILTER ============== -->
+  <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+    <div class="flex gap-1 bg-paper border border-black/5 rounded-xl p-1">
+      <button data-filter="all"       class="filter-btn active px-3.5 py-1.5 rounded-lg text-[12px] font-bold transition bg-ink text-white">すべて <span class="mono text-[10px] ml-1 opacity-70">8</span></button>
+      <button data-filter="match"     class="filter-btn px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-inksoft hover:text-ink transition">あなた向け <span class="mono text-[10px] ml-1 opacity-70">5</span></button>
+      <button data-filter="urgent"    class="filter-btn px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-inksoft hover:text-ink transition">🔥 緊急 <span class="mono text-[10px] ml-1 opacity-70">3</span></button>
+      <button data-filter="mine"      class="filter-btn px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-inksoft hover:text-ink transition">登録済み <span class="mono text-[10px] ml-1 opacity-70">2</span></button>
+    </div>
+  </div>
+
+
+  <!-- ============== PROJECT LIST ============== -->
+  <div id="grid" class="bg-paper border border-black/5 rounded-2xl divide-y divide-black/5 overflow-hidden"></div>
+
+</main>
+
+
+<div id="toast" class="toast"><span class="ico">✓</span><span id="toast-msg"></span></div>
+
+
+<script>
+// ============================================
+// Projects data
+// ============================================
+const projects = [
+  { id:'PJ-2087', logo:'FX', title:'決済プラットフォーム / バックエンド刷新', client:'FinX 株式会社', industry:'FinTech', role:'バックエンド', workStyle:'週3リモート + 渋谷', rate:[80,95], months:6, start:'2026-07-01', deadline:'06/05', skills:['Go','PostgreSQL','AWS','K8s'], aiScore:96, matchName:'K.S', urgent:true, posted:1, mine:false },
+  { id:'PJ-2084', logo:'DD', title:'SaaS向けデータ基盤 / DWH構築', client:'DataDive Inc.', industry:'SaaS', role:'データエンジ', workStyle:'フルリモート', rate:[85,100], months:12, start:'2026-06-15', deadline:'06/08', skills:['Snowflake','dbt','Airflow','Python'], aiScore:94, matchName:'H.W', urgent:false, posted:2, mine:false },
+  { id:'PJ-2076', logo:'RK', title:'EC基盤 SRE / クラウド移行', client:'Rakume', industry:'EC', role:'SRE', workStyle:'週3リモート', rate:[95,115], months:9, start:'2026-06-01', deadline:'06/12', skills:['AWS','Terraform','K8s','Datadog'], aiScore:91, matchName:'S.N', urgent:true, posted:4, mine:false },
+  { id:'PJ-2074', logo:'BH', title:'管理画面リニューアル / React', client:'Bloom HR', industry:'HRTech', role:'フロント', workStyle:'フルリモート', rate:[70,85], months:6, start:'2026-06-15', deadline:'06/15', skills:['React','TS','Next.js'], aiScore:88, matchName:'T.S, A.M', urgent:false, posted:5, mine:false },
+  { id:'PJ-2071', logo:'AI', title:'社内LLMチャットボット / MLOps', client:'AIvory', industry:'AI', role:'MLエンジ', workStyle:'週2出社 / 五反田', rate:[95,120], months:8, start:'2026-06-15', deadline:'06/18', skills:['Python','PyTorch','LLM','SageMaker'], aiScore:79, matchName:null, urgent:false, posted:6, mine:false },
+  { id:'PJ-2081', logo:'MB', title:'金融系基幹システム PM', client:'MegaBank Tokyo', industry:'金融', role:'PM / PMO', workStyle:'週5常駐 / 大手町', rate:[100,130], months:12, start:'2026-07-01', deadline:'06/10', skills:['PMP','金融','要件定義'], aiScore:62, matchName:null, urgent:false, posted:3, mine:false },
+  { id:'PJ-2069', logo:'NX', title:'内製スキル人材 / Java求人', client:'NextStep Lab (自分登録)', industry:'SI', role:'Javaエンジ', workStyle:'週5常駐', rate:[60,75], months:6, start:'2026-08-01', deadline:'06/30', skills:['Java','Spring','Oracle'], aiScore:84, matchName:'T.Y', urgent:false, posted:8, mine:true },
+  { id:'PJ-2065', logo:'CV', title:'モバイル新機能開発 (自分登録)', client:'Cavotto', industry:'B2C', role:'iOS', workStyle:'フルリモート', rate:[55,70], months:4, start:'2026-07-15', deadline:'07/05', skills:['Swift','Firebase'], aiScore:81, matchName:'M.K', urgent:false, posted:12, mine:true },
+];
+
+function scoreBadge(s) {
+  if (s >= 90) return 'bg-mintsoft text-mintdeep';
+  if (s >= 80) return 'bg-infosoft text-[#1E40AF]';
+  return 'bg-cream2 text-inksoft';
+}
+
+function render(filter='all') {
+  let list = projects;
+  if (filter === 'match')  list = projects.filter(p => p.aiScore >= 80);
+  if (filter === 'urgent') list = projects.filter(p => p.urgent);
+  if (filter === 'mine')   list = projects.filter(p => p.mine);
+
+  // Sort by AI score desc
+  list = [...list].sort((a,b) => b.aiScore - a.aiScore);
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = list.map(p => {
+    const hasMatch = !!p.matchName;
+    const stripe = p.urgent ? 'bg-warn' : p.mine ? 'bg-info' : 'bg-transparent';
+    return `
+    <div
+      onclick="location.href='project-detail.html?id=${p.id}'"
+      class="flex items-stretch hover:bg-mintsoft/20 transition cursor-pointer group">
+
+      <!-- Left color stripe (urgent / mine) -->
+      <div class="w-1 ${stripe} flex-shrink-0"></div>
+
+      <!-- Body -->
+      <div class="flex items-center gap-3 px-4 py-3 flex-1 min-w-0">
+
+        <!-- Logo -->
+        <div class="w-9 h-9 rounded-lg bg-cream2 flex items-center justify-center mono text-[11px] font-black flex-shrink-0">${p.logo}</div>
+
+        <!-- Title + client -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5">
+            ${p.urgent ? `<span class="text-warn text-[10px] mono font-black flex-shrink-0">🔥</span>` : ''}
+            ${p.mine ? `<span class="bg-info text-white mono text-[9px] font-black px-1.5 py-0.5 rounded flex-shrink-0">自分</span>` : ''}
+            <span class="font-bold text-[13.5px] truncate">${p.title}</span>
+          </div>
+          <div class="text-[11px] text-inksoft truncate mt-0.5">${p.client} · ${p.industry} · ${p.role}</div>
+        </div>
+
+        <!-- Rate -->
+        <div class="hidden md:block flex-shrink-0 text-right w-[100px]">
+          <div class="num font-black text-[14px] leading-tight">${p.rate[0]}–${p.rate[1]}<span class="text-[10px] text-inksoft font-bold ml-0.5">万</span></div>
+          <div class="text-[10px] text-inksoft mt-0.5">${p.months}ヶ月</div>
+        </div>
+
+        <!-- Match -->
+        <div class="hidden lg:flex flex-shrink-0 items-center gap-1.5 w-[120px]">
+          ${hasMatch
+            ? `<span class="mono text-[10px] text-inkmute uppercase">マッチ</span><span class="mono font-black text-mintdeep text-[12px] truncate">${p.matchName}</span>`
+            : `<span class="text-[10.5px] text-inkmute">マッチなし</span>`}
+        </div>
+
+        <!-- Score -->
+        <div class="flex-shrink-0 text-center w-[42px]">
+          <div class="${scoreBadge(p.aiScore)} num font-black text-[13px] rounded px-1.5 py-0.5 leading-none">${p.aiScore}</div>
+          <div class="mono text-[8px] text-inkmute tracking-[0.1em] mt-1 font-bold">マッチ</div>
+        </div>
+
+        <!-- Deadline -->
+        <div class="hidden sm:block flex-shrink-0 text-right w-[58px]">
+          <div class="mono text-[8px] text-inkmute tracking-[0.12em] uppercase font-bold">締切</div>
+          <div class="mono font-black text-[12px] mt-0.5 ${p.urgent ? 'text-warn' : ''}">${p.deadline}</div>
+        </div>
+
+        <!-- Propose button -->
+        ${hasMatch
+          ? `<a href="propose.html?project=${p.id}" onclick="event.stopPropagation()" class="bg-mint hover:bg-[#5BE890] text-ink px-3 py-1.5 rounded-lg text-[11.5px] font-bold flex items-center gap-1 whitespace-nowrap transition flex-shrink-0">
+              提案 <span class="text-mintdeep">→</span>
+            </a>`
+          : `<span class="text-inkmute text-[16px] flex-shrink-0 px-2 group-hover:translate-x-0.5 transition">›</span>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('active','bg-ink','text-white','font-bold');
+      b.classList.add('text-inksoft','font-medium');
+    });
+    btn.classList.add('active','bg-ink','text-white','font-bold');
+    btn.classList.remove('text-inksoft','font-medium');
+    render(btn.dataset.filter);
+  });
+});
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+render();
+</script>
+
+</body>
+</html>

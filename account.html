@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — アカウント</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      ink: '#0A0A0A', ink2: '#2A2A2D', inksoft: '#555559', inkmute: '#8A8A8F',
+      paper: '#FFFFFF', cream: '#F4F1E8', cream2: '#ECE8DB',
+      mint: '#4ADE80', mintdeep: '#16A34A', mintsoft: '#D7F7E0', mintglow: '#B6F4A5',
+      warn: '#F59E0B', warnsoft: '#FEF3C7',
+      info: '#3B82F6', infosoft: '#DBEAFE',
+    },
+  }}
+}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+  .grid-bg { background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 40px 40px; }
+  .toast { position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%) translateY(20px); background: #0A0A0A; color: #fff; padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; transition: opacity 0.18s ease, transform 0.2s ease; pointer-events: none; z-index: 80; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast .ico { color: #4ADE80; margin-right: 6px; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<!-- =========== HEADER =========== -->
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5 hover:opacity-90 transition">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">01</span>
+        <span class="font-medium hidden xl:inline">ダッシュボード</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">02</span>
+        <span class="font-medium hidden xl:inline">エンジニア</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">03</span>
+        <span class="font-medium hidden xl:inline">案件</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span>
+        <span class="font-medium hidden xl:inline">自動処理</span>
+      </a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="account.html" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold ring-2 ring-ink">T.K</div>
+        <div class="hidden sm:block">
+          <div class="font-bold text-[13px] leading-tight">田中 健一</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</header>
+
+
+<main class="max-w-[1100px] mx-auto px-6 py-8">
+
+  <!-- ============== PAGE HEADER ============== -->
+  <div class="mb-7">
+    <div class="mono text-[11px] text-inksoft tracking-[0.22em] uppercase font-bold mb-3 flex items-center gap-3">
+      <span class="block w-7 h-[1.5px] bg-ink"></span>
+      <span>アカウント設定</span>
+    </div>
+    <h1 class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(28px, 4.4vw, 40px);">
+      アカウント設定
+    </h1>
+  </div>
+
+
+  <!-- ============== PROFILE HERO ============== -->
+  <section class="relative overflow-hidden bg-ink text-white rounded-3xl p-7 md:p-8 grid-bg mb-5">
+    <div class="absolute -right-24 -bottom-24 w-72 h-72 rounded-full" style="background: radial-gradient(circle, rgba(74,222,128,0.15), transparent 65%);"></div>
+
+    <div class="relative grid md:grid-cols-[auto_1fr_auto] gap-6 items-center">
+
+      <!-- Avatar -->
+      <div class="w-24 h-24 rounded-2xl bg-mint flex items-center justify-center mono text-3xl font-black text-ink ring-4 ring-white/10">T.K</div>
+
+      <!-- Identity -->
+      <div>
+        <div class="mono text-[10px] text-mint tracking-[0.18em] uppercase font-bold mb-1.5">エージェントID  REP-001</div>
+        <div class="font-black text-[28px] leading-tight tracking-tight">田中 健一</div>
+        <div class="text-white/65 text-[13px] mt-1">シニア営業エージェント · 2025年7月参加 (11ヶ月)</div>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <span class="bg-mint/15 text-mint mono text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 py-1 rounded-full">🥇 ゴールドティア</span>
+          <span class="bg-white/10 text-white/80 mono text-[10px] tracking-[0.14em] uppercase font-bold px-2.5 py-1 rounded-full">75% 還元率</span>
+        </div>
+      </div>
+
+      <!-- Tier explainer -->
+      <div class="bg-white/[0.06] border border-white/10 rounded-2xl p-4 backdrop-blur-sm min-w-[200px]">
+        <div class="mono text-[9px] text-white/55 tracking-[0.14em] uppercase font-bold mb-1.5">次のティアまで</div>
+        <div class="num font-black text-[20px] leading-tight">+2 <span class="text-[12px] text-white/55 font-bold">名 / 稼働</span></div>
+        <div class="h-1.5 bg-white/10 rounded-full overflow-hidden mt-2.5">
+          <div class="h-full bg-mint rounded-full" style="width: 65%"></div>
+        </div>
+        <div class="mono text-[9px] text-white/55 tracking-[0.06em] mt-2">プラチナ達成で <span class="text-mint font-bold">80% 還元</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============== PERFORMANCE STATS ============== -->
+  <section class="grid md:grid-cols-3 gap-3 mb-5">
+    <div class="bg-paper rounded-2xl p-5 border border-black/5">
+      <div class="mono text-[10px] text-inksoft tracking-[0.16em] uppercase font-bold">累計獲得報酬</div>
+      <div class="num font-black text-[32px] leading-none mt-3">¥4,250<span class="text-[14px] text-inksoft font-bold ml-1">,000</span></div>
+      <div class="text-[11px] text-inksoft mt-2 mono">SAKIGAKE 参加 11ヶ月</div>
+    </div>
+    <div class="bg-paper rounded-2xl p-5 border border-mint/40 relative overflow-hidden">
+      <div class="absolute -right-6 -top-6 w-20 h-20 rounded-full bg-mint/10"></div>
+      <div class="relative">
+        <div class="mono text-[10px] text-mintdeep tracking-[0.16em] uppercase font-bold">今月のストック収入</div>
+        <div class="num font-black text-[32px] leading-none mt-3 text-mintdeep">¥325<span class="text-[14px] text-inksoft font-bold ml-1">,000</span></div>
+        <div class="text-[11px] text-inksoft mt-2 mono">稼働中 4名分</div>
+      </div>
+    </div>
+    <div class="bg-paper rounded-2xl p-5 border border-black/5">
+      <div class="mono text-[10px] text-inksoft tracking-[0.16em] uppercase font-bold">担当エンジニア</div>
+      <div class="num font-black text-[32px] leading-none mt-3">7<span class="text-[14px] text-inksoft font-bold ml-1">名</span></div>
+      <div class="text-[11px] text-inksoft mt-2 mono">稼働 <span class="text-mintdeep font-bold">4</span> / 提案 <span class="font-bold">2</span> / 待機 <span class="font-bold">1</span></div>
+    </div>
+  </section>
+
+
+  <!-- ============== BASIC INFO ============== -->
+  <section class="bg-paper rounded-2xl border border-black/5 p-6 mb-5">
+    <div class="flex items-center gap-3 mb-5">
+      <span class="block w-4 h-[1.5px] bg-ink"></span>
+      <span class="mono text-[11px] text-inksoft tracking-[0.18em] uppercase font-bold">基本情報</span>
+      <span class="flex-1"></span>
+      <button onclick="toast('✏️ 編集モード')" class="text-[12px] text-ink2 hover:text-ink font-bold border border-black/10 hover:border-ink px-3 py-1.5 rounded-lg transition">編集</button>
+    </div>
+    <div class="grid md:grid-cols-2 gap-x-8 gap-y-1 divide-y divide-black/5">
+      <div class="grid grid-cols-[110px_1fr] py-3">
+        <div class="mono text-[10px] text-inksoft tracking-[0.12em] uppercase font-bold">氏名</div>
+        <div class="text-[13px] font-bold">田中 健一</div>
+      </div>
+      <div class="grid grid-cols-[110px_1fr] py-3 md:border-t-0 md:!border-t-transparent">
+        <div class="mono text-[10px] text-inksoft tracking-[0.12em] uppercase font-bold">エージェントID</div>
+        <div class="mono text-[13px] font-bold">REP-001</div>
+      </div>
+      <div class="grid grid-cols-[110px_1fr] py-3">
+        <div class="mono text-[10px] text-inksoft tracking-[0.12em] uppercase font-bold">メール</div>
+        <div class="text-[13px] font-bold">tanaka.kenichi@sakigake.io</div>
+      </div>
+      <div class="grid grid-cols-[110px_1fr] py-3">
+        <div class="mono text-[10px] text-inksoft tracking-[0.12em] uppercase font-bold">電話</div>
+        <div class="mono text-[13px] font-bold">090-XXXX-XXXX</div>
+      </div>
+      <div class="grid grid-cols-[110px_1fr] py-3">
+        <div class="mono text-[10px] text-inksoft tracking-[0.12em] uppercase font-bold">参加日</div>
+        <div class="text-[13px] font-bold">2025-07-15</div>
+      </div>
+      <div class="grid grid-cols-[110px_1fr] py-3">
+        <div class="mono text-[10px] text-inksoft tracking-[0.12em] uppercase font-bold">Lark UID</div>
+        <div class="mono text-[11.5px] text-inksoft">ou_4f8a2c91e0d5b6...</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============== PAYOUT INFO ============== -->
+  <section class="bg-paper rounded-2xl border border-black/5 p-6 mb-5">
+    <div class="flex items-center gap-3 mb-5">
+      <span class="block w-4 h-[1.5px] bg-ink"></span>
+      <span class="mono text-[11px] text-inksoft tracking-[0.18em] uppercase font-bold">振込先口座</span>
+      <span class="flex-1"></span>
+      <button onclick="toast('🏦 口座編集')" class="text-[12px] text-ink2 hover:text-ink font-bold border border-black/10 hover:border-ink px-3 py-1.5 rounded-lg transition">編集</button>
+    </div>
+    <div class="bg-cream/50 border border-black/5 rounded-xl p-4 flex items-center gap-4 flex-wrap">
+      <div class="w-12 h-12 rounded-xl bg-ink text-mint flex items-center justify-center mono text-[10px] font-black flex-shrink-0">GMO</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-black text-[14px]">GMOあおぞらネット銀行</div>
+        <div class="mono text-[11.5px] text-inksoft mt-0.5">法人営業部 (普通) **** **** 1234</div>
+      </div>
+      <div class="text-right">
+        <div class="mono text-[9px] text-inkmute tracking-[0.12em] uppercase font-bold">次回振込</div>
+        <div class="font-black text-[14px] mt-0.5">6/15 <span class="text-mintdeep num">¥325,000</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============== SETTINGS ============== -->
+  <section class="bg-paper rounded-2xl border border-black/5 p-6 mb-5">
+    <div class="flex items-center gap-3 mb-5">
+      <span class="block w-4 h-[1.5px] bg-ink"></span>
+      <span class="mono text-[11px] text-inksoft tracking-[0.18em] uppercase font-bold">通知 / 設定</span>
+    </div>
+    <div class="divide-y divide-black/5">
+      <label class="flex items-center gap-3 py-3 cursor-pointer">
+        <div class="flex-1">
+          <div class="font-bold text-[13px]">新規案件マッチ通知</div>
+          <div class="text-[11.5px] text-inksoft mt-0.5">担当エンジニアにマッチする案件が公開された時</div>
+        </div>
+        <input type="checkbox" checked class="w-10 h-6 appearance-none rounded-full bg-cream2 checked:bg-mint relative cursor-pointer transition before:absolute before:w-4 before:h-4 before:rounded-full before:bg-white before:top-1 before:left-1 before:transition-all checked:before:left-5"/>
+      </label>
+      <label class="flex items-center gap-3 py-3 cursor-pointer">
+        <div class="flex-1">
+          <div class="font-bold text-[13px]">商談ステータス更新</div>
+          <div class="text-[11.5px] text-inksoft mt-0.5">面談確定・選考通過などのリアルタイム通知</div>
+        </div>
+        <input type="checkbox" checked class="w-10 h-6 appearance-none rounded-full bg-cream2 checked:bg-mint relative cursor-pointer transition before:absolute before:w-4 before:h-4 before:rounded-full before:bg-white before:top-1 before:left-1 before:transition-all checked:before:left-5"/>
+      </label>
+      <label class="flex items-center gap-3 py-3 cursor-pointer">
+        <div class="flex-1">
+          <div class="font-bold text-[13px]">月次レポートメール</div>
+          <div class="text-[11.5px] text-inksoft mt-0.5">毎月15日に獲得報酬サマリを送信</div>
+        </div>
+        <input type="checkbox" class="w-10 h-6 appearance-none rounded-full bg-cream2 checked:bg-mint relative cursor-pointer transition before:absolute before:w-4 before:h-4 before:rounded-full before:bg-white before:top-1 before:left-1 before:transition-all checked:before:left-5"/>
+      </label>
+    </div>
+  </section>
+
+
+  <!-- ============== LARK BASE LINK ============== -->
+  <section class="bg-paper rounded-2xl border border-black/5 p-6 mb-5">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="block w-4 h-[1.5px] bg-ink"></span>
+      <span class="mono text-[11px] text-inksoft tracking-[0.18em] uppercase font-bold">データソース · Lark Base</span>
+    </div>
+    <div class="bg-cream/50 border border-black/5 rounded-xl p-4 flex items-center gap-3 flex-wrap">
+      <span class="w-2 h-2 rounded-full bg-mint blink"></span>
+      <div class="flex-1 min-w-0">
+        <div class="font-bold text-[13px]">Lark Base と接続中</div>
+        <div class="mono text-[10.5px] text-inksoft mt-1 truncate">I0pLbgKMoaeeSjsj30LjgHOPpqc · 最終同期 2 分前</div>
+      </div>
+      <a href="https://yjpybvfyklof.jp.larksuite.com/base/I0pLbgKMoaeeSjsj30LjgHOPpqc" target="_blank" rel="noopener" class="text-[12px] font-bold border border-black/10 hover:border-ink px-3 py-1.5 rounded-lg transition whitespace-nowrap">Lark で開く →</a>
+    </div>
+  </section>
+
+
+  <!-- ============== LOGOUT ============== -->
+  <div class="flex items-center justify-end gap-3">
+    <button onclick="toast('🚪 ログアウト')" class="text-[12px] text-inksoft hover:text-ink font-bold px-4 py-2.5 rounded-lg hover:bg-cream2 transition">ログアウト</button>
+  </div>
+
+</main>
+
+
+<div id="toast" class="toast"><span class="ico">✓</span><span id="toast-msg"></span></div>
+
+<script>
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => t.classList.remove('show'), 2400);
+}
+</script>
+
+</body>
+</html>

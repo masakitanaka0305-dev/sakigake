@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — 案件詳細</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      ink: '#0A0A0A', ink2: '#2A2A2D', inksoft: '#555559', inkmute: '#8A8A8F',
+      paper: '#FFFFFF', cream: '#F4F1E8', cream2: '#ECE8DB',
+      mint: '#4ADE80', mintdeep: '#16A34A', mintsoft: '#D7F7E0', mintglow: '#B6F4A5',
+      warn: '#F59E0B', warnsoft: '#FEF3C7',
+      info: '#3B82F6', infosoft: '#DBEAFE',
+    },
+  }}
+}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+  .av-c0 { background: #E6E1D2; } .av-c1 { background: #DDEDE3; } .av-c2 { background: #E7DFEC; } .av-c3 { background: #EFDFD3; } .av-c4 { background: #D9E5EF; } .av-c5 { background: #EDE2D2; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">ダッシュボード</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">02<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">エンジニア</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink text-white font-bold">
+        <span class="mono text-[9px] text-mint tracking-[0.14em] font-bold">03</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-mint blink"></span>
+        <span>案件</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span>
+        <span class="font-medium hidden xl:inline">自動処理</span>
+      </a>
+    </nav>
+    <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+      <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+      <div class="hidden sm:block">
+        <div class="font-bold text-[13px] leading-tight">田中 健一</div>
+      </div>
+    </a>
+  </div>
+</header>
+
+
+<main class="max-w-[1280px] mx-auto px-6 py-6">
+
+  <!-- Breadcrumb / back -->
+  <a href="projects.html" class="inline-flex items-center gap-1.5 text-[12px] text-inksoft hover:text-ink font-bold transition mb-5">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+    <span>案件一覧に戻る</span>
+  </a>
+
+  <!-- ============== HERO ============== -->
+  <section id="hero" class="bg-paper border border-black/5 rounded-2xl p-6 md:p-8 mb-5"></section>
+
+
+  <div class="grid lg:grid-cols-[1.6fr_1fr] gap-5">
+
+    <!-- ============== MAIN (left column) ============== -->
+    <div class="flex flex-col gap-5">
+
+      <!-- 案件概要 -->
+      <section class="bg-paper border border-black/5 rounded-2xl p-6">
+        <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-ink"></span>
+          <span>案件概要</span>
+        </div>
+        <p id="description" class="text-[14px] leading-[1.85] text-ink2"></p>
+      </section>
+
+      <!-- 求めるスキル -->
+      <section class="bg-paper border border-black/5 rounded-2xl p-6">
+        <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-ink"></span>
+          <span>求めるスキル</span>
+        </div>
+        <div id="skills" class="flex flex-wrap gap-2 mb-4"></div>
+        <ul id="requirements" class="text-[13px] leading-[1.8] text-ink2 space-y-1.5"></ul>
+      </section>
+
+      <!-- 業務内容 -->
+      <section class="bg-paper border border-black/5 rounded-2xl p-6">
+        <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-ink"></span>
+          <span>業務内容</span>
+        </div>
+        <ul id="responsibilities" class="text-[13px] leading-[1.8] text-ink2 space-y-1.5"></ul>
+      </section>
+
+      <!-- 選考フロー -->
+      <section class="bg-paper border border-black/5 rounded-2xl p-6">
+        <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-ink"></span>
+          <span>選考フロー</span>
+        </div>
+        <div id="flow" class="flex gap-1.5 items-stretch overflow-x-auto pb-1"></div>
+      </section>
+
+    </div>
+
+
+    <!-- ============== SIDEBAR (right column) ============== -->
+    <div class="flex flex-col gap-5">
+
+      <!-- AI マッチ提案 -->
+      <section class="bg-paper border-2 border-mint/40 rounded-2xl p-5 relative overflow-hidden">
+        <div class="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-mint/10"></div>
+        <div class="relative">
+          <div class="mono text-[10px] text-mintdeep tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+            <span class="block w-4 h-[1.5px] bg-mintdeep"></span>
+            <span>マッチ候補 / 担当エンジニア</span>
+          </div>
+          <div id="candidates" class="flex flex-col gap-2.5"></div>
+          <div class="mt-4 pt-3 border-t border-black/5 flex items-center gap-2 flex-wrap">
+            <a id="primary-propose" href="propose.html" class="bg-mint hover:bg-[#5BE890] text-ink font-bold px-4 py-2.5 rounded-lg text-[12.5px] flex-1 text-center transition shadow-[0_4px_12px_rgba(74,222,128,0.25)] whitespace-nowrap">
+              提案テキストを作成 →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- クライアント情報 -->
+      <section class="bg-paper border border-black/5 rounded-2xl p-5">
+        <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-ink"></span>
+          <span>クライアント</span>
+        </div>
+        <div id="client-card" class="flex items-center gap-3 mb-4 pb-4 border-b border-black/5"></div>
+        <div class="grid grid-cols-2 gap-3 text-[12px]" id="meta">
+        </div>
+      </section>
+
+      <!-- 関連情報 -->
+      <section class="bg-paper border border-black/5 rounded-2xl p-5">
+        <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+          <span class="block w-4 h-[1.5px] bg-ink"></span>
+          <span>関連情報</span>
+        </div>
+        <div class="divide-y divide-black/5" id="related">
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</main>
+
+
+<div id="toast" class="fixed left-1/2 bottom-8 -translate-x-1/2 translate-y-5 opacity-0 pointer-events-none bg-ink text-white px-5 py-2.5 rounded-full text-[13px] font-bold z-50 shadow-lg transition-all duration-200"><span class="text-mint mr-1">✓</span><span id="toast-msg"></span></div>
+
+
+<script>
+// ============================================
+// Project data + my engineers (for AI match)
+// ============================================
+const projects = {
+  'PJ-2087': {
+    id:'PJ-2087', logo:'FX', title:'決済プラットフォーム / バックエンド刷新',
+    client:'FinX 株式会社', clientFull:'FinX 株式会社 (フィンエックス)', industry:'FinTech',
+    role:'バックエンドエンジニア', workStyle:'週3リモート + 渋谷オフィス (水・金は出社)',
+    rate:[80,95], months:6, start:'2026-07-01', deadline:'2026-06-05',
+    headcount:2, applied:8, posted:1, urgent:true, hot:true, mine:false,
+    skills:['Go','PostgreSQL','AWS','Kubernetes','gRPC','Docker'],
+    description: 'FinX 株式会社が運営するBtoB決済プラットフォームのバックエンドを、モノリス構造からマイクロサービスへ刷新するプロジェクト。月間取引高 500億円規模、ピーク時 TPS 3,000+ を捌く高負荷ドメインで、Go ベースのドメイン駆動設計を行います。要件定義から実装・テスト・運用までを担う中核ロールです。',
+    requirements: [
+      'Go での Web API / マイクロサービス開発 3年以上',
+      'PostgreSQL を用いたトランザクション設計の経験',
+      'AWS (ECS / EKS / RDS) の運用経験',
+      '決済・金融など高信頼性が求められるドメインの経験尚可',
+    ],
+    responsibilities: [
+      '既存決済モジュールのドメイン分析と分割設計',
+      'gRPC を用いたマイクロサービス間通信の実装',
+      'PostgreSQL スキーマ設計・パフォーマンスチューニング',
+      'CI/CD パイプライン整備 (GitHub Actions / ArgoCD)',
+      'コードレビュー・ペアプロを通じたチーム品質向上',
+    ],
+    flow: [
+      { step:1, label:'スキルシート提出', meta:'即日' },
+      { step:2, label:'書類選考', meta:'2-3営業日' },
+      { step:3, label:'技術面談', meta:'45分・オンライン' },
+      { step:4, label:'最終面談', meta:'30分・対面（渋谷）' },
+      { step:5, label:'契約', meta:'内定後 3営業日' },
+    ],
+    candidates: [
+      { engId:'ENG-0138', initial:'K.S', role:'バックエンドエンジニア', score:96, reasons:['Go 3年完全一致','PostgreSQL/決済領域経験','単価帯マッチ'], color:'c2' },
+      { engId:'ENG-0119', initial:'S.N', role:'AWS / SRE', score:78, reasons:['AWS/K8s 経験豊富','稼働中のため後半参画相談'], color:'c4' },
+    ],
+    contactPerson:'高橋 大輔（営業窓口）',
+    contactCompany:'FinX 株式会社',
+    postedAt:'2026-05-25',
+    sourceVia:'Lark Base / 直契約',
+  },
+  'PJ-2084': {
+    id:'PJ-2084', logo:'DD', title:'SaaS向けデータ基盤 / DWH構築',
+    client:'DataDive Inc.', clientFull:'DataDive Inc. (データダイブ)', industry:'SaaS',
+    role:'データエンジニア', workStyle:'フルリモート (キックオフのみ品川)',
+    rate:[85,100], months:12, start:'2026-06-15', deadline:'2026-06-08',
+    headcount:1, applied:4, posted:2, urgent:false, hot:true, mine:false,
+    skills:['Snowflake','dbt','Airflow','Python','SQL'],
+    description: 'SaaSプロダクトの分析データ基盤を、Snowflake をデータウェアハウスとして新規構築。dbt を中心としたモダンデータスタックの導入支援。',
+    requirements: [
+      'Snowflake or BigQuery など DWH の運用経験 2年以上',
+      'dbt によるデータモデリング経験',
+      'Airflow / dbt Cloud などのワークフロー管理ツール経験',
+    ],
+    responsibilities: [
+      'データソース調査と ELT パイプライン設計',
+      'dbt モデル構築・データマート整備',
+      'Looker / Tableau 用のデータ層整備',
+    ],
+    flow: [
+      { step:1, label:'スキルシート提出', meta:'即日' },
+      { step:2, label:'書類選考', meta:'2営業日' },
+      { step:3, label:'技術面談', meta:'60分・オンライン' },
+      { step:4, label:'契約', meta:'内定後 3営業日' },
+    ],
+    candidates: [
+      { engId:'ENG-0108', initial:'H.W', role:'データエンジニア', score:94, reasons:['Snowflake/dbt 完全一致','SaaS企業希望','フルリモート可'], color:'c5' },
+    ],
+    contactPerson:'森田 直樹',
+    contactCompany:'DataDive Inc.',
+    postedAt:'2026-05-24',
+    sourceVia:'Lark Base / パートナー経由',
+  },
+  'PJ-2076': {
+    id:'PJ-2076', logo:'RK', title:'EC基盤 SRE / クラウド移行',
+    client:'Rakume', clientFull:'Rakume 株式会社', industry:'EC',
+    role:'SRE', workStyle:'週3リモート + 品川オフィス',
+    rate:[95,115], months:9, start:'2026-06-01', deadline:'2026-06-12',
+    headcount:1, applied:5, posted:4, urgent:true, hot:true, mine:false,
+    skills:['AWS','Terraform','Kubernetes','Datadog','Ansible'],
+    description: 'オンプレ環境で稼働中の EC 基盤を AWS へ移行するプロジェクト。月商 30億円規模の EC サイトを止めずに段階移行する難易度の高いオペレーション。',
+    requirements: [
+      'AWS マルチアカウント運用 3年以上',
+      'Terraform / IaC 設計経験',
+      'Kubernetes クラスタ運用経験',
+      '高トラフィックサイトでの SRE / 障害対応経験',
+    ],
+    responsibilities: [
+      'AWS アカウント設計・ネットワーク設計',
+      'Terraform モジュール整備と CI/CD',
+      'Kubernetes クラスタ構築 (EKS)',
+      'SLO / SLI 設計とオンコール体制構築',
+    ],
+    flow: [
+      { step:1, label:'スキルシート提出', meta:'即日' },
+      { step:2, label:'書類選考', meta:'2-3営業日' },
+      { step:3, label:'技術面談', meta:'60分・対面' },
+      { step:4, label:'最終面談', meta:'45分' },
+      { step:5, label:'契約', meta:'内定後 3営業日' },
+    ],
+    candidates: [
+      { engId:'ENG-0119', initial:'S.N', role:'AWS / SRE', score:91, reasons:['AWS/Terraform/K8s 完全一致','EC大規模経験'], color:'c4' },
+    ],
+    contactPerson:'松永 直樹',
+    contactCompany:'Rakume 株式会社',
+    postedAt:'2026-05-22',
+    sourceVia:'Lark Base / 直契約',
+  },
+  'PJ-2074': {
+    id:'PJ-2074', logo:'BH', title:'管理画面リニューアル / React',
+    client:'Bloom HR', clientFull:'Bloom HR Inc.', industry:'HRTech',
+    role:'フロントエンドエンジニア', workStyle:'フルリモート',
+    rate:[70,85], months:6, start:'2026-06-15', deadline:'2026-06-15',
+    headcount:2, applied:7, posted:5, urgent:false, hot:false, mine:false,
+    skills:['React','TypeScript','Next.js','Tailwind','Figma'],
+    description: 'HR SaaS の管理画面を React + Next.js でリプレイス。デザインシステムの導入とコンポーネント整備が中心。',
+    requirements: [
+      'React + TypeScript 3年以上',
+      'Next.js (App Router) 経験',
+      'デザインシステム / Storybook 経験',
+    ],
+    responsibilities: [
+      'コンポーネント設計・実装',
+      'デザインシステム整備',
+      'パフォーマンスチューニング',
+    ],
+    flow: [
+      { step:1, label:'スキルシート提出', meta:'即日' },
+      { step:2, label:'書類選考', meta:'2営業日' },
+      { step:3, label:'技術面談', meta:'45分・オンライン' },
+      { step:4, label:'契約', meta:'内定後 3営業日' },
+    ],
+    candidates: [
+      { engId:'ENG-0142', initial:'A.H', role:'フロントエンド (React/Next)', score:88, reasons:['React/Next 完全一致','フルリモート希望'], color:'c1' },
+      { engId:'ENG-0124', initial:'A.M', role:'React / TS エンジニア', score:84, reasons:['React 経験豊富'], color:'c3' },
+    ],
+    contactPerson:'西村 さくら',
+    contactCompany:'Bloom HR Inc.',
+    postedAt:'2026-05-21',
+    sourceVia:'Lark Base / リファラル',
+  },
+  'PJ-2071': {
+    id:'PJ-2071', logo:'AI', title:'社内LLMチャットボット / MLOps',
+    client:'AIvory', clientFull:'AIvory 株式会社', industry:'AI',
+    role:'MLエンジニア', workStyle:'週2出社 / 五反田',
+    rate:[95,120], months:8, start:'2026-06-15', deadline:'2026-06-18',
+    headcount:1, applied:6, posted:6, urgent:false, hot:false, mine:false,
+    skills:['Python','PyTorch','LLM','SageMaker','MLOps'],
+    description: '社内向け業務支援LLMチャットボットのMLOps基盤構築。RAG / ファインチューニング含む。',
+    requirements: [
+      'Python + PyTorch 3年以上',
+      'LLM / ベクトル DB の実運用経験',
+      'AWS SageMaker または同等サービス経験',
+    ],
+    responsibilities: [
+      'MLOps パイプライン構築',
+      'RAG / Embeddings 設計',
+      '評価データセット整備と継続学習',
+    ],
+    flow: [
+      { step:1, label:'スキルシート提出', meta:'即日' },
+      { step:2, label:'書類選考', meta:'3営業日' },
+      { step:3, label:'技術面談', meta:'60分・対面' },
+      { step:4, label:'契約', meta:'内定後 3営業日' },
+    ],
+    candidates: [],
+    contactPerson:'内田 葵',
+    contactCompany:'AIvory 株式会社',
+    postedAt:'2026-05-20',
+    sourceVia:'Lark Base / 直契約',
+  },
+  'PJ-2081': {
+    id:'PJ-2081', logo:'MB', title:'金融系基幹システム PM',
+    client:'MegaBank Tokyo', clientFull:'株式会社 MegaBank Tokyo', industry:'金融',
+    role:'PM / PMO', workStyle:'週5常駐 / 大手町',
+    rate:[100,130], months:12, start:'2026-07-01', deadline:'2026-06-10',
+    headcount:1, applied:3, posted:3, urgent:false, hot:false, mine:false,
+    skills:['PMP','金融業界','要件定義','Scrum','Jira'],
+    description: 'メガバンクの基幹システム刷新フェーズ2の PM 募集。要件定義から運用まで通しでマネジメントするロール。',
+    requirements: [
+      '金融業界 PM 経験 5年以上',
+      'PMP 資格保持',
+      '大規模ベンダー間調整経験',
+    ],
+    responsibilities: [
+      'プロジェクト全体管理',
+      'ベンダー / 内製チーム調整',
+      'リスクマネジメント',
+    ],
+    flow: [
+      { step:1, label:'スキルシート提出', meta:'即日' },
+      { step:2, label:'書類選考', meta:'5営業日' },
+      { step:3, label:'1次面談', meta:'60分・対面' },
+      { step:4, label:'最終面談', meta:'60分・対面' },
+      { step:5, label:'契約', meta:'内定後 5営業日' },
+    ],
+    candidates: [],
+    contactPerson:'江藤 信介',
+    contactCompany:'株式会社 MegaBank Tokyo',
+    postedAt:'2026-05-23',
+    sourceVia:'Lark Base / パートナー経由',
+  },
+  'PJ-2069': {
+    id:'PJ-2069', logo:'NX', title:'内製スキル人材 / Java求人',
+    client:'NextStep Lab', clientFull:'NextStep Lab 株式会社', industry:'SI',
+    role:'Java エンジニア', workStyle:'週5常駐 / 新橋',
+    rate:[60,75], months:6, start:'2026-08-01', deadline:'2026-06-30',
+    headcount:2, applied:1, posted:8, urgent:false, hot:false, mine:true,
+    skills:['Java','Spring','Oracle','SQL'],
+    description: '内製化推進中のSIerが、Java スキルを持つベテランエンジニアを募集。レガシーシステムのリプレイス。',
+    requirements: [
+      'Java + Spring 5年以上',
+      'Oracle PL/SQL 経験',
+      '基本設計以上のフェーズ経験',
+    ],
+    responsibilities: [
+      '既存システムの仕様調査・再設計',
+      'Java + Spring での再実装',
+      '若手育成のメンタリング',
+    ],
+    flow: [
+      { step:1, label:'スキルシート提出', meta:'即日' },
+      { step:2, label:'書類選考', meta:'2-3営業日' },
+      { step:3, label:'面談', meta:'60分・対面' },
+      { step:4, label:'契約', meta:'内定後 3営業日' },
+    ],
+    candidates: [
+      { engId:'ENG-0135', initial:'T.Y', role:'Java エンジニア', score:84, reasons:['Java/Spring 完全一致','長期実績'], color:'c3' },
+    ],
+    contactPerson:'(自分登録)',
+    contactCompany:'NextStep Lab 株式会社',
+    postedAt:'2026-05-18',
+    sourceVia:'自分登録 (Lark フォーム経由)',
+  },
+  'PJ-2065': {
+    id:'PJ-2065', logo:'CV', title:'モバイル新機能開発',
+    client:'Cavotto', clientFull:'Cavotto 株式会社', industry:'B2C',
+    role:'iOS エンジニア', workStyle:'フルリモート',
+    rate:[55,70], months:4, start:'2026-07-15', deadline:'2026-07-05',
+    headcount:1, applied:2, posted:12, urgent:false, hot:false, mine:true,
+    skills:['Swift','UIKit','Firebase','XCode'],
+    description: 'C向け SNS アプリの新機能 (動画ストーリー機能) を開発。',
+    requirements: [
+      'Swift / UIKit 3年以上',
+      'Firebase 経験',
+      'リリース実績 (App Store) あり',
+    ],
+    responsibilities: [
+      '新機能の設計・実装',
+      'Firebase連携',
+      'リリース対応',
+    ],
+    flow: [
+      { step:1, label:'スキルシート提出', meta:'即日' },
+      { step:2, label:'書類選考', meta:'2営業日' },
+      { step:3, label:'技術面談', meta:'45分・オンライン' },
+      { step:4, label:'契約', meta:'内定後 3営業日' },
+    ],
+    candidates: [
+      { engId:'ENG-0098', initial:'M.K', role:'iOS エンジニア', score:81, reasons:['Swift/Firebase 一致','即日稼働可'], color:'c0' },
+    ],
+    contactPerson:'(自分登録)',
+    contactCompany:'Cavotto 株式会社',
+    postedAt:'2026-05-14',
+    sourceVia:'自分登録 (Lark フォーム経由)',
+  },
+};
+
+const STORAGE_FALLBACK = 'PJ-2087';
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function getProjectId() {
+  const params = new URLSearchParams(location.search);
+  return params.get('id') || STORAGE_FALLBACK;
+}
+
+const p = projects[getProjectId()] || projects[STORAGE_FALLBACK];
+
+
+// ============== Render HERO ==============
+document.getElementById('hero').innerHTML = `
+  <div class="flex flex-wrap items-start gap-5 mb-5">
+    <div class="w-16 h-16 rounded-2xl bg-cream2 flex items-center justify-center mono text-[15px] font-black flex-shrink-0">${p.logo}</div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2 mb-2 flex-wrap">
+        ${p.urgent ? `<span class="bg-warnsoft text-[#B45309] mono text-[10px] font-black px-2 py-0.5 rounded-full tracking-[0.06em]">🔥 緊急</span>` : ''}
+        ${p.hot ? `<span class="bg-mintsoft text-mintdeep mono text-[10px] font-black px-2 py-0.5 rounded-full tracking-[0.06em]">HOT</span>` : ''}
+        ${p.posted <= 2 ? `<span class="bg-ink text-white mono text-[10px] font-black px-2 py-0.5 rounded-full tracking-[0.06em]">NEW</span>` : ''}
+        <span class="mono text-[10px] text-inkmute tracking-[0.08em]">${p.id} · 公開 ${p.posted}日前</span>
+      </div>
+      <h1 class="font-black text-[24px] md:text-[28px] leading-tight tracking-tight">${p.title}</h1>
+      <div class="mono text-[11.5px] text-inksoft mt-2 tracking-[0.04em]">${p.client} · ${p.industry}</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-5 border-t border-black/5">
+    <div>
+      <div class="mono text-[9.5px] text-inkmute tracking-[0.14em] uppercase font-bold">単価レンジ</div>
+      <div class="num font-black text-[24px] mt-1 leading-none">${p.rate[0]}–${p.rate[1]}<span class="text-[12px] text-inksoft font-bold ml-0.5">万 / 月</span></div>
+    </div>
+    <div>
+      <div class="mono text-[9.5px] text-inkmute tracking-[0.14em] uppercase font-bold">期間</div>
+      <div class="num font-black text-[24px] mt-1 leading-none">${p.months}<span class="text-[12px] text-inksoft font-bold ml-0.5">ヶ月</span></div>
+    </div>
+    <div>
+      <div class="mono text-[9.5px] text-inkmute tracking-[0.14em] uppercase font-bold">開始</div>
+      <div class="num font-black text-[18px] mt-1 leading-tight">${p.start.slice(5)}</div>
+      <div class="mono text-[10px] text-inksoft mt-0.5">${p.workStyle.split(' ')[0]}</div>
+    </div>
+    <div>
+      <div class="mono text-[9.5px] text-warn tracking-[0.14em] uppercase font-bold">締切</div>
+      <div class="num font-black text-[18px] mt-1 leading-tight text-warn">${p.deadline.slice(5)}</div>
+      <div class="mono text-[10px] text-inksoft mt-0.5">応募 <b class="text-ink">${p.applied}</b>件 / 募集 ${p.headcount}名</div>
+    </div>
+  </div>
+`;
+
+
+// ============== Render BODY sections ==============
+document.getElementById('description').textContent = p.description;
+document.getElementById('skills').innerHTML = p.skills.map(s => `<span class="mono text-[11px] bg-ink text-mint px-2 py-1 rounded font-bold">${esc(s)}</span>`).join('');
+document.getElementById('requirements').innerHTML = p.requirements.map(r => `<li class="flex gap-2"><span class="text-mintdeep flex-shrink-0 mt-0.5">✓</span><span>${esc(r)}</span></li>`).join('');
+document.getElementById('responsibilities').innerHTML = p.responsibilities.map(r => `<li class="flex gap-2"><span class="text-inkmute flex-shrink-0">·</span><span>${esc(r)}</span></li>`).join('');
+
+document.getElementById('flow').innerHTML = p.flow.map((f, i) => `
+  <div class="flex-1 min-w-[120px] bg-cream/50 border border-black/5 rounded-xl p-3">
+    <div class="mono text-[9px] text-inkmute tracking-[0.12em] uppercase font-bold mb-1">STEP ${String(f.step).padStart(2,'0')}</div>
+    <div class="font-bold text-[12px] leading-tight">${esc(f.label)}</div>
+    <div class="mono text-[10px] text-inksoft mt-2 tracking-[0.04em]">${esc(f.meta)}</div>
+  </div>
+  ${i < p.flow.length - 1 ? '<div class="flex items-center justify-center text-inkmute flex-shrink-0"><svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg></div>' : ''}
+`).join('');
+
+
+// ============== Render SIDEBAR ==============
+function scoreColor(s) {
+  if (s >= 90) return 'text-mintdeep';
+  if (s >= 80) return 'text-info';
+  return 'text-inksoft';
+}
+
+document.getElementById('candidates').innerHTML = p.candidates.map(c => `
+  <a href="propose.html?project=${p.id}&engineer=${c.engId}" class="bg-cream/40 border border-black/5 rounded-xl p-3 flex items-center gap-3 hover:border-mint/40 hover:bg-mintsoft/30 transition">
+    <div class="w-10 h-10 rounded-lg av-${c.color} flex items-center justify-center mono text-[11px] font-black flex-shrink-0">${c.initial}</div>
+    <div class="flex-1 min-w-0">
+      <div class="font-black text-[13px] leading-tight">${c.initial} さん</div>
+      <div class="text-[10.5px] text-inksoft mt-0.5 leading-tight">${c.role}</div>
+      <div class="flex flex-wrap gap-1 mt-1.5">
+        ${c.reasons.slice(0,2).map(r => `<span class="text-[9.5px] bg-mintsoft text-mintdeep px-1.5 py-0.5 rounded font-bold leading-tight">${esc(r)}</span>`).join('')}
+      </div>
+    </div>
+    <div class="flex-shrink-0 text-center">
+      <div class="num font-black text-[18px] ${scoreColor(c.score)} leading-none">${c.score}</div>
+      <div class="mono text-[8px] text-inkmute tracking-[0.14em] mt-1 font-bold">マッチ度</div>
+    </div>
+  </a>
+`).join('');
+
+// Update primary CTA link to first candidate by default
+if (p.candidates.length > 0) {
+  document.getElementById('primary-propose').href = `propose.html?project=${p.id}&engineer=${p.candidates[0].engId}`;
+}
+
+// Client card
+document.getElementById('client-card').innerHTML = `
+  <div class="w-12 h-12 rounded-xl bg-ink text-mint flex items-center justify-center mono text-[12px] font-black flex-shrink-0">${p.logo}</div>
+  <div>
+    <div class="font-black text-[13.5px] leading-tight">${esc(p.clientFull)}</div>
+    <div class="mono text-[10.5px] text-inksoft mt-1 tracking-[0.04em]">${esc(p.industry)}</div>
+  </div>
+`;
+
+document.getElementById('meta').innerHTML = `
+  <div>
+    <div class="mono text-[9px] text-inkmute tracking-[0.14em] uppercase font-bold">勤務スタイル</div>
+    <div class="font-bold mt-0.5 text-[12px]">${esc(p.workStyle)}</div>
+  </div>
+  <div>
+    <div class="mono text-[9px] text-inkmute tracking-[0.14em] uppercase font-bold">業種</div>
+    <div class="font-bold mt-0.5 text-[12px]">${esc(p.industry)}</div>
+  </div>
+  <div>
+    <div class="mono text-[9px] text-inkmute tracking-[0.14em] uppercase font-bold">募集人数</div>
+    <div class="font-bold mt-0.5 text-[12px] num">${p.headcount}名</div>
+  </div>
+  <div>
+    <div class="mono text-[9px] text-inkmute tracking-[0.14em] uppercase font-bold">応募状況</div>
+    <div class="font-bold mt-0.5 text-[12px]"><span class="num">${p.applied}</span>件 / <span class="num">${p.headcount}</span>名</div>
+  </div>
+`;
+
+document.getElementById('related').innerHTML = `
+  <div class="grid grid-cols-[110px_1fr] py-2.5 text-[12px]">
+    <div class="mono text-[9.5px] text-inksoft tracking-[0.12em] uppercase font-bold">担当窓口</div>
+    <div class="font-bold">${esc(p.contactPerson)}</div>
+  </div>
+  <div class="grid grid-cols-[110px_1fr] py-2.5 text-[12px]">
+    <div class="mono text-[9.5px] text-inksoft tracking-[0.12em] uppercase font-bold">公開日</div>
+    <div class="mono">${esc(p.postedAt)}</div>
+  </div>
+  <div class="grid grid-cols-[110px_1fr] py-2.5 text-[12px]">
+    <div class="mono text-[9.5px] text-inksoft tracking-[0.12em] uppercase font-bold">経路</div>
+    <div class="font-bold">${esc(p.sourceVia)}</div>
+  </div>
+`;
+
+// Toast helper (unused on this page for now but kept for parity)
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.remove('opacity-0','translate-y-5');
+  t.classList.add('opacity-100','translate-y-0');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => {
+    t.classList.add('opacity-0','translate-y-5');
+    t.classList.remove('opacity-100','translate-y-0');
+  }, 2400);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — 商談</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      ink: '#0A0A0A', ink2: '#2A2A2D', inksoft: '#555559', inkmute: '#8A8A8F',
+      paper: '#FFFFFF', cream: '#F4F1E8', cream2: '#ECE8DB',
+      mint: '#4ADE80', mintdeep: '#16A34A', mintsoft: '#D7F7E0', mintglow: '#B6F4A5',
+      warn: '#F59E0B', warnsoft: '#FEF3C7',
+      info: '#3B82F6', infosoft: '#DBEAFE',
+    },
+  }}
+}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<!-- =========== HEADER =========== -->
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5 hover:opacity-90 transition">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">ダッシュボード</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">02<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">エンジニア</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">03<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">案件</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span>
+        <span class="font-medium hidden xl:inline">自動処理</span>
+      </a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+        <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+        <div class="hidden sm:block">
+          <div class="font-bold text-[13px] leading-tight">田中 健一</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</header>
+
+
+<main class="max-w-[1280px] mx-auto px-6 py-8">
+
+  <!-- ============== PAGE HEADER ============== -->
+  <div class="mb-7">
+    <div class="mono text-[11px] text-inksoft tracking-[0.22em] uppercase font-bold mb-3 flex items-center gap-3">
+      <span class="block w-7 h-[1.5px] bg-ink"></span>
+      <span>商談一覧</span>
+    </div>
+    <h1 class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(28px, 4.4vw, 44px);">
+      進行中の商談 <span class="hl">3 件</span>
+    </h1>
+    <p class="mt-3 text-inksoft text-[14px] leading-relaxed max-w-2xl">
+      担当エンジニア × 案件 のペア。
+    </p>
+  </div>
+
+
+  <!-- ============== DEAL LIST ============== -->
+  <div id="deals" class="flex flex-col gap-3"></div>
+
+</main>
+
+
+<script>
+const deals = [
+  {
+    id: 'DEAL-301',
+    engInitial:'T.Y', engRole:'Javaエンジニア', engSkills:['Java','Spring','Oracle'], engColor:'bg-[#E7DFEC]',
+    client:'X社', clientLogo:'X', project:'基幹システム / 機能追加', industry:'SI',
+    rate:70, months:12, start:'2026-06-01',
+    statusKey:'ready', statusLabel:'最終面談確定',
+    nextAction:'最終面談 (本日 14:00)',
+  },
+  {
+    id: 'DEAL-298',
+    engInitial:'K.S', engRole:'バックエンドエンジニア', engSkills:['Go','PostgreSQL','GCP'], engColor:'bg-[#DDEDE3]',
+    client:'FinX 株式会社', clientLogo:'FX', project:'決済PJ', industry:'FinTech',
+    rate:78, months:6, start:'2026-06-15',
+    statusKey:'todo', statusLabel:'提案中',
+    nextAction:'スキルシート提出済み / 返答待ち',
+  },
+  {
+    id: 'DEAL-295',
+    engInitial:'H.W', engRole:'データエンジニア', engSkills:['Python','Snowflake','dbt'], engColor:'bg-[#EDE2D2]',
+    client:'DataDive Inc.', clientLogo:'DD', project:'DWH 構築', industry:'SaaS',
+    rate:92, months:12, start:'2026-06-15',
+    statusKey:'todo', statusLabel:'単価調整中',
+    nextAction:'クライアント返答待ち (明日 16:00)',
+  },
+];
+
+const STATUS_TONE = {
+  ready: 'bg-mintsoft text-mintdeep',
+  todo:  'bg-warnsoft text-[#B45309]',
+};
+const STATUS_DOT = {
+  ready: 'bg-mintdeep',
+  todo:  'bg-warn',
+};
+
+function render(filter='all') {
+  const list = filter === 'all' ? deals : deals.filter(d => d.statusKey === filter);
+  const root = document.getElementById('deals');
+  root.innerHTML = list.map(d => {
+    const ready = d.statusKey === 'ready';
+    return `
+    <article class="bg-paper border border-black/5 rounded-2xl p-5 lg:p-6 grid lg:grid-cols-[1fr_24px_1fr_auto] gap-4 lg:gap-5 items-center">
+
+      <!-- ENGINEER -->
+      <div class="flex items-center gap-3.5 min-w-0">
+        <div class="w-12 h-12 rounded-xl ${d.engColor} flex items-center justify-center mono text-[12px] font-black flex-shrink-0">${d.engInitial}</div>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2 mb-0.5">
+            <span class="font-black text-[15px]">${d.engInitial} さん</span>
+            <span class="mono text-[9px] text-inkmute tracking-[0.08em]">${d.id}</span>
+          </div>
+          <div class="text-[12px] text-ink2 font-bold leading-tight">${d.engRole}</div>
+          <div class="flex flex-wrap gap-1 mt-1.5">
+            ${d.engSkills.map(s => `<span class="mono text-[9.5px] bg-cream2 text-ink2 px-1.5 py-0.5 rounded font-bold">${s}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- ARROW -->
+      <div class="hidden lg:flex items-center justify-center text-inkmute">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <!-- PROJECT -->
+      <div class="flex items-center gap-3.5 min-w-0 lg:pl-0 lg:border-l-0 border-t lg:border-t-0 border-black/5 pt-4 lg:pt-0">
+        <div class="w-12 h-12 rounded-xl bg-ink text-mint flex items-center justify-center mono text-[12px] font-black flex-shrink-0">${d.clientLogo}</div>
+        <div class="min-w-0 flex-1">
+          <div class="font-black text-[15px] leading-tight">${d.project}</div>
+          <div class="mono text-[10px] text-inksoft mt-1 tracking-[0.04em]">${d.client} · ${d.industry}</div>
+          <div class="flex items-baseline gap-3 mt-2 flex-wrap">
+            <div class="num font-black text-[16px]">${d.rate}<span class="text-[10px] text-inksoft font-bold ml-0.5">万/月</span></div>
+            <div class="mono text-[10px] text-inksoft">${d.months}ヶ月 · ${d.start.slice(5)}〜</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS + ACTION (right rail) -->
+      <div class="flex flex-col gap-2.5 lg:items-end border-t lg:border-t-0 lg:border-l border-black/5 pt-4 lg:pt-0 lg:pl-5 min-w-[200px]">
+        <span class="${STATUS_TONE[d.statusKey]} text-[11px] font-bold rounded-full px-2.5 py-1 inline-flex items-center gap-1.5 whitespace-nowrap self-start lg:self-end">
+          <span class="w-1.5 h-1.5 rounded-full ${STATUS_DOT[d.statusKey]}"></span>
+          ${d.statusLabel}
+        </span>
+        <div class="text-[11.5px] text-ink2 lg:text-right leading-snug">${d.nextAction}</div>
+        ${ready
+          ? `<a href="closing.html?deal=${d.id}" class="w-full lg:w-auto bg-mint hover:bg-[#5BE890] text-ink font-black text-[12.5px] rounded-lg px-4 py-2.5 flex items-center justify-center gap-1.5 transition shadow-[0_4px_12px_rgba(74,222,128,0.25)] whitespace-nowrap mt-1">
+              バックオフィスに送信 <span class="text-mintdeep">→</span>
+            </a>`
+          : `<button class="w-full lg:w-auto border border-black/10 text-ink font-bold text-[12px] rounded-lg px-4 py-2.5 hover:bg-cream2 transition whitespace-nowrap mt-1" onclick="location.href='project-detail.html'">詳細を見る</button>`}
+      </div>
+
+    </article>`;
+  }).join('');
+}
+
+render();
+</script>
+
+</body>
+</html>

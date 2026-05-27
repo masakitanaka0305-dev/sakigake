@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — クロージング情報送信</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { ink:'#0A0A0A', ink2:'#2A2A2D', inksoft:'#555559', inkmute:'#8A8A8F', paper:'#FFFFFF', cream:'#F4F1E8', cream2:'#ECE8DB', mint:'#4ADE80', mintdeep:'#16A34A', mintsoft:'#D7F7E0', mintglow:'#B6F4A5', warn:'#F59E0B', warnsoft:'#FEF3C7', info:'#3B82F6', infosoft:'#DBEAFE', danger:'#EF4444' },
+}}}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+  .av-c0 { background: #E6E1D2; } .av-c1 { background: #DDEDE3; } .av-c2 { background: #E7DFEC; } .av-c3 { background: #EFDFD3; } .av-c4 { background: #D9E5EF; } .av-c5 { background: #EDE2D2; }
+  .fld { display: flex; flex-direction: column; gap: 4px; }
+  .fld label { font-family: "JetBrains Mono", monospace; font-size: 10px; color: #555559; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; }
+  .fld input, .fld select, .fld textarea {
+    background: #FFFFFF; border: 1px solid rgba(10,10,10,0.08); border-radius: 10px; padding: 10px 12px;
+    font-size: 13px; color: #0A0A0A; outline: none; transition: border-color 0.12s ease, box-shadow 0.12s ease;
+    font-family: inherit;
+  }
+  .fld textarea { resize: vertical; line-height: 1.6; }
+  .fld input:focus, .fld select:focus, .fld textarea:focus { border-color: #0A0A0A; box-shadow: 0 0 0 3px rgba(74,222,128,0.18); }
+  .req::after { content: " *"; color: #EF4444; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition"><span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span><span class="font-medium hidden xl:inline">ダッシュボード</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition"><span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">02<span class="ml-0.5 opacity-70">✓</span></span><span class="font-medium hidden xl:inline">エンジニア</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition"><span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">03<span class="ml-0.5 opacity-70">✓</span></span><span class="font-medium hidden xl:inline">案件</span></a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition"><span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span><span class="font-medium hidden xl:inline">自動処理</span></a>
+    </nav>
+    <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+      <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+      <div class="hidden sm:block"><div class="font-bold text-[13px] leading-tight">田中 健一</div></div>
+    </a>
+  </div>
+</header>
+
+
+<main class="max-w-[1100px] mx-auto px-6 py-7">
+
+  <a href="deals.html" class="inline-flex items-center gap-1.5 text-[12px] text-inksoft hover:text-ink font-bold transition mb-5">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+    <span>商談一覧に戻る</span>
+  </a>
+
+  <div class="mb-7">
+    <div class="mono text-[11px] text-inksoft tracking-[0.22em] uppercase font-bold mb-3 flex items-center gap-3">
+      <span class="block w-7 h-[1.5px] bg-ink"></span>
+      <span>バックオフィスへ引継ぎ</span>
+    </div>
+    <h1 class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(26px, 4vw, 38px);">
+      クロージング情報を<br/>
+      <span class="hl">バックオフィスに送信</span>
+    </h1>
+    <p class="mt-3 text-inksoft text-[13.5px] leading-relaxed max-w-2xl">
+      お客様の契約意思が確認できました。下記の情報を送信すると、<span class="font-bold text-ink">弊社バックオフィスチーム</span> が契約書ドラフト・電子契約・キックオフを引き受けます。あなたは案件マッチングだけに戻れます。
+    </p>
+  </div>
+
+
+  <!-- ============== Pair summary ============== -->
+  <section class="bg-ink text-white rounded-2xl p-5 lg:p-6 mb-5 relative overflow-hidden">
+    <div class="absolute -right-16 -bottom-16 w-64 h-64 rounded-full" style="background: radial-gradient(circle, rgba(74,222,128,0.15), transparent 65%);"></div>
+    <div class="relative grid md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
+      <div id="eng-summary" class="flex items-center gap-3 min-w-0"></div>
+      <div class="hidden md:flex items-center justify-center text-mint">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div id="proj-summary" class="flex items-center gap-3 min-w-0"></div>
+    </div>
+    <div class="relative mt-5 pt-5 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div>
+        <div class="mono text-[9px] text-white/50 tracking-[0.14em] uppercase font-bold">合意単価</div>
+        <div class="num font-black text-[22px] leading-none mt-1" id="sum-rate">70<span class="text-[12px] text-white/55 font-bold ml-0.5">万 / 月</span></div>
+      </div>
+      <div>
+        <div class="mono text-[9px] text-white/50 tracking-[0.14em] uppercase font-bold">あなた還元</div>
+        <div class="num font-black text-[22px] leading-none mt-1 text-mint" id="sum-payout">+¥70,000<span class="text-[10px] text-mint/75 font-bold ml-1">/月 ストック</span></div>
+      </div>
+      <div>
+        <div class="mono text-[9px] text-white/50 tracking-[0.14em] uppercase font-bold">期間</div>
+        <div class="num font-black text-[22px] leading-none mt-1" id="sum-months">12<span class="text-[12px] text-white/55 font-bold ml-0.5">ヶ月</span></div>
+      </div>
+      <div>
+        <div class="mono text-[9px] text-white/50 tracking-[0.14em] uppercase font-bold">開始日</div>
+        <div class="num font-black text-[22px] leading-none mt-1" id="sum-start">06-01</div>
+      </div>
+    </div>
+  </section>
+
+
+  <form id="form" class="flex flex-col gap-5">
+
+    <!-- 契約条件 -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>契約条件</span>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="fld"><label class="req">合意単価 (万円 / 月)</label><input name="rate" type="number" required value="70" min="30" max="200"/></div>
+        <div class="fld"><label class="req">契約期間 (ヶ月)</label><input name="months" type="number" required value="12" min="1" max="36"/></div>
+        <div class="fld"><label class="req">稼働開始日</label><input name="startDate" type="date" required value="2026-06-01"/></div>
+        <div class="fld"><label>契約終了予定日</label><input name="endDate" type="date" value="2027-05-31"/></div>
+        <div class="fld"><label>勤務形態</label><select name="workMode"><option>準委任 (時間精算)</option><option>準委任 (定額)</option><option>請負</option><option>派遣</option></select></div>
+        <div class="fld"><label>清算幅</label><input name="settle" placeholder="140-180h" value="140-180h"/></div>
+        <div class="fld md:col-span-2"><label>勤務地 / 勤務形態詳細</label><input name="workLocation" placeholder="週3リモート + 渋谷オフィス (水・金は出社)"/></div>
+        <div class="fld"><label>支払サイト</label><select name="payCycle"><option>月末締め翌月末払い</option><option>月末締め翌々月10日払い</option><option>月末締め翌月15日払い</option></select></div>
+      </div>
+    </section>
+
+
+    <!-- エンジニア情報 -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>エンジニア情報 (本契約用 / バックオフィスでのみ使用)</span>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="fld md:col-span-2"><label class="req">本名 (フルネーム)</label><input name="engRealName" required placeholder="山田 太郎"/></div>
+        <div class="fld"><label>フリガナ</label><input name="engKana" placeholder="ヤマダ タロウ"/></div>
+        <div class="fld md:col-span-2"><label>メールアドレス</label><input name="engEmail" type="email" placeholder="taro.yamada@example.com"/></div>
+        <div class="fld"><label>電話番号</label><input name="engPhone" placeholder="090-XXXX-XXXX"/></div>
+      </div>
+      <div class="mt-4 grid md:grid-cols-3 gap-3">
+        <label class="flex items-center gap-2.5 bg-cream/50 border border-black/5 rounded-xl px-4 py-3 cursor-pointer">
+          <input type="checkbox" name="hasMyNumber" class="w-4 h-4 accent-mint"/>
+          <span class="text-[12.5px] font-bold">マイナンバー回収済み</span>
+        </label>
+        <label class="flex items-center gap-2.5 bg-cream/50 border border-black/5 rounded-xl px-4 py-3 cursor-pointer">
+          <input type="checkbox" name="hasBank" class="w-4 h-4 accent-mint"/>
+          <span class="text-[12.5px] font-bold">振込口座情報あり</span>
+        </label>
+        <label class="flex items-center gap-2.5 bg-cream/50 border border-black/5 rounded-xl px-4 py-3 cursor-pointer">
+          <input type="checkbox" name="hasNda" class="w-4 h-4 accent-mint" checked/>
+          <span class="text-[12.5px] font-bold">エンジニア NDA 締結済み</span>
+        </label>
+      </div>
+    </section>
+
+
+    <!-- クライアント情報 -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>クライアント契約担当 (バックオフィスから連絡が入ります)</span>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="fld"><label class="req">契約担当者</label><input name="clientContact" required placeholder="高橋 大輔"/></div>
+        <div class="fld"><label>役職</label><input name="clientRole" placeholder="管理部 部長"/></div>
+        <div class="fld"><label class="req">メールアドレス</label><input name="clientEmail" type="email" required placeholder="takahashi@finx.example.com"/></div>
+        <div class="fld"><label>電話番号</label><input name="clientPhone" placeholder="03-XXXX-XXXX"/></div>
+        <div class="fld md:col-span-2"><label>請求書宛先 / 部署</label><input name="clientBillTo" placeholder="経理部 (請求書 PDF 添付・月末送付)"/></div>
+      </div>
+      <div class="mt-4 grid md:grid-cols-3 gap-3">
+        <label class="flex items-center gap-2.5 bg-cream/50 border border-black/5 rounded-xl px-4 py-3 cursor-pointer">
+          <input type="checkbox" name="hasMasterAgreement" class="w-4 h-4 accent-mint"/>
+          <span class="text-[12.5px] font-bold">既に基本契約あり</span>
+        </label>
+        <label class="flex items-center gap-2.5 bg-cream/50 border border-black/5 rounded-xl px-4 py-3 cursor-pointer">
+          <input type="checkbox" name="clientNda" class="w-4 h-4 accent-mint" checked/>
+          <span class="text-[12.5px] font-bold">クライアント NDA あり</span>
+        </label>
+        <label class="flex items-center gap-2.5 bg-cream/50 border border-black/5 rounded-xl px-4 py-3 cursor-pointer">
+          <input type="checkbox" name="urgent" class="w-4 h-4 accent-warn"/>
+          <span class="text-[12.5px] font-bold">🔥 急ぎ (3営業日以内)</span>
+        </label>
+      </div>
+    </section>
+
+
+    <!-- 備考 -->
+    <section class="bg-paper border border-black/5 rounded-2xl p-6">
+      <div class="mono text-[10px] text-inksoft tracking-[0.18em] uppercase font-bold mb-4 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-ink"></span>
+        <span>バックオフィスへのメモ / 特記事項</span>
+      </div>
+      <div class="fld">
+        <label>備考</label>
+        <textarea name="notes" rows="5" placeholder="・客先からは6月1日着工を強く希望されています&#10;・初月のみ稼働時間180h上限の合意&#10;・面談で出た特記事項があれば記載"></textarea>
+      </div>
+    </section>
+
+
+    <!-- What happens next -->
+    <section class="bg-mintsoft/40 border border-mint/30 rounded-2xl p-5">
+      <div class="mono text-[10px] text-mintdeep tracking-[0.18em] uppercase font-bold mb-3 flex items-center gap-3">
+        <span class="block w-4 h-[1.5px] bg-mintdeep"></span>
+        <span>送信後、バックオフィスが対応する内容</span>
+      </div>
+      <div class="grid md:grid-cols-2 gap-3 text-[12.5px] text-ink2">
+        <div class="flex items-start gap-2"><span class="text-mintdeep flex-shrink-0">✓</span><span><b>契約書ドラフト作成</b> (基本契約 / 個別契約) — Claude AI が自動生成</span></div>
+        <div class="flex items-start gap-2"><span class="text-mintdeep flex-shrink-0">✓</span><span><b>電子契約送付</b> (CloudSign) — クライアント・エンジニア両方</span></div>
+        <div class="flex items-start gap-2"><span class="text-mintdeep flex-shrink-0">✓</span><span><b>キックオフ調整</b> — Slack / メールで初回打合せ設定</span></div>
+        <div class="flex items-start gap-2"><span class="text-mintdeep flex-shrink-0">✓</span><span><b>請求 / 振込基盤の登録</b> — freee + GMOあおぞら設定</span></div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-mint/20 text-[11.5px] text-inksoft">
+        進捗は <a href="backoffice.html" class="text-mintdeep font-bold hover:underline">自動処理ページ</a> でリアルタイムに確認できます。
+      </div>
+    </section>
+
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3 justify-end pt-3 flex-wrap">
+      <a href="deals.html" class="border border-black/10 hover:border-ink text-[13px] font-bold px-5 py-3 rounded-xl transition">キャンセル</a>
+      <button type="button" id="save-draft" class="border border-black/10 hover:border-ink text-[13px] font-bold px-5 py-3 rounded-xl transition">下書き保存</button>
+      <button type="submit" class="bg-mint hover:bg-[#5BE890] text-ink font-black text-[14px] px-6 py-3.5 rounded-xl flex items-center gap-2 shadow-[0_6px_20px_rgba(74,222,128,0.25)] transition">
+        <span class="w-2 h-2 rounded-full bg-ink"></span>
+        バックオフィスに送信 → 自動処理スタート
+        <span class="text-mintdeep">→</span>
+      </button>
+    </div>
+
+  </form>
+
+</main>
+
+
+<div id="toast" class="fixed left-1/2 bottom-8 -translate-x-1/2 translate-y-5 opacity-0 pointer-events-none bg-ink text-white px-5 py-2.5 rounded-full text-[13px] font-bold z-50 shadow-lg transition-all duration-200"><span class="text-mint mr-1">✓</span><span id="toast-msg"></span></div>
+
+
+<script>
+// ============================================
+// Pair data — fetched by URL params (?deal=DEAL-301)
+// ============================================
+const dealPairs = {
+  'DEAL-301': { engInitial:'T.Y', engRole:'Java エンジニア', engColor:'c3', engRealNameHint:'(本名未入力)', clientLogo:'X', client:'X社', project:'基幹システム / 機能追加', rate:70, months:12, start:'2026-06-01' },
+  'DEAL-298': { engInitial:'K.S', engRole:'バックエンドエンジニア', engColor:'c2', engRealNameHint:'(本名未入力)', clientLogo:'FX', client:'FinX 株式会社', project:'決済PJ', rate:78, months:6, start:'2026-06-15' },
+  'DEAL-295': { engInitial:'H.W', engRole:'データエンジニア', engColor:'c5', engRealNameHint:'(本名未入力)', clientLogo:'DD', client:'DataDive Inc.', project:'DWH 構築', rate:92, months:12, start:'2026-06-15' },
+};
+
+const params = new URLSearchParams(location.search);
+const dealId = params.get('deal') || 'DEAL-301';
+const d = dealPairs[dealId] || dealPairs['DEAL-301'];
+
+// Render pair summary
+document.getElementById('eng-summary').innerHTML = `
+  <div class="w-12 h-12 rounded-xl av-${d.engColor} flex items-center justify-center mono text-[12px] font-black flex-shrink-0">${d.engInitial}</div>
+  <div class="min-w-0">
+    <div class="font-black text-[15px] leading-tight">${d.engInitial} さん</div>
+    <div class="mono text-[10.5px] text-white/60 mt-1">${d.engRole}</div>
+  </div>
+`;
+document.getElementById('proj-summary').innerHTML = `
+  <div class="w-12 h-12 rounded-xl bg-mint text-ink flex items-center justify-center mono text-[12px] font-black flex-shrink-0">${d.clientLogo}</div>
+  <div class="min-w-0">
+    <div class="font-black text-[15px] leading-tight">${d.client}</div>
+    <div class="text-[12px] text-white/80 mt-1">${d.project}</div>
+  </div>
+`;
+
+// Populate summary numbers
+document.getElementById('sum-rate').innerHTML = `${d.rate}<span class="text-[12px] text-white/55 font-bold ml-0.5">万 / 月</span>`;
+document.getElementById('sum-months').innerHTML = `${d.months}<span class="text-[12px] text-white/55 font-bold ml-0.5">ヶ月</span>`;
+document.getElementById('sum-start').textContent = d.start.slice(5);
+const payout = d.rate * 10000 * 0.1;
+document.getElementById('sum-payout').innerHTML = `+¥${payout.toLocaleString()}<span class="text-[10px] text-mint/75 font-bold ml-1">/月 ストック</span>`;
+
+// Pre-fill form defaults from deal
+document.querySelector('[name="rate"]').value = d.rate;
+document.querySelector('[name="months"]').value = d.months;
+document.querySelector('[name="startDate"]').value = d.start;
+
+// Toast
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.remove('opacity-0','translate-y-5');
+  t.classList.add('opacity-100','translate-y-0');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => {
+    t.classList.add('opacity-0','translate-y-5');
+    t.classList.remove('opacity-100','translate-y-0');
+  }, 2400);
+}
+
+document.getElementById('save-draft').addEventListener('click', () => {
+  toast('💾 クロージング情報を下書き保存しました');
+});
+
+document.getElementById('form').addEventListener('submit', (ev) => {
+  ev.preventDefault();
+  toast(`📨 バックオフィスに送信しました — ${d.engInitial}さん × ${d.client}`);
+  setTimeout(() => { location.href = 'backoffice.html'; }, 1500);
+});
+</script>
+
+</body>
+</html>

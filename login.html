@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — ログイン</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink: '#0A0A0A',
+        ink2: '#2A2A2D',
+        inksoft: '#555559',
+        inkmute: '#8A8A8F',
+        paper: '#FFFFFF',
+        cream: '#F4F1E8',
+        cream2: '#ECE8DB',
+        mint: '#4ADE80',
+        mintdeep: '#16A34A',
+        mintsoft: '#D7F7E0',
+        mintglow: '#B6F4A5',
+        danger: '#EF4444',
+      },
+      fontFamily: {
+        jp: ['"Zen Kaku Gothic New"', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+    }
+  }
+}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+</style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center px-4 py-12">
+
+  <!-- Logo -->
+  <div class="flex items-center gap-2.5 mb-10">
+    <div class="w-10 h-10 rounded-[11px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+    <span class="font-black text-[22px] tracking-tight">SAKIGAKE</span>
+  </div>
+
+  <!-- Login Form -->
+  <div class="bg-paper border border-black/5 rounded-2xl p-8 w-full max-w-[380px] shadow-sm">
+    <h1 class="font-black text-[22px] leading-tight mb-1 text-center">ログイン</h1>
+    <p class="text-inksoft text-[13px] text-center mb-7">登録されている氏名を入力してください</p>
+
+    <form id="login-form" autocomplete="off">
+      <label class="block mono text-[10px] text-inkmute tracking-[0.14em] uppercase font-bold mb-2">氏名</label>
+      <input
+        id="sales-name"
+        type="text"
+        placeholder="例: 田中優輝"
+        required
+        class="w-full bg-cream border border-black/10 rounded-xl px-4 py-3 text-[15px] font-bold focus:outline-none focus:border-mint focus:ring-2 focus:ring-mint/20 transition placeholder:text-inkmute/50"
+      />
+
+      <div id="error-msg" class="hidden text-danger text-[13px] font-bold mt-3 text-center"></div>
+
+      <button
+        type="submit"
+        id="login-btn"
+        class="w-full mt-5 bg-ink text-white font-black text-[14px] py-3.5 rounded-xl hover:bg-ink2 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      >
+        <span id="btn-text">ログイン</span>
+        <div id="btn-spinner" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+      </button>
+    </form>
+  </div>
+
+<script>
+// Already logged in? Redirect
+const existing = localStorage.getItem('sakigake_user');
+if (existing) {
+  try {
+    const u = JSON.parse(existing);
+    if (u && u.recordId) window.location.href = '/sales-mvp.html';
+  } catch(e) {}
+}
+
+const form = document.getElementById('login-form');
+const input = document.getElementById('sales-name');
+const errorEl = document.getElementById('error-msg');
+const btn = document.getElementById('login-btn');
+const btnText = document.getElementById('btn-text');
+const btnSpinner = document.getElementById('btn-spinner');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = input.value.trim();
+  if (!name) return;
+
+  // UI: loading state
+  btn.disabled = true;
+  btnText.textContent = '確認中...';
+  btnSpinner.classList.remove('hidden');
+  errorEl.classList.add('hidden');
+
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    });
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'ログインに失敗しました');
+    }
+
+    localStorage.setItem('sakigake_user', JSON.stringify(data.user));
+    window.location.href = '/sales-mvp.html';
+  } catch(err) {
+    errorEl.textContent = err.message;
+    errorEl.classList.remove('hidden');
+    btn.disabled = false;
+    btnText.textContent = 'ログイン';
+    btnSpinner.classList.add('hidden');
+    input.focus();
+  }
+});
+</script>
+
+</body>
+</html>

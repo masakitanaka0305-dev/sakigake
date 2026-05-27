@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAKIGAKE — エンジニア管理</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      ink: '#0A0A0A', ink2: '#2A2A2D', inksoft: '#555559', inkmute: '#8A8A8F',
+      paper: '#FFFFFF', cream: '#F4F1E8', cream2: '#ECE8DB',
+      mint: '#4ADE80', mintdeep: '#16A34A', mintsoft: '#D7F7E0', mintglow: '#B6F4A5',
+      warn: '#F59E0B', warnsoft: '#FEF3C7',
+      info: '#3B82F6', infosoft: '#DBEAFE',
+      danger: '#EF4444', dangersoft: '#FEE2E2',
+    },
+    fontFamily: {
+      mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+    }
+  }}
+}
+</script>
+<style>
+  html, body { font-family: 'Zen Kaku Gothic New', system-ui, sans-serif; background: #F4F1E8; color: #0A0A0A; font-feature-settings: "palt"; -webkit-font-smoothing: antialiased; letter-spacing: 0.01em; }
+  .num { font-family: Manrope, "Zen Kaku Gothic New", sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .hl { background: linear-gradient(180deg, transparent 55%, #B6F4A5 55%, #B6F4A5 92%, transparent 92%); padding: 0 2px; }
+  @keyframes blink-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .blink { animation: blink-dot 1.8s ease-in-out infinite; }
+  .toast { position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%) translateY(20px); background: #0A0A0A; color: #fff; padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; transition: opacity 0.18s ease, transform 0.2s ease; pointer-events: none; z-index: 80; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast .ico { color: #4ADE80; margin-right: 6px; }
+  .av-c0 { background: #E6E1D2; } .av-c1 { background: #DDEDE3; } .av-c2 { background: #E7DFEC; } .av-c3 { background: #EFDFD3; } .av-c4 { background: #D9E5EF; } .av-c5 { background: #EDE2D2; }
+  .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+  .custom-scroll::-webkit-scrollbar-thumb { background: rgba(74,222,128,0.3); border-radius: 3px; }
+  .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+  .status-select { background-image: none; padding-right: 1.75rem; }
+  .status-select::-ms-expand { display: none; }
+</style>
+</head>
+
+<body class="min-h-screen pb-16">
+
+<!-- =========== HEADER (shared stepper nav) =========== -->
+<header class="sticky top-0 z-30 bg-cream/85 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-4">
+    <a href="sales-mvp.html" class="flex items-center gap-2.5 hover:opacity-90 transition">
+      <div class="w-8 h-8 rounded-[9px]" style="background: linear-gradient(135deg, #0E0E10 0%, #0E0E10 50%, #4ADE80 50%, #4ADE80 100%);"></div>
+      <span class="font-black text-[17px] tracking-tight">SAKIGAKE</span>
+    </a>
+    <div class="flex-1"></div>
+    <nav class="hidden md:flex items-center text-[12px] whitespace-nowrap" aria-label="営業フロー">
+      <a href="sales-mvp.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-ink hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-mintdeep tracking-[0.14em] font-bold">01<span class="ml-0.5 opacity-70">✓</span></span>
+        <span class="font-medium hidden xl:inline">ダッシュボード</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="engineers.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink text-white font-bold">
+        <span class="mono text-[9px] text-mint tracking-[0.14em] font-bold">02</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-mint blink"></span>
+        <span>エンジニア</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="projects.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">03</span>
+        <span class="font-medium hidden xl:inline">案件</span>
+      </a>
+      <svg class="w-3 h-3 text-black/15 mx-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+      <a href="backoffice.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-inksoft hover:bg-cream2 transition">
+        <span class="mono text-[9px] text-inkmute tracking-[0.14em] font-bold">04</span>
+        <span class="font-medium hidden xl:inline">自動処理</span>
+      </a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="account.html" class="flex items-center gap-2.5 hover:opacity-90 transition" title="アカウント">
+        <div class="w-9 h-9 rounded-[10px] bg-mint flex items-center justify-center mono text-xs font-bold">T.K</div>
+        <div class="hidden sm:block">
+          <div class="font-bold text-[13px] leading-tight">田中 健一</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</header>
+
+
+<main class="max-w-[1280px] mx-auto px-6 py-8">
+
+  <!-- =========== PAGE HEADER =========== -->
+  <div class="flex items-end justify-between gap-6 mb-7 flex-wrap">
+    <div>
+      <div class="mono text-[11px] text-inksoft tracking-[0.22em] uppercase font-bold mb-3 flex items-center gap-3">
+        <span class="block w-7 h-[1.5px] bg-ink"></span>
+        <span>エンジニア管理</span>
+      </div>
+      <h1 class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(28px, 4.4vw, 44px);">
+        担当エンジニア <span class="hl">4 名</span>
+      </h1>
+      <p class="mt-3 text-inksoft text-[14px] leading-relaxed max-w-xl">
+        　<span class="font-bold text-ink">「全文コピー」</span> でクライアント送付用の要員概要+スキルシートURLを一括コピー、そのままメールに貼り付けで送信。
+      </p>
+    </div>
+    <a href="engineer-new.html" class="bg-mint hover:bg-[#5BE890] text-ink font-bold px-5 py-3 rounded-xl text-[13px] flex items-center gap-2 whitespace-nowrap shadow-[0_6px_20px_rgba(74,222,128,0.25)] transition">
+      <span class="text-lg">+</span>
+      新規エンジニアを登録
+      <span class="text-mintdeep">→</span>
+    </a>
+  </div>
+
+
+  <!-- =========== FILTER TABS =========== -->
+  <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+    <div class="flex gap-1 bg-paper border border-black/5 rounded-xl p-1">
+      <button data-filter="all"        class="filter-btn active px-3.5 py-1.5 rounded-lg text-[12px] font-bold transition bg-ink text-white">すべて <span class="mono text-[10px] ml-1 opacity-70" data-count="all">4</span></button>
+      <button data-filter="proposing"  class="filter-btn px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-inksoft hover:text-ink transition">営業中 <span class="mono text-[10px] ml-1 opacity-70" data-count="proposing">0</span></button>
+      <button data-filter="interview"  class="filter-btn px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-inksoft hover:text-ink transition">面談中 <span class="mono text-[10px] ml-1 opacity-70" data-count="interview">0</span></button>
+      <button data-filter="active"     class="filter-btn px-3.5 py-1.5 rounded-lg text-[12px] font-medium text-inksoft hover:text-ink transition">稼働中 <span class="mono text-[10px] ml-1 opacity-70" data-count="active">0</span></button>
+    </div>
+  </div>
+
+
+  <!-- =========== ENGINEER LIST =========== -->
+  <div id="grid" class="grid grid-cols-1 xl:grid-cols-2 gap-3"></div>
+
+</main>
+
+
+<div id="toast" class="toast"><span class="ico">✓</span><span id="toast-msg"></span></div>
+
+
+<script>
+// ============================================
+// Engineer roster data
+// ============================================
+const engineers = [
+  {
+    id: 'ENG-0142', initial: 'A.H', age: 31, gender: '男性',
+    email: 'a.hayashi@sakigake.co.jp', phone: '090-1234-5678',
+    station: '中洲川端駅（福岡）',
+    startable: '即日',
+    affiliation: '弊社社員',
+    workStyle: 'フルリモート（リモート併用相談可）',
+    rate: 65, parallel: 0, yoe: 4,
+    techStack: 'TypeScript(React, Next.js) 3年、PHP(Laravel/CodeIgniter) 2年',
+    phases: '基本設計〜運用保守',
+    dbos: 'Firebase、Windows、Mac',
+    tools: 'Git、GitHub、Backlog',
+    skills: [
+      'Webアプリ開発（React/Next.js・Laravel）',
+      '動画配信サービス開発・運用保守経験',
+      '小規模案件両方の自走経験',
+    ],
+    appeal: '柔らかい態度で話しやすく、報連相を大切にする協調性のある明るいエンジニアです。',
+    availableSlots: [
+      '5月26日(火) 12:00~18:30',
+      '5月27日(水) 12:00~18:30',
+      '5月28日(木) 12:00~18:30',
+      '5月29日(金) 12:00~18:30',
+    ],
+    skillSheetUrl: 'https://docs.google.com/spreadsheets/d/1TGZwxJPLimo7PcWEUBoVYpZrH3OhYdYNz34S2gte40U/edit?usp=sharing',
+    currentStatus: '待機', stage: '即日稼働可', color: 'c1',
+    proposals: [
+      { projectId:'PJ-2074', logo:'BH', client:'Bloom HR', title:'管理画面リニューアル / React', status:'面談調整中', date:'2026-05-23' },
+      { projectId:'PJ-2087', logo:'FX', client:'FinX', title:'決済プラットフォーム', status:'書類選考中', date:'2026-05-24' },
+      { projectId:'PJ-2084', logo:'DD', client:'DataDive', title:'SaaS向けデータ基盤 / DWH', status:'書類選考中', date:'2026-05-22' },
+      { projectId:'PJ-2076', logo:'RK', client:'Rakume', title:'EC基盤 SRE / クラウド移行', status:'書類選考中', date:'2026-05-22' },
+      { projectId:'PJ-2071', logo:'AI', client:'AIvory', title:'社内LLMチャットボット / MLOps', status:'書類選考中', date:'2026-05-20' },
+      { projectId:'PJ-2069', logo:'NX', client:'NextStep Lab', title:'内製スキル人材 / Java求人', status:'書類落ち', date:'2026-05-18' },
+      { projectId:'PJ-2081', logo:'MB', client:'MegaBank Tokyo', title:'金融系基幹システム PM', status:'書類落ち', date:'2026-05-17' },
+      { projectId:'PJ-2065', logo:'CV', client:'Cavotto', title:'モバイル新機能開発', status:'書類選考中', date:'2026-05-25' },
+    ],
+  },
+  {
+    id: 'ENG-0138', initial: 'K.S', age: 28, gender: '男性',
+    email: 'k.suzuki@sakigake.co.jp', phone: '080-2345-6789',
+    station: '新宿駅（東京）',
+    startable: '6月15日〜',
+    affiliation: '弊社社員',
+    workStyle: '逃リモート + 渋谷 (週二)',
+    rate: 65, parallel: 1, yoe: 5,
+    techStack: 'Go 3年、Python 2年、Node.js 1年',
+    phases: '詳細設計〜運用保守',
+    dbos: 'PostgreSQL、Redis、Docker、Linux',
+    tools: 'Git、GitHub Actions、Jira、Datadog',
+    skills: [
+      '決済マイクロサービス開発（Go/gRPC）',
+      'クラウドネイティブな分散システム設計',
+      'CI/CD パイプライン構築',
+    ],
+    appeal: '論理的な思考でチームの課題を解決。スピード感と品質のバランスを大切にします。',
+    availableSlots: [
+      '5月28日(木) 13:00~18:00',
+      '5月29日(金) 10:00~16:00',
+      '5月30日(土) 10:00~14:00',
+    ],
+    skillSheetUrl: 'https://docs.google.com/spreadsheets/d/1k5xJZpQDR3Wsx9KAB7m_kLs/edit?usp=sharing',
+    currentStatus: '商談中', stage: 'クライアント単価調整中', color: 'c2',
+    alert: '本名回収が必要',
+    proposals: [
+      { projectId:'PJ-2087', logo:'FX', client:'FinX', title:'決済プラットフォーム / バックエンド刷新', status:'商談中', date:'2026-05-21' },
+      { projectId:'PJ-2076', logo:'RK', client:'Rakume', title:'EC基盤 SRE / クラウド移行', status:'面談調整中', date:'2026-05-23' },
+      { projectId:'PJ-2074', logo:'BH', client:'Bloom HR', title:'管理画面リニューアル', status:'書類落ち', date:'2026-05-19' },
+      { projectId:'PJ-2071', logo:'AI', client:'AIvory', title:'LLMチャットボット / MLOps', status:'書類選考中', date:'2026-05-22' },
+    ],
+  },
+  {
+    id: 'ENG-0135', initial: 'T.Y', age: 36, gender: '男性',
+    email: 't.yamada@sakigake.co.jp', phone: '070-3456-7890',
+    station: '横浜駅（神奈川）',
+    startable: '稼働中 / 8月末まで',
+    affiliation: '弊社社員',
+    workStyle: '週五常駐 / 大手町',
+    rate: 70, parallel: 1, yoe: 12,
+    techStack: 'Java 12年、Spring 8年、Oracle PL/SQL 6年',
+    phases: '要件定義〜運用保守',
+    dbos: 'Oracle、PostgreSQL、Linux、AIX',
+    tools: 'Git、Jenkins、Jira、Confluence',
+    skills: [
+      '金融系基幹システム開発・運用',
+      'Spring Boot / Batch を用いた大規模処理',
+      'チームリーダー経験（メンバー8名）',
+    ],
+    appeal: '大規模金融案件での豊富な経験。安定運用への高い意識。',
+    availableSlots: ['稼働中のため面談調整は8月以降'],
+    skillSheetUrl: 'https://docs.google.com/spreadsheets/d/1TYZ9pUkj_8saHQR2bnL/edit?usp=sharing',
+    currentStatus: '稼働中', stage: '稼働中 (8月末まで)', client: 'X社 / 基幹システム', monthlyIncome: 70000, color: 'c3',
+    proposals: [],
+  },
+  {
+    id: 'ENG-0119', initial: 'S.N', age: 35, gender: '男性',
+    email: 's.nakamura@sakigake.co.jp', phone: '090-4567-8901',
+    station: '川崎駅（神奈川）',
+    startable: '稼働中 / 来年3月末まで',
+    affiliation: '弊社社員',
+    workStyle: '週三リモート',
+    rate: 90, parallel: 1, yoe: 11,
+    techStack: 'AWS 8年、Terraform 5年、Python 6年、Go 2年',
+    phases: '要件定義〜運用保守',
+    dbos: 'AWS 各種、Linux、Kubernetes、Datadog',
+    tools: 'Git、Terraform、ArgoCD、Datadog',
+    skills: [
+      'AWS マルチアカウント設計・運用',
+      'Kubernetes クラスタ運用',
+      'SRE / オンコール対応経験',
+    ],
+    appeal: 'クラウドインフラ全領域に精通。冷静で障害対応に強い。',
+    availableSlots: ['稼働中のため面談調整は4月以降'],
+    skillSheetUrl: 'https://docs.google.com/spreadsheets/d/1SN3aQpkoBxKWcdHmnP/edit?usp=sharing',
+    currentStatus: '稼働中', stage: '稼働中 (来年3月末まで)', client: 'Rakume / EC基盤', monthlyIncome: 90000, color: 'c4',
+    proposals: [],
+  },
+];
+
+const STATUS_OPTIONS = ['営業中','面談依頼','面談設定済み','面談実施','稼働中'];
+const STATUS_BG = {
+  '営業中':     'bg-infosoft text-[#1E40AF]',
+  '面談依頼':   'bg-infosoft text-[#1E40AF]',
+  '面談設定済み': 'bg-warnsoft text-[#B45309]',
+  '面談実施':   'bg-purple-100 text-purple-700',
+  '稼働中':     'bg-ink text-mint',
+};
+const STATUS_DOT = {
+  '営業中':     'bg-info',
+  '面談依頼':   'bg-info',
+  '面談設定済み': 'bg-warn',
+  '面談実施':   'bg-purple-400',
+  '稼働中':     'bg-mint',
+};
+
+// 旧ステータスから新ステータスへのマッピング
+const STATUS_MIGRATE = {
+  '待機': '営業中', '提案中': '営業中', '書類選考': '営業中',
+  '面談調整': '面談依頼', '商談中': '面談実施', '落選': '営業中',
+};
+function migrateStatus(s) { return STATUS_MIGRATE[s] || (STATUS_OPTIONS.includes(s) ? s : '営業中'); }
+
+// Local persistence — sales-mvp.html と共通キー
+const STORAGE_KEY = 'sg_pipeline_status';
+function loadOverrides() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); } catch(e) { return {}; }
+}
+function saveOverrides(map) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(map)); } catch(e) {}
+}
+// 旧キーからの移行
+(function migrateOldKey() {
+  try {
+    const old = JSON.parse(localStorage.getItem('sg_engineer_status')||'{}');
+    if (Object.keys(old).length > 0) {
+      const cur = loadOverrides();
+      Object.entries(old).forEach(([k, v]) => { if (!cur[k]) cur[k] = migrateStatus(v); });
+      saveOverrides(cur);
+      localStorage.removeItem('sg_engineer_status');
+    }
+  } catch(e) {}
+})();
+
+const statusOverrides = loadOverrides();
+engineers.forEach(e => {
+  if (statusOverrides[e.id]) {
+    e.currentStatus = migrateStatus(statusOverrides[e.id]);
+  } else {
+    e.currentStatus = migrateStatus(e.currentStatus);
+  }
+});
+
+// ============================================
+// Build the copy-paste text block
+// ============================================
+function buildPasteText(e) {
+  const DIV = 'ｰｰｰｰｰｰｰｰｰｰｰ';
+  const slots = e.availableSlots.join('\n');
+  const skillsBullets = e.skills.map(s => '・' + s).join('\n');
+  return `${DIV}
+◼︎並行：${e.parallel}件
+${slots}
+
+◼︎アピールポイント
+${e.appeal}
+
+
+${DIV}
+要員概要
+${DIV}
+氏名：${e.initial}（${e.age}歳・${e.gender}）
+最寄り駅：${e.station}
+稼働：${e.startable}
+所属：${e.affiliation}
+通勤：${e.workStyle}
+単価：${e.rate}万
+並行：${e.parallel}件
+
+エンジニア歴：${e.yoe}年
+言語/FW : ${e.techStack}
+工程: ${e.phases}
+DB/OS: ${e.dbos}
+ツール: ${e.tools}
+
+スキル：
+${skillsBullets}
+
+スキルシート：
+${e.skillSheetUrl}
+${DIV}`;
+}
+
+function esc(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function matchesFilter(filter, status) {
+  if (filter === 'all') return true;
+  if (filter === 'proposing') return status === '営業中';
+  if (filter === 'interview') return ['面談依頼','面談設定済み','面談実施'].includes(status);
+  if (filter === 'active')    return status === '稼働中';
+  return true;
+}
+
+function recomputeCounts() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const f = el.dataset.count;
+    el.textContent = engineers.filter(e => matchesFilter(f, e.currentStatus)).length;
+  });
+}
+
+function render(filter='all') {
+  const list = engineers.filter(e => matchesFilter(filter, e.currentStatus));
+  const grid = document.getElementById('grid');
+  grid.innerHTML = list.map((e, i) => {
+    const isActive = e.currentStatus === '稼働中';
+    const isClosing = e.currentStatus === '面談実施';
+    const hasAlert = !!e.alert;
+    const pasteText = buildPasteText(e);
+    const optionsHtml = STATUS_OPTIONS.map(s => `<option value="${s}"${s===e.currentStatus?' selected':''}>${s}</option>`).join('');
+    return `
+    <article class="bg-paper border ${hasAlert ? 'border-warn/40' : 'border-black/5'} rounded-2xl hover:shadow-[0_6px_20px_rgba(10,10,10,0.06)] transition flex flex-col">
+
+      <!-- Top row: avatar + name + status -->
+      <div class="p-5 lg:p-6 flex items-start gap-4 border-b border-black/5">
+        <div class="w-14 h-14 rounded-xl av-${e.color} flex items-center justify-center mono text-[14px] font-black flex-shrink-0">${e.initial}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1 flex-wrap">
+            <span class="font-black text-[18px] leading-tight whitespace-nowrap">${e.initial} さん</span>
+            <span class="text-[12px] text-inksoft">${e.age}歳・${e.gender}</span>
+            <span class="mono text-[10px] text-inkmute">${e.id}</span>
+          </div>
+          <div class="flex items-baseline gap-x-4 gap-y-1 flex-wrap text-[12px] text-ink2">
+            <span><span class="text-inksoft">📍</span> ${e.station}</span>
+            <span><span class="text-inksoft">所属</span> <b>${e.affiliation}</b></span>
+            <span><span class="text-inksoft">通勤</span> <b>${e.workStyle}</b></span>
+          </div>
+          <div class="flex items-baseline gap-x-4 gap-y-1 mt-1 flex-wrap text-[12px] text-ink2">
+            <span class="email-copy cursor-pointer hover:opacity-80 transition" data-email="${e.email}"><span class="text-inksoft">✉</span> <span class="text-mintdeep">${e.email}</span></span>
+            <span><span class="text-inksoft">📞</span> <a href="tel:${e.phone}" class="hover:underline">${e.phone}</a></span>
+          </div>
+          <div class="flex items-baseline gap-x-4 mt-1.5 flex-wrap">
+            <span class="num font-black text-[20px] whitespace-nowrap">${e.rate}<span class="text-[12px] text-inksoft font-bold ml-0.5">万 / 月</span></span>
+            <span class="text-[12px] text-inksoft whitespace-nowrap">並行 <b class="text-ink num">${e.parallel}</b>件 · 稼働 <b class="text-ink">${e.startable}</b></span>
+            ${isActive && e.monthlyIncome ? `<span class="text-[11px] mono text-mintdeep font-bold">+¥${e.monthlyIncome.toLocaleString()}/月 あなた報酬</span>` : ''}
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+          <div class="relative inline-flex items-center">
+            <select class="status-select ${STATUS_BG[e.currentStatus] || 'bg-gray-100 text-gray-600'} text-[11px] font-bold rounded-full pl-3 pr-7 py-1 appearance-none cursor-pointer outline-none border-0 focus:ring-2 focus:ring-ink/20 transition" data-eng-id="${e.id}">
+              ${optionsHtml}
+            </select>
+            <svg class="w-3 h-3 absolute right-2 pointer-events-none ${(STATUS_BG[e.currentStatus] || '').includes('text-mint') ? 'text-mint' : 'opacity-60'}" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+          ${isClosing ? `<a href="closing.html?eng=${e.id}" class="text-[10.5px] mono font-bold text-mintdeep hover:text-ink underline underline-offset-2 whitespace-nowrap">→ バックオフィスに送信</a>` : ''}
+        </div>
+      </div>
+
+      ${hasAlert ? `
+      <div class="bg-warnsoft border-b border-warn/30 px-5 lg:px-6 py-2.5 text-[12px] flex items-center gap-2">
+        <span class="text-warn flex-shrink-0">⚠</span>
+        <span class="font-bold text-[#B45309]">${e.alert}</span>
+      </div>` : ''}
+
+      <!-- Copy-paste preview -->
+      <div class="p-5 lg:p-6">
+        <div class="flex items-center gap-3 mb-2.5">
+          <span class="mono text-[10px] text-inksoft tracking-[0.16em] uppercase font-bold">クライアント送付用テキスト</span>
+          <span class="text-[10px] text-inkmute">· 直接編集可能</span>
+          <span class="flex-1"></span>
+          <button class="copy-btn bg-mint hover:bg-[#5BE890] text-ink px-4 py-2 rounded-lg text-[12px] font-bold flex items-center gap-1.5 whitespace-nowrap transition shadow-[0_2px_8px_rgba(74,222,128,0.25)]" data-paste-idx="${i}">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2M8 5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2m0 0h2a2 2 0 0 1 2 2v3m0 4h-6m0 0l2-2m-2 2l2 2"/></svg>
+            全文コピー
+          </button>
+        </div>
+        <textarea data-paste-idx="${i}" class="paste-area w-full bg-ink text-mint/95 rounded-xl p-4 mono text-[11.5px] leading-[1.7] whitespace-pre-wrap overflow-x-auto h-[420px] custom-scroll selection:bg-mint/30 outline-none focus:ring-2 focus:ring-mint/40 resize-y" spellcheck="false">${esc(pasteText)}</textarea>
+        <div class="mt-2.5 flex items-center gap-2 text-[10.5px] text-inksoft">
+          <span class="mono tracking-wide">スキルシート (Google Sheets):</span>
+          <a href="${e.skillSheetUrl}" target="_blank" rel="noopener" class="truncate text-mintdeep hover:underline mono">${e.skillSheetUrl.replace('https://','')}</a>
+        </div>
+      </div>
+
+    </article>`;
+  }).join('');
+
+  // Re-bind copy buttons (read current textarea value, including edits)
+  grid.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.pasteIdx, 10);
+      const e = list[idx];
+      const ta = grid.querySelector(`textarea.paste-area[data-paste-idx="${idx}"]`);
+      const text = ta ? ta.value : buildPasteText(e);
+      navigator.clipboard?.writeText(text).catch(()=>{});
+      toast(`📋 ${e.initial} さんの送付用テキストをコピーしました`);
+    });
+  });
+
+  grid.querySelectorAll('.email-copy').forEach(el => {
+    el.addEventListener('click', () => {
+      const email = el.dataset.email;
+      navigator.clipboard?.writeText(email).catch(()=>{});
+      toast(`📋 ${email} をコピーしました`);
+    });
+  });
+
+  // Status change handler
+  grid.querySelectorAll('.status-select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const id = sel.dataset.engId;
+      const eng = engineers.find(x => x.id === id);
+      if (!eng) return;
+      const newStatus = sel.value;
+      eng.currentStatus = newStatus;
+      const ov = loadOverrides();
+      ov[id] = newStatus;
+      saveOverrides(ov);
+      toast(`✓ ${eng.initial} さん → ${newStatus}`);
+      const currentFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+      render(currentFilter);
+      recomputeCounts();
+    });
+  });
+}
+
+// Filter tabs
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('active','bg-ink','text-white');
+      b.classList.add('text-inksoft','font-medium');
+      b.classList.remove('font-bold');
+    });
+    btn.classList.add('active','bg-ink','text-white','font-bold');
+    btn.classList.remove('text-inksoft','font-medium');
+    render(btn.dataset.filter);
+  });
+});
+
+// Toast
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+render();
+recomputeCounts();
+</script>
+
+</body>
+</html>
